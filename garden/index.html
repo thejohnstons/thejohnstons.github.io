@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F1EADF">
+<meta name="apple-mobile-web-app-title" content="Garden">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon-64.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Johnston Garden</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Jost:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --linen:#F1EADF; --cream:#FAF5EA; --ink:#4A3431; --cocoa:#5E4440; --muted:#7E5F54; --line:#E7DCC8;
+    --sage:#AFB380; --sage2:#D9DCB8; --blush:#EBC6CC; --peach:#F6CBAE; --mustard:#E8B04B; --apricot:#E5944F; --oat:#EFE6D6;
+    --display:Italiana, "Cormorant Garamond", Georgia, serif;
+    --serif:"Cormorant Garamond", Georgia, serif;
+    --script:"Pinyon Script", "Snell Roundhand", cursive;
+    --sans:Jost, "Helvetica Neue", Arial, sans-serif;
+    color-scheme:light;
+  }
+  :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  *,*::before,*::after{box-sizing:inherit}
+  body{margin:0;background:var(--linen);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:var(--ink)}
+  button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+  input,select,textarea{font:inherit;color:var(--ink)}
+  :focus-visible{outline:3px solid var(--cocoa);outline-offset:3px;border-radius:6px}
+  @media (pointer:coarse){input,select,textarea{font-size:16px}}
+  .hidden{display:none!important}
+
+  .wrap{max-width:1140px;margin:0 auto;padding:clamp(16px,3vw,28px) clamp(14px,3vw,32px) 64px;display:flex;flex-direction:column;gap:22px}
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand .back{font-size:13px;text-decoration:none}
+  .brand .name{margin:0;font-family:var(--display);font-size:clamp(28px,4vw,34px);line-height:1.1}
+  nav.main{display:flex;gap:2px;flex-wrap:wrap;font-family:var(--serif);font-size:18px;font-weight:500}
+  nav.main a{padding:8px 13px;border-radius:999px;text-decoration:none;min-height:40px;display:inline-flex;align-items:center}
+  nav.main a[aria-current="page"]{background:var(--cocoa);color:#F3EBD3}
+  @media (max-width:700px){nav.main{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}nav.main a{white-space:nowrap}}
+
+  .ptitle{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+  .ptitle .s{margin:0;font-family:var(--script);font-size:26px;color:#8B5E4E;line-height:1.2}
+  .ptitle h1{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(40px,6vw,56px);line-height:1}
+  .h2{margin:0;font-family:var(--serif);font-weight:500;font-size:24px;letter-spacing:.06em;text-transform:uppercase;line-height:1.2}
+  .script{font-family:var(--script);color:#8B5E4E}
+  .card{background:var(--cream);border-radius:22px;padding:24px 26px}
+  .dark{background:var(--cocoa);color:#F3EBD3;border-radius:22px;padding:24px 26px}
+  .dark .h2{color:var(--blush)}
+  .row{display:flex;flex-wrap:wrap;gap:20px;align-items:stretch}
+  .row > *{min-width:0}
+  .muted{color:var(--muted)}
+  .small{font-size:13px}
+  .chip{display:inline-flex;align-items:center;background:var(--sage2);border-radius:8px;padding:3px 9px;font-size:13px;font-weight:600;white-space:nowrap}
+  .chip.front{background:var(--blush)}
+  .chip.dk{background:var(--cocoa);color:#F3EBD3}
+  .pill{display:inline-flex;align-items:center;background:var(--oat);border-radius:999px;padding:4px 12px;font-size:13px;white-space:nowrap}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 18px;border-radius:999px;background:var(--cocoa);color:#F3EBD3;font-weight:500;text-decoration:none}
+  .btn.line{background:transparent;color:var(--ink);border:1.5px solid var(--cocoa)}
+  .btn.blush{background:var(--blush);color:var(--ink)}
+  .btn.small{min-height:36px;padding:0 14px;font-size:14px}
+  .link{text-decoration:underline;text-underline-offset:3px;font-weight:500;min-height:36px;display:inline-flex;align-items:center}
+  .danger{color:#9B3B2E}
+  .field{width:100%;min-height:44px;border-radius:12px;border:1.5px solid #CDBEAE;background:#FFFDF8;padding:8px 12px}
+  textarea.field{min-height:90px;resize:vertical}
+  label.f{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+  .notice{background:var(--peach);border-radius:14px;padding:12px 16px;font-size:14.5px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+  .notice.err{background:#F2C9C4}
+
+  /* Home */
+  .hero{position:relative;flex:1.3 1 520px;border-radius:22px;overflow:hidden;min-height:400px;display:flex;align-items:center;justify-content:center;padding:30px}
+  .hero > svg.bg{position:absolute;inset:0;width:100%;height:100%}
+  .oval{position:relative;background:var(--cream);border-radius:50%;width:360px;max-width:100%;aspect-ratio:5/6;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;box-shadow:0 0 0 10px var(--cream),0 0 0 11.5px var(--cocoa)}
+  .oval h2{margin:2px 0 0;font-family:var(--display);font-weight:400;font-size:46px;line-height:1}
+  .oval p{margin:10px 0 0;font-family:var(--serif);font-size:19px;line-height:1.35}
+  .checklist .it{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:start;padding:9px 0;border-bottom:1px solid var(--line)}
+  .tick{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--cocoa);display:grid;place-items:center;font-size:13px;color:var(--cream);margin-top:1px}
+  .tick.on{background:var(--cocoa)}
+  .done-text{text-decoration:line-through;color:var(--muted)}
+  .often{font-size:12px;font-weight:500;background:var(--peach);border-radius:999px;padding:3px 10px;white-space:nowrap}
+  .jobs .j{display:grid;grid-template-columns:62px minmax(0,1fr) 28px;gap:10px;padding:7px 0;font-size:14.5px;line-height:1.4;align-items:start}
+  .jobs .k{font-family:var(--script);font-size:23px;line-height:1;color:var(--peach)}
+  .jobs .tick{border-color:#EBC6CC}
+  .jobs .tick.on{background:#EBC6CC;color:var(--cocoa)}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .tile{display:flex;flex-direction:column;justify-content:space-between;gap:22px;min-height:160px;padding:20px;border-radius:22px;color:var(--ink);text-decoration:none}
+  .tile .n{font-family:var(--script);font-size:24px;line-height:1;color:#6E4C42}
+  .tile strong{display:block;font-family:var(--display);font-weight:400;font-size:30px;line-height:1.05}
+  @media (max-width:560px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.tile{min-height:130px;padding:14px}.tile strong{font-size:22px}.tile .d{display:none}.hero{min-height:340px;padding:18px}.oval{width:290px}}
+
+  /* Map */
+  .areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .area{border-radius:22px;padding:18px 20px 22px}
+  .area.front{background:#F6E3E6}.area.side{background:#ECEDD9}
+  .area h2{margin:0 0 12px;font-family:var(--script);font-weight:400;font-size:30px;color:#8B5E4E}
+  .toks{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .tok{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:600;font-size:15px;border:1.5px solid var(--cocoa);text-align:center;line-height:1.1}
+  .tok small{font-weight:400;font-size:11.5px;color:var(--muted);max-width:140px}
+  .k-bed{border-radius:42% 58% 55% 45%/50% 45% 55% 50%;min-width:220px;min-height:130px;padding:16px;background:var(--blush)}
+  .k-pot{border-radius:50%;width:70px;height:70px;background:var(--peach)}
+  .k-trough{border-radius:8px;width:100px;height:48px;background:var(--sage2)}
+  .k-patch{border-radius:50%;width:130px;height:80px;background:var(--cream)}
+  .k-planned{border:2px dashed #9A8A78;background:transparent;border-radius:16px;width:160px;height:96px}
+  .tok[aria-current="true"]{outline:3px solid var(--cocoa);outline-offset:3px}
+  .spotlist .r{display:grid;grid-template-columns:46px minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px;text-align:left;width:100%}
+
+  /* Plants */
+  .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .filters a{padding:7px 14px;border-radius:999px;text-decoration:none;font-size:14px;background:var(--cream);min-height:36px;display:inline-flex;align-items:center}
+  .filters a[aria-current="true"]{background:var(--cocoa);color:#F3EBD3}
+  .search{flex:1 1 220px;max-width:320px;border-radius:999px;border:1.5px solid var(--cocoa);background:var(--cream);min-height:44px;padding:0 16px}
+  .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+  .pcard{background:var(--cream);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:var(--ink)}
+  .pcard .ph{height:110px;display:grid;place-items:center;overflow:hidden}
+  .pcard .ph img{width:100%;height:100%;object-fit:cover}
+  .pcard .b{padding:14px 16px 16px;display:flex;flex-direction:column;gap:5px;flex-grow:1}
+  .pcard h3{margin:0;font-family:var(--serif);font-weight:600;font-size:21px;line-height:1.15}
+  .pcard .v{font-family:var(--script);font-size:18px;line-height:1.15;color:#8B5E4E}
+  .pcard .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto;padding-top:6px}
+  .wish{background:var(--cream);border:1.5px dashed #C9A9A0;border-radius:16px;padding:12px 16px;flex:1 1 200px;text-decoration:none;color:var(--ink)}
+  .wish strong{display:block;font-family:var(--serif);font-weight:600;font-size:19px}
+
+  /* Plant page */
+  .photo-main{background:var(--blush);border-radius:22px;aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden;position:relative}
+  .photo-main img{width:100%;height:100%;object-fit:cover}
+  .thumbs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  .thumbs button,.thumbs label{aspect-ratio:1;border-radius:14px;overflow:hidden;display:grid;place-items:center;background:var(--oat);font-size:13px;text-align:center;cursor:pointer}
+  .thumbs img{width:100%;height:100%;object-fit:cover}
+  .thumbs label{border:1.5px dashed var(--cocoa);background:transparent}
+  .facts .r{display:grid;grid-template-columns:100px minmax(0,1fr);gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+  .facts .r:last-child{border-bottom:0}
+  .facts .r b{font-weight:600}
+  .year .r{display:grid;grid-template-columns:86px minmax(0,1fr);gap:10px;padding:8px 0;font-size:14.5px;line-height:1.4}
+  .year .r span:first-child{font-family:var(--script);font-size:23px;line-height:1;color:var(--peach)}
+
+  /* Seeds */
+  .group{border-radius:22px;padding:22px 24px}
+  .packets{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:14px}
+  .packet{background:var(--cream);border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+  .packet h3{margin:0;font-family:var(--serif);font-weight:600;font-size:21px;line-height:1.15}
+
+  /* Bloom */
+  .cal{min-width:820px;display:grid;grid-template-columns:190px repeat(12,minmax(0,1fr));gap:4px;align-items:center}
+  .cal .m{font-size:13px;text-align:center;padding-bottom:6px;border-bottom:3px solid transparent}
+  .cal .m.now{font-weight:700;border-bottom-color:var(--cocoa)}
+  .cal .gh{font-family:var(--script);font-size:22px;color:#8B5E4E;padding-top:14px;grid-column:1/-1}
+  .cal .nm{font-size:14.5px;font-weight:500;padding-right:8px;text-decoration:none}
+  .cal .c{height:20px;border-radius:6px;background:#F4EEE3}
+  .cal .c.now{background:var(--oat)}
+  .cal .c.g{background:#E89496}.cal .c.g.now{background:var(--cocoa)}
+  .cal .c.s{background:#CFD3A2}.cal .c.s.now{background:#8E9460}
+  .cal .c.w{background:repeating-linear-gradient(45deg,#E3C9B3 0 3px,transparent 3px 6px);border:1px dashed #B79B87}
+  .cal .cnt{height:28px;border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:600;background:#E2E5C6}
+  .cal .cnt.low{background:#F6E3D3}.cal .cnt.zero{background:#F2C9C4;border:1.5px solid #C0605A}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:22px;height:12px;border-radius:4px;display:inline-block}
+
+  /* Diary */
+  .entry{display:grid;grid-template-columns:22px minmax(0,1fr);gap:14px}
+  .entry .dot{display:flex;flex-direction:column;align-items:center}
+  .entry .dot span:first-child{width:14px;height:14px;border-radius:50%;background:var(--cocoa);margin-top:22px}
+  .entry .dot span:last-child{flex-grow:1;width:1.5px;background:#CDBEAE;margin-top:4px}
+  .entry .card{padding:18px 20px;margin-bottom:14px}
+  .ephotos{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .ephotos img{width:96px;height:78px;object-fit:cover;border-radius:12px}
+  .spotpick{display:flex;gap:6px;flex-wrap:wrap}
+  .spotpick label{display:inline-flex;align-items:center;gap:4px;border:1.5px solid #EBC6CC;border-radius:8px;padding:4px 10px;font-weight:600;font-size:13px;cursor:pointer;min-height:34px}
+  .spotpick input{accent-color:#EBC6CC}
+  .dark .field{background:var(--cream);border-color:transparent}
+
+  .gate{max-width:460px;margin:12vh auto;text-align:center}
+  .modal-bg{position:fixed;inset:0;background:rgba(60,40,35,.35);z-index:30}
+  .modal{position:fixed;z-index:31;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100% - 24px));max-height:calc(100vh - 40px);overflow:auto;background:var(--cream);border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:14px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="leaves" width="70" height="70" patternUnits="userSpaceOnUse"><rect width="70" height="70" fill="#FAF5EA"/><g fill="#AFB380"><path d="M10 40c4-14 14-20 24-20-3 12-12 20-24 20z"/><path d="M44 66c2-13 11-20 22-21-2 11-10 19-22 21z"/><path d="M40 10c10 2 16 10 16 20-10-2-16-9-16-20z"/><path d="M6 6c9 1 14 8 14 16-9-1-14-7-14-16z"/></g><g stroke="#8E9460" stroke-width="1.2" fill="none"><path d="M10 40c8-6 16-12 24-20M44 66c7-7 14-14 22-21M40 10c6 6 12 13 16 20M6 6c5 5 10 10 14 16"/></g></pattern>
+    <symbol id="magnolia" viewBox="0 0 60 70"><path d="M30 68c0-12 1-22 4-32" stroke="#8E9460" stroke-width="2" fill="none"/><path d="M33 44c6-4 12-4 16 0-5 4-11 4-16 0z" fill="#AFB380" stroke="#6E7344" stroke-width="1"/><g fill="#EBC6CC" stroke="#5E4440" stroke-width="1.3" stroke-linejoin="round"><path d="M30 36c-10-2-18-10-18-20 9 1 16 7 18 20z"/><path d="M34 36c10-2 18-10 18-20-9 1-16 7-18 20z"/><path d="M32 36c-6-8-6-20 0-30 6 10 6 22 0 30z"/></g><path d="M26 34c2 2 10 2 12 0" stroke="#5E4440" stroke-width="1.3" fill="#F6CBAE"/></symbol>
+    <symbol id="bloom" viewBox="0 0 40 40"><g stroke="#5E4440" stroke-width="1.2"><circle cx="20" cy="10" r="7"/><circle cx="30" cy="17" r="7"/><circle cx="26" cy="29" r="7"/><circle cx="14" cy="29" r="7"/><circle cx="10" cy="17" r="7"/></g><circle cx="20" cy="20" r="5" fill="#E8B04B" stroke="#5E4440" stroke-width="1.2"/></symbol>
+  </defs>
+</svg>
+<div id="app" class="wrap"><p class="muted">Loading the garden…</p></div>
+
+<script src="../firebase-config.js"></script>
+<script type="module">
+/* =====================================================================
+   Johnston Garden
+   Data lives in Firestore under households/johnston/garden_*:
+   spots, plants, seeds, diary, tasks, photos, plus garden_meta (ticks).
+   ===================================================================== */
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, getRedirectResult, signOut }
+  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, memoryLocalCache,
+  collection, doc, setDoc, deleteDoc, getDoc, onSnapshot, writeBatch }
+  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+/* ---------------- Helpers ---------------- */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MON = MONTHS.map(m=>m.slice(0,3));
+const pad = n => String(n).padStart(2,'0');
+const isoDate = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const monthKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}`;
+function mondayOf(d){ const x=new Date(d); const day=(x.getDay()+6)%7; x.setDate(x.getDate()-day); return isoDate(x); }
+const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+const andList = l => l.length<2 ? l.join('') : l.slice(0,-1).join(', ')+' and '+l[l.length-1];
+const span = (a,b) => { const on=[]; for(let i=1;i<=12;i++) on.push(!a||!b ? false : a<=b ? (i>=a&&i<=b) : (i>=a||i<=b)); return on; };
+function bloomText(a,b){ if(!a||!b) return ''; return a===b ? MONTHS[a-1] : `${MON[a-1]}–${MON[b-1]}`; }
+function dateText(s){
+  if(!s) return '';
+  const [y,m,d] = String(s).split('-').map(Number);
+  if(!d) return `${MONTHS[m-1]} ${y}`;
+  return new Date(y,m-1,d).toLocaleDateString('en-AU',{weekday:'short', day:'numeric', month:'long', year:'numeric'});
+}
+
+/* ---------------- Month guide (Adelaide Hills) ---------------- */
+// A general guide written for the Adelaide Hills; frosts and heatwaves can shift things a few weeks.
+const SEASON = [
+  ['high summer','Long hot days. Water deeply and pick early in the morning.',[['Sow','Last zinnias and cosmos for autumn flowers'],['Care','Water deeply in the early morning; shade pots on heatwave days'],['Care','Keep deadheading so summer flowers keep coming'],['Cut','Pick in the cool of the morning, straight into water']]],
+  ['late summer','Still hot, but autumn is coming. Plan the cool-season flowers.',[['Plan','Order ranunculus and anemone corms for autumn planting'],['Sow','Stock in trays for winter and spring flowers'],['Care','Keep watering; feed dahlias and zinnias'],['Cut','Dahlias and zinnias, as often as you can']]],
+  ['early autumn','Cooler nights. A great time to sow for spring.',[['Sow','Sweet peas around St Patrick’s Day, plus annual scabiosa and gypsophila'],['Plant','Stock seedlings'],['Care','Pull out finished summer annuals'],['Cut','The first chrysanthemums']]],
+  ['autumn in the hills','The planting season for spring flowers.',[['Plant','Ranunculus and anemone corms (soak them for a few hours first)'],['Sow','Sweet peas, if you haven’t yet'],['Care','Mulch the beds as the weather cools'],['Cut','Chrysanthemums']]],
+  ['late autumn','Frosts begin. Tuck the garden in.',[['Plant','Finish planting corms and stock seedlings'],['Care','After frost blackens the dahlias, cut them back and lift or mulch the tubers'],['Care','Watch for snails on new seedlings'],['Cut','The last of the chrysanthemums']]],
+  ['early winter','Quiet and cold. A month for planning.',[['Plant','Bare-root roses'],['Care','Cut chrysanthemums back once they finish'],['Care','Protect seedlings on frosty nights'],['Plan','Look through the seed box for spring']]],
+  ['midwinter','Pruning time.',[['Care','Prune the roses'],['Care','Prune the hydrangeas'],['Plant','Bare-root roses, if not done'],['Cut','The first anemones']]],
+  ['late winter','The first signs of spring.',[['Care','Feed the roses as new growth starts'],['Care','Check sweet peas and tall flowers have support'],['Sow','Warm-season seeds in trays near the end of the month'],['Cut','Anemones and stock']]],
+  ['early spring','Everything starts growing fast.',[['Care','Feed everything and watch for aphids on new growth'],['Plant','Summer seedlings once the risk of frost has passed'],['Care','Weed while the weeds are small'],['Cut','Ranunculus, anemones and stock']]],
+  ['spring in the hills','Warm soil at last. Sowing time.',[['Sow','Zinnias, cosmos and strawflowers, straight into warm soil'],['Plant','Dahlia tubers'],['Care','Mulch, and stake tall plants early'],['Cut','Ranunculus and the first roses']]],
+  ['late spring in the hills','Warm days, cool nights. Time to sow the summer flowers.',[['Sow','Zinnias, strawflowers, dahlia seed and chives, now the soil is warm'],['Plant','Lisianthus seedlings, and any empty spots in the beds'],['Care','Mulch before the heat, and water deeply in the mornings'],['Cut','Pick often and deadhead roses to keep the flowers coming']]],
+  ['early summer','Abundance! The cutting garden comes into its own.',[['Sow','A last round of zinnias and cosmos for autumn colour'],['Care','Pinch chrysanthemums for the last time before midsummer'],['Care','Water deeply, and shade pots on very hot days'],['Cut','Lisianthus, hydrangeas and the first dahlias']]]
+];
+const WATER_TIP = m => ([12,1,2].includes(m) ? 'Summer: pots can need water every day in a heatwave.' : [6,7,8].includes(m) ? 'Winter: only water when the soil is dry.' : 'Check pots with your finger; they dry out faster than beds.');
+
+/* ---------------- Starting data (written once, then edited by you) ---------------- */
+const DEFAULTS = {
+  spots: [
+    {id:'FB', code:'FB', name:'Front cutting beds', area:'front', kind:'bed', note:'Full sun', order:1},
+    {id:'P1', code:'P1', name:'Big pot', area:'side', kind:'pot', note:'', order:2},
+    {id:'P2', code:'P2', name:'Big pot', area:'side', kind:'pot', note:'', order:3},
+    {id:'P3', code:'P3', name:'Slightly smaller pot', area:'side', kind:'pot', note:'', order:4},
+    {id:'P4', code:'P4', name:'Pot', area:'side', kind:'pot', note:'Perennials going in', order:5},
+    {id:'P5', code:'P5', name:'Pot', area:'side', kind:'pot', note:'Perennials going in', order:6},
+    {id:'T1', code:'T1', name:'Concrete trough', area:'side', kind:'trough', note:'', order:7},
+    {id:'T2', code:'T2', name:'Concrete trough', area:'side', kind:'trough', note:'', order:8},
+    {id:'T3', code:'T3', name:'Concrete trough', area:'side', kind:'trough', note:'', order:9},
+    {id:'CL', code:'CL', name:'Calla lily patch', area:'side', kind:'patch', note:'', order:10},
+    {id:'KP', code:'KP', name:'Kids’ play area', area:'side', kind:'planned', note:'Coming soon', order:11},
+    {id:'VG', code:'VG', name:'Veggie patch', area:'side', kind:'planned', note:'Coming later', order:12}
+  ],
+  plants: [
+    {name:'Roses', variety:'incl. a pink peony-like rose', spot:'FB', type:'Perennial', status:'Growing', from:10, to:4, colour:'#E89AAE', picking:'Pick when the buds are just starting to open', vase:'About 5 to 7 days'},
+    {name:'Peonies', variety:'2 plants', spot:'FB', type:'Perennial', status:'Establishing', from:11, to:11, colour:'#F2B8C6', picking:'Pick at the soft “marshmallow” bud stage', vase:'About a week', notes:'First flowers expected in about 2 years.'},
+    {name:'Chrysanthemums', variety:'pom-pom', spot:'FB', type:'Perennial', status:'Growing', from:3, to:5, colour:'#E8B04B', planted:'October 2026', sun:'Full sun', water:'Regular; more on hot days', picking:'Cut when flowers are almost fully open, as they don’t open further in the vase', vase:'Long lasting, often 1 to 2 weeks',
+      care:{spring:'Pinch out the growing tips for bushier plants with more flowers', summer:'Stop pinching by midsummer; water and feed regularly', autumn:'Flowering time: cut often for the house', winter:'Cut back to near the ground once flowering finishes'}},
+    {name:'Carnations', variety:'raised from seed', spot:'FB', type:'Perennial', status:'Growing', from:10, to:3, colour:'#E5944F', picking:'Pick when the flowers are half to fully open', vase:'Up to 2 weeks'},
+    {name:'Hydrangeas', variety:'', spot:'FB', type:'Perennial', status:'Growing', from:11, to:2, colour:'#A9B8D6', picking:'Pick mature heads that feel slightly papery', vase:'About a week'},
+    {name:'Echinacea', variety:'one raised from seed', spot:'FB', type:'Perennial', status:'Growing', from:12, to:3, colour:'#D98AA0', picking:'Pick when the petals are fully open', vase:'About a week'},
+    {name:'Lisianthus', variety:'6 seedlings', spot:'FB', type:'Annual', status:'Seedlings', from:12, to:3, colour:'#C9B3DD', planted:'November 2026', picking:'Pick when one or two flowers on the stem are open', vase:'Up to 2 weeks'},
+    {name:'Statice', variety:'Forever Happy', spot:'FB', type:'Check type', status:'Growing', from:11, to:3, colour:'#B7A3D6', picking:'Pick when most of the flowers are open', vase:'Long lasting, and it dries well'},
+    {name:'Cosmos', variety:'', spot:'FB', type:'Annual', status:'Seedlings', from:11, to:4, colour:'#F2B8C6', planted:'November 2026', picking:'Pick when the buds are just opening', vase:'About 4 to 6 days'},
+    {name:'Billy buttons', variety:'in one of the troughs', spot:'T1', type:'Perennial', status:'Growing', from:10, to:1, colour:'#E8B04B', picking:'Pick when the balls are fully coloured', vase:'Long lasting, and they dry well', notes:'Check which trough they’re in and move them to the right spot.'},
+    {name:'Calla lilies', variety:'', spot:'CL', type:'Bulb', status:'Growing', from:10, to:1, colour:'#F6E9D7', picking:'Pick when the flower has fully opened', vase:'1 to 2 weeks'},
+    {name:'Ranunculus', variety:'replant April to May', spot:'FB', type:'Corm', status:'Finished for now', from:9, to:11, colour:'#F6CBAE', picking:'Pick at the soft “marshmallow” bud stage', vase:'About 7 to 10 days'},
+    {name:'Anemone', variety:'replant April to May', spot:'FB', type:'Corm', status:'Finished for now', from:7, to:10, colour:'#A9B8D6', picking:'Pick when the petals have just opened', vase:'About a week'},
+    {name:'Stock', variety:'replant April to May', spot:'FB', type:'Annual', status:'Finished for now', from:7, to:10, colour:'#D9C3E6', picking:'Pick when a third to half of the flowers are open', vase:'About a week, beautifully scented'},
+    {name:'Hellebores', variety:'winter flowers for June', spot:'', type:'Perennial', status:'Wish list', from:6, to:9, colour:'#C9D2B0', wish:true},
+    {name:'Alstroemeria', variety:'long vase life', spot:'', type:'Perennial', status:'Wish list', from:10, to:3, colour:'#F6CBAE', wish:true},
+    {name:'Scabiosa Pink Mist', variety:'for a pot', spot:'', type:'Perennial', status:'Wish list', from:10, to:4, colour:'#EBC6CC', wish:true},
+    {name:'Lemon or lime tree', variety:'still deciding', spot:'', type:'Tree', status:'Wish list', from:0, to:0, colour:'#E8E0A0', wish:true}
+  ],
+  seeds: [
+    {name:'Zinnia', variety:'Benary’s Giant · 4 packs', group:'now', method:'direct', from:12, to:4},
+    {name:'Strawflower', variety:'Silvery Rose', group:'now', method:'direct', note:'Needs light to sprout, so barely cover', from:12, to:4},
+    {name:'Dahlia', variety:'Sunny Reggae', group:'now', method:'trays', note:'Plus the seeds you were given', from:12, to:4},
+    {name:'Chives', variety:'', group:'now', method:'direct', from:10, to:12},
+    {name:'Gypsophila', variety:'Snowflake', group:'either', method:'direct', from:10, to:1},
+    {name:'Feverfew', variety:'Golden Ball', group:'either', method:'direct', note:'Needs light to sprout, so barely cover', from:11, to:2},
+    {name:'Scabiosa', variety:'Fama blue and white', group:'either', method:'trays', from:11, to:3},
+    {name:'Annual scabiosa', variety:'Snowmaiden, Summer Fruits, Salmon Rose', group:'autumn', method:'direct', from:10, to:1},
+    {name:'Ranunculus', variety:'corms', group:'aprmay', method:'plant', note:'Soak the corms for a few hours first', from:9, to:11},
+    {name:'Anemone', variety:'corms', group:'aprmay', method:'plant', note:'Soak the corms for a few hours first', from:7, to:10},
+    {name:'Stock', variety:'buy as seedlings', group:'aprmay', method:'plant', from:7, to:10}
+  ],
+  diary: [
+    {date:'2026-11', spots:['P4','P5'], text:'Pulling out the hyacinths (they didn’t flower) so perennials can go in.'},
+    {date:'2026-11', spots:['FB'], text:'Planted the six lisianthus seedlings and cosmos where the ranunculus, anemones and stock finished.'},
+    {date:'2026-11', spots:[], text:'Gave the hollyhocks away.'},
+    {date:'2026-10', spots:['FB'], text:'Planted pom-pom chrysanthemums.'},
+    {date:'2026-05', spots:[], text:'Started the cutting garden!'}
+  ],
+  tasks: [
+    {job:'Water the pots and troughs deeply', where:'P1–P5, T1–T3', often:'3× a week', order:1},
+    {job:'Water the front cutting beds', where:'FB', often:'2× a week', order:2},
+    {job:'Pick flowers and deadhead', where:'FB, roses', often:'Every few days', order:3},
+    {job:'Check for aphids and snails', where:'New growth, seedlings', often:'Weekly', order:4},
+    {job:'Pull weeds while they’re small', where:'FB', often:'Weekly', order:5},
+    {job:'Liquid feed the pots', where:'P1–P5, T1–T3', often:'Fortnightly', order:6}
+  ]
+};
+const GROUPS = [['now','Sow now','late spring, soil is warm','#E7E8CF'],['either','Now or autumn','either works','#F3DDE0'],['autumn','Autumn','for spring flowers','#F8E2D3'],['aprmay','Plant in April to May','bulbs, corms and seedlings','#EFE6D6'],['later','Later','saved for another time','#EDE6DA']];
+const METHOD = {direct:['Direct sow','#D9DCB8'], trays:['Start in trays','#F6CBAE'], plant:['Plant straight in','#D9DCB8']};
+const STATUS_BG = {'Growing':'#D9DCB8','Seedlings':'#F6CBAE','Establishing':'#EBC6CC','Finished for now':'#E6DED0','Wish list':'#EFE6D6','Flowering':'#F2C9D2'};
+const TYPES = ['Perennial','Annual','Bulb','Corm','Shrub','Tree','Herb','Check type'];
+const STATUSES = ['Growing','Seedlings','Establishing','Flowering','Finished for now'];
+const KINDS = [['bed','Garden bed'],['pot','Pot'],['trough','Trough'],['patch','Patch'],['planned','Planned (later)']];
+
+/* ---------------- State ---------------- */
+const S = { status:'loading', user:null, demo:false, error:'', info:'',
+  spots:[], plants:[], seeds:[], diary:[], tasks:[], meta:{}, photos:{},
+  loaded:{}, ui:{} };
+
+/* ---------------- Data backend ---------------- */
+let db = null, auth = null, unsubs = [];
+const base = () => ['households', window.HOUSEHOLD_ID || 'johnston'];
+const COLS = {spots:'garden_spots', plants:'garden_plants', seeds:'garden_seeds', diary:'garden_diary', tasks:'garden_tasks'};
+function colRef(k){ return collection(db, ...base(), COLS[k] || k); }
+function docRef(k, id){ return doc(db, ...base(), COLS[k] || k, id); }
+
+async function put(kind, item){
+  if(S.demo){ const list=S[kind]; const i=list.findIndex(x=>x.id===item.id); if(i>=0) list[i]=item; else list.push(item); render(); return; }
+  const {id, ...rest} = item;
+  try{ await setDoc(docRef(kind,id), rest); }catch(e){ fail(e); }
+}
+async function remove(kind, id){
+  if(S.demo){ S[kind]=S[kind].filter(x=>x.id!==id); render(); return; }
+  try{ await deleteDoc(docRef(kind,id)); }catch(e){ fail(e); }
+}
+async function putMeta(id, data){
+  if(S.demo){ S.meta[id]=data; render(); return; }
+  try{ await setDoc(doc(db, ...base(), 'garden_meta', id), data); }catch(e){ fail(e); }
+}
+async function putPhoto(data){
+  const id = uid('ph');
+  if(S.demo){ S.photos[id]=data; return id; }
+  await setDoc(doc(db, ...base(), 'garden_photos', id), {data, at:Date.now()});
+  S.photos[id]=data; return id;
+}
+async function dropPhoto(id){ if(S.demo){ delete S.photos[id]; return; } try{ await deleteDoc(doc(db, ...base(), 'garden_photos', id)); }catch(e){} }
+async function getPhoto(id){
+  if(!id || S.photos[id]!==undefined || S.demo) return;
+  S.photos[id] = null;
+  try{ const d = await getDoc(doc(db, ...base(), 'garden_photos', id)); S.photos[id] = d.exists() ? d.data().data : ''; liveRender(); }catch(e){}
+}
+function photoSrc(id){ if(!id) return ''; if(S.photos[id]===undefined) getPhoto(id); return S.photos[id] || ''; }
+function fail(e){ S.error = e && e.code==='permission-denied' ? "Couldn't save: this account doesn't have access, or the database rules need updating (see the setup guide)." : "Couldn't save that change. Check the internet connection and try again."; render(); }
+
+function withIds(prefix, list){ return list.map((x,i)=>({id: x.id || `${prefix}${String(i+1).padStart(2,'0')}`, ...x})); }
+async function seedDefaults(){
+  // Writes the starting data the first time only. A marker stops it ever running again.
+  const mark = await getDoc(doc(db, ...base(), 'garden_meta', 'seeded'));
+  if(mark.exists()) return;
+  const b = writeBatch(db);
+  withIds('s',DEFAULTS.spots).forEach(({id,...r})=>b.set(docRef('spots',id), r));
+  withIds('pl',DEFAULTS.plants).forEach(({id,...r})=>b.set(docRef('plants',id), r));
+  withIds('sd',DEFAULTS.seeds).forEach(({id,...r})=>b.set(docRef('seeds',id), r));
+  withIds('d',DEFAULTS.diary).forEach(({id,...r})=>b.set(docRef('diary',id), r));
+  withIds('t',DEFAULTS.tasks).forEach(({id,...r})=>b.set(docRef('tasks',id), r));
+  b.set(doc(db, ...base(), 'garden_meta', 'seeded'), {at:Date.now()});
+  await b.commit();
+}
+function listen(){
+  unsubs.forEach(u=>u()); unsubs=[];
+  Object.keys(COLS).forEach(k=>{
+    unsubs.push(onSnapshot(colRef(k), snap=>{ S[k]=snap.docs.map(d=>({...d.data(), id:d.id})); S.loaded[k]=true; liveRender(); }, err=>{ if(err.code==='permission-denied'){ S.status='denied'; render(); } }));
+  });
+  unsubs.push(onSnapshot(collection(db, ...base(), 'garden_meta'), snap=>{ snap.docs.forEach(d=>{ S.meta[d.id]=d.data(); }); liveRender(); }, ()=>{}));
+}
+function startDemo(){
+  S.demo=true; S.status='ready'; S.user={email:'demo'};
+  S.spots=withIds('s',DEFAULTS.spots); S.plants=withIds('pl',DEFAULTS.plants); S.seeds=withIds('sd',DEFAULTS.seeds); S.diary=withIds('d',DEFAULTS.diary); S.tasks=withIds('t',DEFAULTS.tasks);
+  Object.keys(COLS).forEach(k=>S.loaded[k]=true); render();
+}
+
+/* ---------------- Rendering ---------------- */
+function route(){ const h = location.hash.replace(/^#\/?/,''); const [page, id] = h.split('/'); return {page: page || 'home', id: id ? decodeURIComponent(id) : ''}; }
+// While you're typing, updates from the other phone wait until you leave the box.
+function liveRender(){ const a=document.activeElement; if(a && a.closest && a.closest('[data-keep]')){ S.pending=true; return; } render(); }
+document.addEventListener('focusout', ()=>setTimeout(()=>{ if(S.pending){ const a=document.activeElement; if(!(a && a.closest && a.closest('[data-keep]'))){ S.pending=false; render(); } } }, 150));
+window.addEventListener('hashchange', ()=>{ S.ui={}; S.error=''; render(); const r=route(); const t = r.page==='plants' && r.id==='wish' ? $('wish') : null; if(t) t.scrollIntoView({block:'start'}); else window.scrollTo(0,0); });
+
+const NAV = [['home','Home'],['map','Garden map'],['plants','Plants'],['seeds','Seed box'],['bloom','Bloom calendar'],['diary','Diary']];
+function header(active){
+  return `<header class="top">
+    <div class="brand">
+      <svg width="50" height="62" viewBox="0 0 64 78" aria-hidden="true"><ellipse cx="32" cy="39" rx="30" ry="37" fill="#5E4440"/><ellipse cx="32" cy="39" rx="25" ry="32" fill="none" stroke="#EBC6CC" stroke-width="1.5" stroke-dasharray="1.5 4" stroke-linecap="round"/><text x="32" y="36" text-anchor="middle" font-family="Italiana, serif" font-size="26" fill="#EBC6CC">j</text><text x="32" y="58" text-anchor="middle" font-family="Italiana, serif" font-size="26" fill="#EBC6CC">g</text></svg>
+      <div><a class="back" href="../">← Johnston Dashboard</a><p class="name">Johnston Garden</p></div>
+    </div>
+    <nav class="main" aria-label="Garden sections">${NAV.map(([k,l])=>`<a href="#${k}"${k===active?' aria-current="page"':''}>${l}</a>`).join('')}</nav>
+  </header>
+  ${S.demo?`<div class="notice">This is a demo. Nothing is saved.</div>`:''}
+  ${S.error?`<div class="notice err" role="alert"><span>${esc(S.error)}</span><button class="link" onclick="G.clearMsg()">Dismiss</button></div>`:''}
+  ${S.info?`<div class="notice" role="status"><span>${esc(S.info)}</span><button class="link" onclick="G.clearMsg()">OK</button></div>`:''}`;
+}
+function ptitle(t, sub, actions=''){ return `<div class="ptitle"><div><p class="s">${sub}</p><h1>${t}</h1></div><div style="display:flex;gap:10px;flex-wrap:wrap">${actions}</div></div>`; }
+const spotByCode = c => S.spots.find(s=>s.code===c);
+const spotsSorted = () => S.spots.slice().sort((a,b)=>(a.order||99)-(b.order||99) || a.code.localeCompare(b.code));
+const chip = code => { const s=spotByCode(code); return `<span class="chip${s&&s.area==='front'?' front':''}">${esc(code||'?')}</span>`; };
+const realPlants = () => S.plants.filter(p=>!p.wish);
+function plantArt(p, size=54){
+  const ph = p.photos && p.photos[0] ? photoSrc(p.photos[0]) : '';
+  return ph ? `<img src="${ph}" alt="">` : `<svg width="${size}" height="${size}" aria-hidden="true" style="fill:${esc(p.colour||'#EBC6CC')}"><use href="#bloom"/></svg>`;
+}
+
+function render(){
+  const app = $('app');
+  if(S.status==='loading'){ app.innerHTML = `<p class="muted">Loading the garden…</p>`; return; }
+  if(S.status==='signedOut' || S.status==='denied' || S.status==='noConfig'){
+    app.innerHTML = `<div class="gate"><svg width="70" height="82" aria-hidden="true"><use href="#magnolia"/></svg>
+      <h1 style="font-family:var(--display);font-weight:400;font-size:46px;margin:6px 0">Johnston Garden</h1>
+      ${S.status==='denied' ? `<p>${esc(S.user&&S.user.email)} doesn’t have access to the family garden. Sign out and use your family Google account.</p><button class="btn line" onclick="G.signOut()">Sign out</button>`
+        : S.status==='noConfig' ? `<p>The Firebase settings file wasn’t found. The garden folder needs to sit inside the dashboard site (see the setup guide).</p>`
+        : `<p class="script" style="font-size:24px;margin:0 0 16px">our little cutting garden</p><button class="btn" onclick="G.signIn()">Sign in with Google</button>${S.error?`<p class="small" style="margin-top:12px">${esc(S.error)}</p>`:''}`}
+      <p style="margin-top:22px"><button class="link small" onclick="G.demo()">Or look around a demo</button></p></div>`;
+    return;
+  }
+  const r = route();
+  const pages = {home:pageHome, map:pageMap, plants:pagePlants, plant:pagePlant, seeds:pageSeeds, bloom:pageBloom, diary:pageDiary};
+  const fn = pages[r.page] || pageHome;
+  const active = r.page==='plant' ? 'plants' : (pages[r.page] ? r.page : 'home');
+  app.innerHTML = header(active) + fn(r.id) + `<footer class="small muted" style="text-align:center;margin-top:20px">${S.demo?'Demo':esc(S.user.email)} · <button class="link small" onclick="G.signOut()">Sign out</button></footer>` + (S.ui.modal ? S.ui.modal() : '');
+}
+
+/* ---------------- Home ---------------- */
+function pageHome(){
+  const now = new Date(), m = now.getMonth()+1, [season, blurb, jobs] = SEASON[m-1];
+  const wk = mondayOf(now), weekTicks = (S.meta.week && S.meta.week.week===wk) ? S.meta.week.done||{} : {};
+  const mk = monthKey(now), monthMeta = (S.meta.month && S.meta.month.month===mk) ? S.meta.month : {done:{}, extra:[]};
+  const allJobs = [...jobs.map((j,i)=>({kind:j[0], text:j[1], key:'j'+i})), ...(monthMeta.extra||[]).map((t,i)=>({kind:'Also', text:t, key:'x'+i, extra:i}))];
+  const tasks = S.tasks.slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  const flowering = realPlants().filter(p=>span(p.from,p.to)[m-1] && p.status!=='Finished for now' && p.status!=='Establishing').map(p=>p.name);
+  const next = realPlants().filter(p=>{ const n=m%12; return p.status!=='Establishing' && span(p.from,p.to)[n] && !span(p.from,p.to)[m-1]; }).map(p=>p.name);
+  const toSow = S.seeds.filter(s=>!s.sown && (s.group==='now'||s.group==='either')).length;
+  const front = spotsSorted().filter(s=>s.area==='front'), side = spotsSorted().filter(s=>s.area==='side');
+  const editTasks = S.ui.editTasks;
+  return `
+  <div class="row">
+    <section class="hero" aria-labelledby="month-h"><svg class="bg" aria-hidden="true"><rect width="100%" height="100%" fill="url(#leaves)"/></svg>
+      <div class="oval"><svg width="58" height="68" aria-hidden="true"><use href="#magnolia"/></svg>
+        <p class="script" style="margin:6px 0 0;font-size:26px;font-family:var(--script)">${esc(season)}</p>
+        <h2 id="month-h">${MONTHS[m-1]}</h2><p>${esc(blurb)}</p></div>
+    </section>
+    <section class="card checklist" style="flex:1 1 380px" aria-labelledby="week-h">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h2 class="h2" id="week-h">This week</h2><span class="script" style="font-size:20px">resets each Monday</span></div>
+      ${tasks.map(t=>{ const on=!!weekTicks[t.id]; return `<div class="it">
+        <button class="tick${on?' on':''}" aria-pressed="${on}" aria-label="${on?'Untick':'Tick'} ${esc(t.job)}" onclick="G.tickWeek('${t.id}')">${on?'✓':''}</button>
+        <span style="font-size:15px;line-height:1.35"><span class="${on?'done-text':''}">${esc(t.job)}</span>${t.where?`<span class="small muted" style="display:block">${esc(t.where)}</span>`:''}${editTasks?`<button class="link small danger" onclick="G.delTask('${t.id}')">Remove</button>`:''}</span>
+        <span class="often">${esc(t.often||'')}</span></div>`; }).join('')}
+      ${editTasks ? `<div data-keep style="display:grid;gap:8px;margin-top:12px"><input id="nt-job" class="field" placeholder="New job, e.g. feed the roses"><div style="display:flex;gap:8px"><input id="nt-where" class="field" placeholder="Where (e.g. FB)"><input id="nt-often" class="field" placeholder="How often"></div><div style="display:flex;gap:8px"><button class="btn small" onclick="G.addTask()">Add job</button><button class="btn small line" onclick="G.ui('editTasks',false)">Done</button></div></div>`
+        : `<p class="small muted" style="margin:10px 0 0">${esc(WATER_TIP(m))} <button class="link small" onclick="G.ui('editTasks',true)">Edit jobs</button></p>`}
+    </section>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px">
+    <section class="dark jobs" aria-labelledby="jobs-h"><h2 class="h2" id="jobs-h" style="margin-bottom:10px">This month</h2>
+      ${allJobs.map(j=>{ const on=!!(monthMeta.done||{})[j.key]; return `<div class="j"><span class="k">${esc(j.kind)}</span><span class="${on?'done-text':''}" style="${on?'color:#C9B6AC':''}">${esc(j.text)}${j.extra!=null?` <button class="link small" style="color:#EBC6CC" onclick="G.delMonthJob(${j.extra})">Remove</button>`:''}</span><button class="tick${on?' on':''}" aria-pressed="${on}" aria-label="${on?'Untick':'Tick'} ${esc(j.text)}" onclick="G.tickMonth('${j.key}')">${on?'✓':''}</button></div>`; }).join('')}
+      <div data-keep style="display:flex;gap:8px;margin-top:12px"><input id="nm-job" class="field" placeholder="Add a job for this month"><button class="btn small blush" onclick="G.addMonthJob()">Add</button></div>
+    </section>
+    <section class="card" style="background:var(--blush);display:flex;flex-direction:column;gap:12px" aria-labelledby="fl-h"><h2 class="h2" id="fl-h">In flower now</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:7px">${flowering.length?flowering.map(f=>`<span class="pill" style="background:var(--cream)">${esc(f)}</span>`).join(''):'<span class="muted">Nothing marked as flowering this month.</span>'}</div>
+      ${next.length?`<p style="margin:auto 0 0;font-family:var(--serif);font-style:italic;font-size:17px">Next month: ${esc(andList(next))}.</p>`:''}
+    </section>
+    <section class="card" style="display:flex;flex-direction:column;gap:10px" aria-labelledby="sp-h"><h2 class="h2" id="sp-h">Spot codes</h2>
+      ${[['Front garden',front,true],['Side garden',side,false]].map(([n,list,isF])=>`<div><span class="script" style="font-size:22px">${n}</span><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">${list.map(s=>`<a href="#map/${encodeURIComponent(s.code)}" class="chip${isF?' front':''}" style="text-decoration:none;min-height:30px">${esc(s.code)}</a>`).join('')}</div></div>`).join('')}
+    </section>
+  </div>
+  <div style="display:flex;align-items:baseline;gap:12px;margin-top:6px;flex-wrap:wrap"><h2 style="margin:0;font-family:var(--display);font-weight:400;font-size:38px">In the garden</h2><span class="script" style="font-size:22px">everything in one place</span></div>
+  <div class="tiles">
+    ${[['map','Garden map',`Front and side gardens, ${S.spots.length} spots`,'where everything is','#AFB380'],['plants','Plants',`${realPlants().length} plants`,'what we grow','#EBC6CC'],['seeds','Seed box',`${toSow} packet${toSow===1?'':'s'} to sow now`,'sow now','#E8B04B'],['bloom','Bloom calendar','What flowers each month','flowers all year','#F6CBAE'],['diary','Garden diary',`${S.diary.length} entries`,'what happened','#FAF5EA'],['plants/wish','Wish list',`${S.plants.filter(p=>p.wish).length} plants for one day`,'one day','#E5944F']]
+      .map(([h,n,d,note,bg])=>`<a class="tile" href="#${h}" style="background:${bg}"><span class="n">${note}</span><span><strong>${n}</strong><span class="d" style="font-size:14px">${esc(d)}</span></span></a>`).join('')}
+  </div>`;
+}
+
+/* ---------------- Map ---------------- */
+function pageMap(code){
+  const sel = spotByCode(code) || spotByCode('FB') || spotsSorted()[0];
+  const tok = s => `<a href="#map/${encodeURIComponent(s.code)}" class="tok k-${esc(s.kind||'patch')}" aria-current="${sel&&s.id===sel.id}" style="text-decoration:none;color:var(--ink)">${esc(s.code)}${s.kind==='planned'||s.kind==='bed'?`<small>${esc(s.name)}</small>`:''}</a>`;
+  const area = (k, label) => `<div class="area ${k}"><h2>${label}</h2><div class="toks">${spotsSorted().filter(s=>s.area===k).map(tok).join('') || '<span class="muted">No spots yet</span>'}</div></div>`;
+  const here = sel ? realPlants().filter(p=>p.spot===sel.code) : [];
+  return ptitle('Garden map','where everything is', `<button class="btn line" onclick="G.spotForm()">+ Add a spot</button>`) + `
+  <div class="row" style="align-items:flex-start">
+    <section class="card" style="flex:1.6 1 520px" aria-label="Garden plan">
+      <div class="areas">${area('front','Front garden')}${area('side','Side garden')}</div>
+      <p class="small muted" style="margin:12px 0 0">Not to scale. Tap a spot to see what’s growing there. Dashed outlines are plans for later.</p>
+    </section>
+    <div style="flex:1 1 320px;display:flex;flex-direction:column;gap:20px;min-width:0">
+      ${sel ? `<section class="dark" aria-labelledby="sel-h">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="chip" style="background:var(--blush);color:var(--ink)">${esc(sel.code)}</span><h2 class="h2" id="sel-h" style="font-size:22px;color:#F3EBD3">${esc(sel.name)}</h2></div>
+        <p class="small" style="color:#EBC6CC;margin:8px 0 12px">${esc([sel.area==='front'?'Front garden':'Side garden', sel.note, `${here.length} plant${here.length===1?'':'s'}`].filter(Boolean).join(' · '))}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">${here.map(p=>`<a class="pill" href="#plant/${p.id}" style="background:var(--cream);color:var(--ink);text-decoration:none">${esc(p.name)}</a>`).join('') || '<span style="color:#EBC6CC">Nothing here yet.</span>'}</div>
+        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap"><a class="btn blush" href="#plant/new?spot=${encodeURIComponent(sel.code)}">+ Add a plant</a><button class="btn line" style="color:#F3EBD3;border-color:#EBC6CC" onclick="G.spotForm('${sel.id}')">Edit spot</button></div>
+      </section>` : ''}
+      <section class="card spotlist" aria-labelledby="all-h"><h2 class="h2" id="all-h" style="font-size:21px;margin-bottom:6px">All spots</h2>
+        ${spotsSorted().map(s=>{ const n=realPlants().filter(p=>p.spot===s.code).length; return `<a class="r" href="#map/${encodeURIComponent(s.code)}" style="text-decoration:none">${chip(s.code)}<span>${esc(s.name)}</span><span class="small muted">${n?`${n} plant${n===1?'':'s'}`:esc(s.note||'empty')}</span></a>`; }).join('')}
+      </section>
+    </div>
+  </div>`;
+}
+function spotForm(id){
+  const s = S.spots.find(x=>x.id===id) || {code:'', name:'', area:'side', kind:'pot', note:''};
+  S.ui.modal = () => `<div class="modal-bg" onclick="G.closeModal()"></div><div class="modal" role="dialog" aria-modal="true" aria-labelledby="sf-h" data-keep>
+    <h2 class="h2" id="sf-h">${id?'Edit spot':'Add a spot'}</h2>
+    <div class="grid2"><label class="f">Code<input id="sf-code" class="field" maxlength="4" value="${esc(s.code)}" placeholder="e.g. P6"></label>
+      <label class="f">Name<input id="sf-name" class="field" value="${esc(s.name)}" placeholder="e.g. Blue pot by the gate"></label></div>
+    <div class="grid2"><label class="f">Garden<select id="sf-area" class="field"><option value="front" ${s.area==='front'?'selected':''}>Front garden</option><option value="side" ${s.area==='side'?'selected':''}>Side garden</option></select></label>
+      <label class="f">Kind<select id="sf-kind" class="field">${KINDS.map(([k,l])=>`<option value="${k}" ${s.kind===k?'selected':''}>${l}</option>`).join('')}</select></label></div>
+    <label class="f">Note<input id="sf-note" class="field" value="${esc(s.note||'')}" placeholder="e.g. Full sun, afternoon shade"></label>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between">
+      ${id?`<button class="link danger" onclick="G.delSpot('${id}')">Remove spot</button>`:'<span></span>'}
+      <span style="display:flex;gap:10px"><button class="btn line" onclick="G.closeModal()">Cancel</button><button class="btn" onclick="G.saveSpot('${id||''}')">Save</button></span></div>
+  </div>`;
+  render(); setTimeout(()=>{ const el=$('sf-code'); if(el) el.focus(); },50);
+}
+
+/* ---------------- Plants ---------------- */
+function pagePlants(id){
+  const f = S.ui.filter || (id==='wish' ? 'wish' : 'All'), q = (S.ui.q||'').toLowerCase().trim();
+  const m = new Date().getMonth()+1;
+  const tests = {'All':p=>true, 'In flower now':p=>span(p.from,p.to)[m-1] && p.status!=='Finished for now' && p.status!=='Establishing', 'Perennials':p=>p.type==='Perennial', 'Annuals':p=>p.type==='Annual', 'Bulbs and corms':p=>p.type==='Bulb'||p.type==='Corm', 'Front garden':p=>(spotByCode(p.spot)||{}).area==='front', 'Side garden':p=>(spotByCode(p.spot)||{}).area==='side'};
+  const list = realPlants().filter(tests[f]||tests.All).filter(p=>!q || [p.name,p.variety,p.spot,p.type,p.status].join(' ').toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name));
+  const wish = S.plants.filter(p=>p.wish);
+  const tones = ['#EBC6CC','#D9DCB8','#F6CBAE'];
+  return ptitle('Plants','what we grow', `<a class="btn" href="#plant/new">+ Add a plant</a>`) + `
+  <div class="filters"><input type="search" class="search" placeholder="Search plants" aria-label="Search plants" value="${esc(S.ui.q||'')}" data-keep oninput="G.search(this.value)">
+    ${Object.keys(tests).map(k=>`<a href="#plants" aria-current="${k===f}" onclick="event.preventDefault();G.filter('${k}')">${k}</a>`).join('')}</div>
+  <div class="pgrid" id="pgrid">${list.map((p,i)=>`<a class="pcard" href="#plant/${p.id}">
+      <div class="ph" style="background:${tones[i%3]}">${plantArt(p)}</div>
+      <div class="b"><h3>${esc(p.name)}</h3>${p.variety?`<span class="v">${esc(p.variety)}</span>`:''}
+      <div class="tags">${chip(p.spot)}<span class="pill">${esc(p.type||'')}</span><span class="pill" style="background:${STATUS_BG[p.status]||'#EFE6D6'}">${esc(p.status||'')}</span></div>
+      ${p.from?`<span class="small muted">Flowers ${bloomText(p.from,p.to)}</span>`:''}</div></a>`).join('') || `<p class="muted">No plants match.</p>`}</div>
+  <section id="wish" style="background:var(--oat);border-radius:22px;padding:22px 26px" aria-labelledby="wish-h">
+    <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:12px;flex-wrap:wrap"><h2 class="h2" id="wish-h">Wish list</h2><span class="script" style="font-size:22px">one day, when there’s room</span><a class="link small" href="#plant/new?wish=1" style="margin-left:auto">+ Add to wish list</a></div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px">${wish.map(p=>`<a class="wish" href="#plant/${p.id}"><strong>${esc(p.name)}</strong><span class="script" style="font-size:18px">${esc(p.variety||'')}</span></a>`).join('') || '<span class="muted">Nothing on the wish list.</span>'}</div>
+  </section>`;
+}
+
+/* ---------------- One plant ---------------- */
+function pagePlant(idRaw){
+  const [id, qs] = String(idRaw).split('?');
+  const params = new URLSearchParams(qs||'');
+  const isNew = id==='new';
+  const p = isNew ? {id:'', name:'', variety:'', spot:params.get('spot')||'', type:'Perennial', status:params.get('wish')?'Wish list':'Growing', wish:!!params.get('wish'), from:0, to:0, colour:'#EBC6CC', care:{}} : S.plants.find(x=>x.id===id);
+  if(!p) return `<p>That plant couldn’t be found. <a href="#plants">Back to plants</a></p>`;
+  if(isNew || S.ui.edit) return plantForm(p, isNew);
+  const sp = spotByCode(p.spot), photos = p.photos||[];
+  const care = p.care||{};
+  const facts = [['Spot', sp?`${sp.code} · ${sp.name}`:(p.wish?'Not planted yet':'')],['Type',p.type],['Flowers',bloomText(p.from,p.to)],['Planted',p.planted],['Sun',p.sun],['Water',p.water],['Picking',p.picking],['Vase life',p.vase]].filter(([,v])=>v);
+  const diary = S.diary.filter(d=>(d.plants||[]).includes(p.id) || (d.text||'').toLowerCase().includes(p.name.toLowerCase().replace(/s$/,''))).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  return `<a href="#plants" class="small" style="text-decoration:none">← All plants</a>
+  <div class="row" style="align-items:flex-start">
+    <div style="flex:1 1 420px;display:flex;flex-direction:column;gap:14px">
+      <div class="photo-main" style="background:${esc(p.colour||'#EBC6CC')}33">${photos[0]&&photoSrc(photos[0])?`<img src="${photoSrc(photos[0])}" alt="${esc(p.name)}">`:`<svg width="170" height="170" aria-hidden="true" style="fill:${esc(p.colour||'#EBC6CC')}"><use href="#bloom"/></svg>`}</div>
+      <div class="thumbs">${photos.slice(0,3).map((ph,i)=>`<button onclick="G.mainPhoto('${p.id}',${i})" aria-label="Show photo ${i+1}">${photoSrc(ph)?`<img src="${photoSrc(ph)}" alt="">`:''}</button>`).join('')}
+        <label>+ Add photo<input type="file" accept="image/*" class="hidden" onchange="G.addPlantPhoto('${p.id}',this)"></label></div>
+      <p class="small muted" id="photo-status" style="margin:0"></p>
+      ${Object.values(care).some(Boolean)?`<section class="dark year" aria-labelledby="yr-h"><h2 class="h2" id="yr-h" style="font-size:22px;margin-bottom:6px">Through the year</h2>${['spring','summer','autumn','winter'].filter(k=>care[k]).map(k=>`<div class="r"><span>${k[0].toUpperCase()+k.slice(1)}</span><span>${esc(care[k])}</span></div>`).join('')}</section>`:''}
+    </div>
+    <div style="flex:1 1 440px;display:flex;flex-direction:column;gap:18px">
+      <div>${p.variety?`<p class="script" style="margin:0;font-size:28px">${esc(p.variety)}</p>`:''}
+        <h1 style="margin:0;font-family:var(--display);font-weight:400;font-size:clamp(40px,6vw,54px);line-height:1">${esc(p.name)}</h1>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">${p.spot?`<span class="chip dk">${esc(p.spot)}</span>`:''}${p.type?`<span class="pill" style="background:#D9DCB8">${esc(p.type)}</span>`:''}<span class="pill" style="background:${STATUS_BG[p.status]||'#EFE6D6'}">${esc(p.status||'')}</span></div></div>
+      ${facts.length?`<section class="card facts" aria-label="Plant details">${facts.map(([a,b])=>`<div class="r"><b>${a}</b><span>${esc(b)}</span></div>`).join('')}</section>`:''}
+      <section class="card" aria-labelledby="pd-h"><h2 class="h2" id="pd-h" style="font-size:21px;margin-bottom:8px">From the diary</h2>
+        ${diary.length?diary.map(d=>`<div style="font-size:14.5px;line-height:1.45;padding:4px 0"><strong>${esc(dateText(d.date))}</strong> · ${esc(d.text)}</div>`).join(''):'<p class="muted small" style="margin:0">No diary entries mention this plant yet.</p>'}</section>
+      <section style="background:var(--oat);border-radius:22px;padding:20px 24px" aria-labelledby="nt-h"><h2 class="h2" id="nt-h" style="font-size:21px;margin-bottom:8px">Our notes</h2>
+        <p style="margin:0;font-size:15px;white-space:pre-wrap">${p.notes?esc(p.notes):'<span class="muted">Nothing yet. Tap Edit to add colour, where you bought it, what worked.</span>'}</p></section>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" onclick="G.ui('edit',true)">Edit plant</button>
+        ${p.wish?`<button class="btn line" onclick="G.plantIt('${p.id}')">We’ve planted it!</button>`:''}</div>
+    </div>
+  </div>`;
+}
+function plantForm(p, isNew){
+  const care = p.care||{};
+  const monthOpts = v => `<option value="0">Not set</option>`+MONTHS.map((n,i)=>`<option value="${i+1}" ${+v===i+1?'selected':''}>${n}</option>`).join('');
+  return `<a href="#${isNew?'plants':'plant/'+p.id}" class="small" style="text-decoration:none" onclick="G.ui('edit',false)">← Cancel</a>
+  ${ptitle(isNew?(p.wish?'Add to wish list':'Add a plant'):'Edit plant', isNew?'something new':esc(p.name))}
+  <section class="card" data-keep style="display:flex;flex-direction:column;gap:14px">
+    <div class="grid2"><label class="f">Name<input id="pf-name" class="field" value="${esc(p.name)}" placeholder="e.g. Sweet peas"></label>
+      <label class="f">Variety or note<input id="pf-variety" class="field" value="${esc(p.variety||'')}" placeholder="e.g. Pink Mist, or ‘from Mum’"></label></div>
+    <div class="grid2">
+      <label class="f">Spot<select id="pf-spot" class="field"><option value="">No spot (wish list or not planted)</option>${spotsSorted().map(s=>`<option value="${esc(s.code)}" ${s.code===p.spot?'selected':''}>${esc(s.code)} · ${esc(s.name)}</option>`).join('')}</select></label>
+      <label class="f">Type<select id="pf-type" class="field">${TYPES.map(t=>`<option ${t===p.type?'selected':''}>${t}</option>`).join('')}</select></label>
+      <label class="f">Status<select id="pf-status" class="field">${[...STATUSES,'Wish list'].map(t=>`<option ${t===p.status?'selected':''}>${t}</option>`).join('')}</select></label></div>
+    <div class="grid2"><label class="f">Flowers from<select id="pf-from" class="field">${monthOpts(p.from)}</select></label>
+      <label class="f">Flowers until<select id="pf-to" class="field">${monthOpts(p.to)}</select></label>
+      <label class="f">Flower colour<input id="pf-colour" type="color" class="field" style="padding:4px" value="${esc(p.colour||'#EBC6CC')}"></label></div>
+    <div class="grid2"><label class="f">Planted<input id="pf-planted" class="field" value="${esc(p.planted||'')}" placeholder="e.g. October 2026"></label>
+      <label class="f">Sun<input id="pf-sun" class="field" value="${esc(p.sun||'')}" placeholder="e.g. Full sun"></label>
+      <label class="f">Water<input id="pf-water" class="field" value="${esc(p.water||'')}" placeholder="e.g. Twice a week"></label></div>
+    <div class="grid2"><label class="f">When to pick<input id="pf-picking" class="field" value="${esc(p.picking||'')}"></label>
+      <label class="f">Vase life<input id="pf-vase" class="field" value="${esc(p.vase||'')}"></label></div>
+    <div class="grid2">${['spring','summer','autumn','winter'].map(k=>`<label class="f">${k[0].toUpperCase()+k.slice(1)} care<textarea id="pf-${k}" class="field" style="min-height:70px">${esc(care[k]||'')}</textarea></label>`).join('')}</div>
+    <label class="f">Our notes<textarea id="pf-notes" class="field">${esc(p.notes||'')}</textarea></label>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+      ${isNew?'<span></span>':(S.ui.confirmDel?`<span><button class="btn small" style="background:#9B3B2E" onclick="G.delPlant('${p.id}')">Yes, remove ${esc(p.name)}</button> <button class="link small" onclick="G.ui('confirmDel',false)">Keep it</button></span>`:`<button class="link danger" onclick="G.ui('confirmDel',true)">Remove this plant</button>`)}
+      <span style="display:flex;gap:10px"><button class="btn" onclick="G.savePlant('${p.id||''}')">Save</button></span></div>
+  </section>`;
+}
+
+/* ---------------- Seed box ---------------- */
+function pageSeeds(){
+  const packet = s => { const [ml, mbg] = METHOD[s.method]||METHOD.direct; return `<article class="packet">
+    <h3>${esc(s.name)}</h3>${s.variety?`<span class="script" style="font-size:19px;line-height:1.1">${esc(s.variety)}</span>`:''}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"><span class="pill" style="background:${mbg}">${ml}</span><span class="pill" style="background:${s.sown?'#D9DCB8':'#EFE6D6'}">${s.sown?`Sown ${esc(dateText(s.sown))}`:'Not sown yet'}</span></div>
+    ${s.note?`<span class="small muted">${esc(s.note)}</span>`:''}
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:4px"><button class="link small" onclick="G.sow('${s.id}')">${s.sown?'Mark as not sown':(s.method==='plant'?'Mark as planted':'Mark as sown')}</button><button class="link small" onclick="G.seedForm('${s.id}')">Edit</button></div>
+  </article>`; };
+  return ptitle('Seed box','sow, grow, repeat', `<button class="btn" onclick="G.seedForm()">+ Add a packet</button>`) + `
+  <div class="dark" style="padding:14px 20px;font-size:15px;line-height:1.45">You like to keep seed-raising to one or two rounds a year, so packets you can <strong>sow straight into the garden</strong> are marked “Direct sow”. Only those marked “Start in trays” need a seed-raising session.</div>
+  ${GROUPS.map(([k,t,sub,bg])=>{ const list=S.seeds.filter(s=>(s.group||'later')===k); if(!list.length) return ''; return `<section class="group" style="background:${bg}" aria-label="${t}">
+    <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><h2 class="h2">${t}</h2><span class="script" style="font-size:22px">${sub}</span></div>
+    <div class="packets">${list.sort((a,b)=>a.name.localeCompare(b.name)).map(packet).join('')}</div></section>`; }).join('')}
+  <p class="small muted" style="margin:0">Sowing times are a general guide for the Adelaide Hills; check each packet too.</p>`;
+}
+function seedForm(id){
+  const s = S.seeds.find(x=>x.id===id) || {name:'', variety:'', group:'now', method:'direct', note:'', from:0, to:0};
+  const monthOpts = v => `<option value="0">Not set</option>`+MONTHS.map((n,i)=>`<option value="${i+1}" ${+v===i+1?'selected':''}>${n}</option>`).join('');
+  S.ui.modal = () => `<div class="modal-bg" onclick="G.closeModal()"></div><div class="modal" role="dialog" aria-modal="true" aria-labelledby="sd-h" data-keep>
+    <h2 class="h2" id="sd-h">${id?'Edit packet':'Add a packet'}</h2>
+    <div class="grid2"><label class="f">Flower<input id="sd-name" class="field" value="${esc(s.name)}" placeholder="e.g. Cosmos"></label><label class="f">Variety<input id="sd-variety" class="field" value="${esc(s.variety||'')}"></label></div>
+    <div class="grid2"><label class="f">When<select id="sd-group" class="field">${GROUPS.map(([k,t])=>`<option value="${k}" ${s.group===k?'selected':''}>${t}</option>`).join('')}</select></label>
+      <label class="f">How<select id="sd-method" class="field">${Object.entries(METHOD).map(([k,[l]])=>`<option value="${k}" ${s.method===k?'selected':''}>${l}</option>`).join('')}</select></label></div>
+    <div class="grid2"><label class="f">Flowers from<select id="sd-from" class="field">${monthOpts(s.from)}</select></label><label class="f">Flowers until<select id="sd-to" class="field">${monthOpts(s.to)}</select></label></div>
+    <label class="f">Note<input id="sd-note" class="field" value="${esc(s.note||'')}" placeholder="e.g. Needs light to sprout"></label>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between">${id?`<button class="link danger" onclick="G.delSeed('${id}')">Remove packet</button>`:'<span></span>'}
+      <span style="display:flex;gap:10px"><button class="btn line" onclick="G.closeModal()">Cancel</button><button class="btn" onclick="G.saveSeed('${id||''}')">Save</button></span></div></div>`;
+  render(); setTimeout(()=>{ const el=$('sd-name'); if(el) el.focus(); },50);
+}
+
+/* ---------------- Bloom calendar ---------------- */
+function pageBloom(){
+  const now = new Date().getMonth()+1;
+  const growing = realPlants().filter(p=>p.from && p.status!=='Establishing').sort((a,b)=>a.from-b.from || a.name.localeCompare(b.name));
+  const seeds = S.seeds.filter(s=>s.from && s.group!=='aprmay').sort((a,b)=>a.from-b.from);
+  const wish = S.plants.filter(p=>p.wish && p.from);
+  const row = (name, a, b, cls, href) => `${href?`<a class="nm" href="${href}">${esc(name)}</a>`:`<span class="nm">${esc(name)}</span>`}${span(a,b).map((on,i)=>`<span class="c${on?' '+cls:''}${i+1===now?' now':''}"></span>`).join('')}`;
+  const counts = MON.map((_,i)=>[...growing,...seeds].filter(p=>span(p.from,p.to)[i]).length);
+  const zero = counts.map((n,i)=>n===0?MONTHS[i]:null).filter(Boolean);
+  const low = counts.map((n,i)=>n>0&&n<3?MONTHS[i]:null).filter(Boolean);
+  const busiest = counts.indexOf(Math.max(...counts));
+  return ptitle('Bloom calendar','flowers all year round') + `
+  <div class="legend"><span><span class="sw" style="background:#E89496"></span>Growing now</span><span><span class="sw" style="background:#CFD3A2"></span>From the seed box</span><span><span class="sw" style="background:repeating-linear-gradient(45deg,#E3C9B3 0 3px,transparent 3px 6px);border:1px dashed #B79B87"></span>Wish list</span><span><span class="sw" style="background:#5E4440"></span>This month</span></div>
+  <section class="card" style="overflow-x:auto" aria-label="Bloom calendar"><div class="cal">
+    <span></span>${MON.map((m,i)=>`<span class="m${i+1===now?' now':''}">${m}</span>`).join('')}
+    <span class="gh">growing now</span>${growing.map(p=>row(p.name,p.from,p.to,'g','#plant/'+p.id)).join('')}
+    ${seeds.length?`<span class="gh">from the seed box</span>${seeds.map(s=>row(s.name,s.from,s.to,'s')).join('')}`:''}
+    ${wish.length?`<span class="gh">wish list</span>${wish.map(p=>row(p.name,p.from,p.to,'w','#plant/'+p.id)).join('')}`:''}
+    <span class="nm" style="font-weight:700;padding-top:12px">Flowers in bloom</span>${counts.map(n=>`<span class="cnt${n===0?' zero':n<3?' low':''}" style="margin-top:12px">${n}</span>`).join('')}
+  </div></section>
+  <div class="row">
+    <section class="dark" style="flex:1 1 380px" aria-labelledby="gap-h"><h2 class="h2" id="gap-h" style="font-size:22px;margin-bottom:8px">The quiet months</h2>
+      <p style="margin:0;font-size:15px;line-height:1.5">${zero.length?`${esc(andList(zero))} ${zero.length===1?'has':'have'} nothing in flower yet${low.length?`, and ${esc(andList(low))} ${low.length===1?'is':'are'} thin`:''}.`:low.length?`${esc(andList(low))} ${low.length===1?'is':'are'} a little thin.`:'Something is flowering every month. Lovely!'}${zero.includes('June')&&wish.some(w=>/hellebore/i.test(w.name))?' Hellebores from your wish list flower from about June to September and would fill the gap nicely.':''}</p></section>
+    <section class="card" style="flex:1 1 380px;background:var(--blush)" aria-labelledby="pk-h"><h2 class="h2" id="pk-h" style="font-size:22px;margin-bottom:8px">The busiest month</h2>
+      <p style="margin:0;font-size:15px;line-height:1.5">${MONTHS[busiest]}, with ${counts[busiest]} kinds of flowers once the seed box is sown. Plenty for the table and for gifts.</p></section>
+  </div>
+  <p class="small muted" style="margin:0">Flowering times are approximate for the Adelaide Hills and you can change them on each plant. Plants still establishing (like the peonies) aren’t counted yet.</p>`;
+}
+
+/* ---------------- Diary ---------------- */
+function pageDiary(){
+  const f = S.ui.dspot || 'All';
+  const list = S.diary.filter(d=>f==='All' || (d.spots||[]).includes(f)).sort((a,b)=>String(b.date).localeCompare(String(a.date)) || String(b.id).localeCompare(String(a.id)));
+  const codes = spotsSorted().filter(s=>s.kind!=='planned').map(s=>s.code);
+  return ptitle('Garden diary','what happened, and when') + `
+  <div class="row" style="align-items:flex-start">
+    <div style="flex:1.5 1 520px">
+      <div class="filters" style="margin-bottom:16px"><span class="small">Show:</span>${['All',...codes].map(c=>`<a href="#diary" aria-current="${c===f}" onclick="event.preventDefault();G.dspot('${c}')" style="border-radius:8px;font-weight:600;font-size:13px">${esc(c)}</a>`).join('')}</div>
+      ${list.map(d=>`<article class="entry"><div class="dot"><span></span><span></span></div><div class="card">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><strong style="font-family:var(--serif);font-weight:600;font-size:20px">${esc(dateText(d.date))}</strong>${(d.spots||[]).map(chip).join('')}
+          <button class="link small muted" style="margin-left:auto" onclick="G.delDiary('${d.id}')" aria-label="Delete this entry">Delete</button></div>
+        <p style="margin:6px 0 0;font-size:15px;line-height:1.5;white-space:pre-wrap">${esc(d.text)}</p>
+        ${(d.photos||[]).length?`<div class="ephotos">${d.photos.map(ph=>photoSrc(ph)?`<img src="${photoSrc(ph)}" alt="">`:'').join('')}</div>`:''}
+      </div></article>`).join('') || '<p class="muted">No entries yet.</p>'}
+    </div>
+    <section class="dark" data-keep style="flex:1 1 340px;display:flex;flex-direction:column;gap:14px" aria-labelledby="new-h">
+      <h2 class="h2" id="new-h">New entry</h2>
+      <label class="f">Date<input id="de-date" type="date" class="field" value="${isoDate(new Date())}"></label>
+      <fieldset style="border:0;padding:0;margin:0"><legend style="font-size:14px;font-weight:500;margin-bottom:6px">Spots</legend><div class="spotpick">${codes.map(c=>`<label><input type="checkbox" value="${esc(c)}" class="de-spot"> ${esc(c)}</label>`).join('')}</div></fieldset>
+      <label class="f">What happened?<textarea id="de-text" class="field" placeholder="e.g. first zinnias sown, roses fed, aphids on the lisianthus…"></textarea></label>
+      <label class="f">Photos<input id="de-photos" type="file" accept="image/*" multiple class="field" style="padding:8px"></label>
+      <p class="small" id="de-status" style="margin:0;color:#EBC6CC"></p>
+      <button class="btn blush" onclick="G.addDiary()">Save entry</button>
+    </section>
+  </div>`;
+}
+
+/* ---------------- Photos ---------------- */
+const PHOTO_MAX = 700000;
+async function loadBitmap(file){ try{ return await createImageBitmap(file); }catch(e){ return await new Promise((res,rej)=>{ const img=new Image(); img.onload=()=>res(img); img.onerror=rej; img.src=URL.createObjectURL(file); }); } }
+async function compress(file){
+  const bmp = await loadBitmap(file), w0 = bmp.width||bmp.naturalWidth, h0 = bmp.height||bmp.naturalHeight;
+  for(const [max,q] of [[1400,0.8],[1200,0.72],[1000,0.65],[800,0.6]]){
+    const s = Math.min(1, max/Math.max(w0,h0)), c = document.createElement('canvas');
+    c.width=Math.round(w0*s); c.height=Math.round(h0*s); c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+    const url = c.toDataURL('image/jpeg', q); if(url.length<=PHOTO_MAX) return url;
+  }
+  throw new Error('too_large');
+}
+
+/* ---------------- Actions ---------------- */
+const val = id => ($(id)||{}).value ?? '';
+window.G = {
+  signIn: async ()=>{ try{ await signInWithPopup(auth, new GoogleAuthProvider()); }catch(e){ if(e && (e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment')) await signInWithRedirect(auth, new GoogleAuthProvider()); else if(e && e.code!=='auth/popup-closed-by-user'){ S.error=`Sign-in didn't work (${e.code}).`; render(); } } },
+  signOut: ()=>{ if(S.demo){ location.reload(); return; } signOut(auth); },
+  demo: startDemo,
+  clearMsg: ()=>{ S.error=''; S.info=''; render(); },
+  ui: (k,v)=>{ S.ui[k]=v; render(); },
+  closeModal: ()=>{ S.ui.modal=null; render(); },
+  search: v=>{ S.ui.q=v; const el=$('pgrid'); const keep=document.activeElement; render(); const s=document.querySelector('.search'); if(s && keep && keep.classList.contains('search')){ s.focus(); s.setSelectionRange(v.length,v.length); } },
+  filter: k=>{ S.ui.filter=k; render(); },
+  dspot: k=>{ S.ui.dspot=k; render(); },
+  tickWeek: id=>{ const wk=mondayOf(new Date()); const cur=(S.meta.week&&S.meta.week.week===wk)?{...S.meta.week.done}:{}; if(cur[id]) delete cur[id]; else cur[id]=true; putMeta('week',{week:wk, done:cur}); },
+  tickMonth: key=>{ const mk=monthKey(new Date()); const m=(S.meta.month&&S.meta.month.month===mk)?S.meta.month:{month:mk,done:{},extra:[]}; const done={...(m.done||{})}; if(done[key]) delete done[key]; else done[key]=true; putMeta('month',{month:mk, done, extra:m.extra||[]}); },
+  addMonthJob: ()=>{ const t=val('nm-job').trim(); if(!t) return; const mk=monthKey(new Date()); const m=(S.meta.month&&S.meta.month.month===mk)?S.meta.month:{month:mk,done:{},extra:[]}; putMeta('month',{month:mk, done:m.done||{}, extra:[...(m.extra||[]), t]}); },
+  delMonthJob: i=>{ const mk=monthKey(new Date()); const m=S.meta.month; if(!m||m.month!==mk) return; const extra=(m.extra||[]).filter((_,j)=>j!==i); const done={}; Object.entries(m.done||{}).forEach(([k,v])=>{ if(k[0]==='j') done[k]=v; else { const n=+k.slice(1); if(n<i) done[k]=v; else if(n>i) done['x'+(n-1)]=v; } }); putMeta('month',{month:mk, done, extra}); },
+  addTask: ()=>{ const job=val('nt-job').trim(); if(!job) return; put('tasks',{id:uid('t'), job, where:val('nt-where').trim(), often:val('nt-often').trim()||'Weekly', order:Date.now()}); },
+  delTask: id=>remove('tasks',id),
+  spotForm,
+  saveSpot: id=>{
+    const code=val('sf-code').trim().toUpperCase(), name=val('sf-name').trim();
+    if(!code || !name){ alert('Please give the spot a code and a name.'); return; }
+    if(S.spots.some(s=>s.code===code && s.id!==id)){ alert(`There's already a spot called ${code}.`); return; }
+    const old = S.spots.find(s=>s.id===id);
+    const item = {id: id||code, code, name, area:val('sf-area'), kind:val('sf-kind'), note:val('sf-note').trim(), order: old?old.order:(Math.max(0,...S.spots.map(s=>s.order||0))+1)};
+    put('spots', item);
+    if(old && old.code!==code) S.plants.filter(p=>p.spot===old.code).forEach(p=>put('plants',{...p, spot:code}));  // keep plants with their renamed spot
+    S.ui.modal=null; location.hash = '#map/'+encodeURIComponent(code); render();
+  },
+  delSpot: id=>{ const s=S.spots.find(x=>x.id===id); if(!s) return; const n=realPlants().filter(p=>p.spot===s.code).length; if(!confirm(n?`${s.code} has ${n} plant${n===1?'':'s'}. Remove the spot anyway? The plants will be kept, without a spot.`:`Remove ${s.code}?`)) return; S.plants.filter(p=>p.spot===s.code).forEach(p=>put('plants',{...p, spot:''})); remove('spots',id); S.ui.modal=null; location.hash='#map'; },
+  savePlant: id=>{
+    const name=val('pf-name').trim(); if(!name){ alert('Please give the plant a name.'); return; }
+    const old = S.plants.find(p=>p.id===id) || {};
+    const status = val('pf-status');
+    const item = {...old, id: id||uid('pl'), name, variety:val('pf-variety').trim(), spot:val('pf-spot'), type:val('pf-type'), status, wish: status==='Wish list',
+      from:+val('pf-from'), to:+val('pf-to'), colour:val('pf-colour'), planted:val('pf-planted').trim(), sun:val('pf-sun').trim(), water:val('pf-water').trim(),
+      picking:val('pf-picking').trim(), vase:val('pf-vase').trim(), notes:val('pf-notes').trim(),
+      care:{spring:val('pf-spring').trim(), summer:val('pf-summer').trim(), autumn:val('pf-autumn').trim(), winter:val('pf-winter').trim()}};
+    if(item.from && !item.to) item.to = item.from;
+    put('plants', item); S.ui.edit=false; S.ui.confirmDel=false;
+    if(location.hash !== '#plant/'+item.id) location.hash = '#plant/'+item.id; else render();
+  },
+  delPlant: id=>{ const p=S.plants.find(x=>x.id===id); (p&&p.photos||[]).forEach(dropPhoto); remove('plants',id); S.ui={}; location.hash='#plants'; },
+  plantIt: id=>{ const p=S.plants.find(x=>x.id===id); if(!p) return; S.ui.edit=true; render(); setTimeout(()=>{ const st=$('pf-status'); if(st) st.value='Growing'; const sp=$('pf-spot'); if(sp) sp.focus(); },50); },
+  mainPhoto: (id,i)=>{ const p=S.plants.find(x=>x.id===id); if(!p||!p.photos) return; const ph=[...p.photos]; const [x]=ph.splice(i,1); ph.unshift(x); put('plants',{...p, photos:ph}); },
+  addPlantPhoto: async (id,input)=>{
+    const file=input.files&&input.files[0]; input.value=''; if(!file) return;
+    const st=$('photo-status'); if(st) st.textContent='Saving photo…';
+    try{ const data=await compress(file); const pid=await putPhoto(data); const p=S.plants.find(x=>x.id===id); await put('plants',{...p, photos:[pid, ...(p.photos||[])]}); if(st) st.textContent=''; render(); }
+    catch(e){ if(st) st.textContent = e.message==='too_large' ? "That photo is too big even after shrinking. Try another." : "Couldn't save the photo. Try again."; }
+  },
+  seedForm,
+  saveSeed: id=>{ const name=val('sd-name').trim(); if(!name){ alert('Please give the packet a name.'); return; } const old=S.seeds.find(s=>s.id===id)||{};
+    put('seeds',{...old, id:id||uid('sd'), name, variety:val('sd-variety').trim(), group:val('sd-group'), method:val('sd-method'), note:val('sd-note').trim(), from:+val('sd-from'), to:+val('sd-to')}); S.ui.modal=null; render(); },
+  delSeed: id=>{ if(!confirm('Remove this seed packet?')) return; remove('seeds',id); S.ui.modal=null; render(); },
+  sow: id=>{ const s=S.seeds.find(x=>x.id===id); if(!s) return; put('seeds',{...s, sown: s.sown ? '' : isoDate(new Date())}); },
+  addDiary: async ()=>{
+    const text=val('de-text').trim(); const files=[...(($('de-photos')||{}).files||[])];
+    if(!text && !files.length){ $('de-status').textContent='Write a note or add a photo first.'; return; }
+    const spots=[...document.querySelectorAll('.de-spot')].filter(b=>b.checked).map(b=>b.value);
+    $('de-status').textContent = files.length ? 'Saving photos…' : 'Saving…';
+    const photos=[];
+    try{ for(const f of files.slice(0,6)){ photos.push(await putPhoto(await compress(f))); } }
+    catch(e){ $('de-status').textContent="One of the photos couldn't be saved; the entry was saved without it."; }
+    await put('diary',{id:uid('d'), date:val('de-date')||isoDate(new Date()), spots, text, photos});
+    S.info='Diary entry saved.'; render();
+  },
+  delDiary: id=>{ if(!confirm('Delete this diary entry?')) return; const d=S.diary.find(x=>x.id===id); (d&&d.photos||[]).forEach(dropPhoto); remove('diary',id); }
+};
+
+/* ---------------- Start ---------------- */
+const cfg = window.FIREBASE_CONFIG;
+if(new URLSearchParams(location.search).has('demo')) startDemo();
+else if(!cfg || !cfg.apiKey){ S.status='noConfig'; render(); }
+else {
+  const app = initializeApp(cfg);
+  auth = getAuth(app);
+  try{ db = initializeFirestore(app, {localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()})}); }
+  catch(e){ db = initializeFirestore(app, {localCache: memoryLocalCache()}); }
+  getRedirectResult(auth).catch(()=>{});
+  onAuthStateChanged(auth, async u=>{
+    S.user = u;
+    if(!u){ S.status='signedOut'; unsubs.forEach(x=>x()); unsubs=[]; render(); return; }
+    S.status='ready'; render();
+    try{ await seedDefaults(); }catch(e){ if(e.code==='permission-denied'){ S.status='denied'; render(); return; } }
+    listen();
+  });
+}
+render();
+</script>
+</body>
+</html>
