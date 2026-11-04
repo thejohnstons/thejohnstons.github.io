@@ -2,6 +2,7 @@
 <html lang="en-AU">
 <head>
 <meta charset="utf-8">
+<script>try{document.documentElement.dataset.style=localStorage.getItem("johnston-style")||"default"}catch(e){document.documentElement.dataset.style="default"}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F3D6D6">
 <meta name="apple-mobile-web-app-title" content="Johnstons">
@@ -12,7 +13,7 @@
 <title>Johnston Family Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Playfair+Display:ital,wght@0,400..800;1,400..800&family=Karla:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Playfair+Display:ital,wght@0,400..800;1,400..800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Karla:wght@400;500;700&display=swap">
 <style>
   :root{
     --blush:#F3D6D6; --rose:#F0C1C5; --paper:#FFF7F6; --card:#FBEAEA; --line:#F1D2D5;
@@ -116,10 +117,82 @@
   .foot .meta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
   .foot button{text-decoration:underline;text-underline-offset:3px;color:var(--deep)}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  /* ===== Classic green (Nathan's style): an editorial page ===== */
+  .g-only{display:none}
+  [data-style="green"] .g-only{display:block}
+  [data-style="green"] .p-only{display:none!important}
+  [data-style="green"] body{background:#F7F5F1;background-image:none;color:#1F2420}
+  [data-style="green"] a{color:#1F2420}
+  [data-style="green"] a:hover{color:#4F5E43}
+  [data-style="green"] :focus-visible{outline-color:#4F5E43}
+  [data-style="green"] .wrap{max-width:1160px}
+  .g-mast{border-bottom:1px solid #1F2420;padding-bottom:22px;margin-bottom:30px}
+  .g-top{display:flex!important;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6B6F66;padding-bottom:14px;border-bottom:1px solid #CFC9BC}
+  .g-row{display:flex!important;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-top:24px}
+  .g-row h1{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(50px,8vw,76px);line-height:.95;letter-spacing:-.015em}
+  .g-dek{margin:0;max-width:360px;font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:20px;line-height:1.35;color:#6B6F66}
+  .g-label{display:flex!important;gap:14px;align-items:baseline;border-top:1px solid #1F2420;padding-top:10px;margin:0 0 14px;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+  .g-label span{color:#4F5E43}
+  [data-style="green"] .top{gap:48px}
+  [data-style="green"] .hero{background:none;padding:0;border-radius:0;display:block;overflow:visible}
+  [data-style="green"] .hero > svg.check{display:none}
+  [data-style="green"] .letter{background:none;box-shadow:none;border-radius:0;padding:0;max-width:none;text-align:left}
+  [data-style="green"] .weather{margin:0;justify-content:flex-start;border:0;padding:0;gap:20px;min-height:0}
+  [data-style="green"] .weather svg{width:120px;height:120px;padding:30px;background:#ECE7DD;stroke:#3E4A36;stroke-width:1.1}
+  [data-style="green"] .w-main{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:34px;line-height:1.05}
+  [data-style="green"] .w-sub{font-size:14.5px;color:#4B4F47;margin-top:4px}
+  [data-style="green"] .quip{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-weight:400;font-size:22px;color:#4F5E43;margin:14px 0 0}
+  [data-style="green"] .verse{background:none;border-radius:0;padding:24px 0 0;margin-top:30px;border-top:1px solid #CFC9BC}
+  [data-style="green"] .verse-label{font-family:Karla,sans-serif;font-style:normal;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6B6F66}
+  [data-style="green"] .verse-text{font-family:"Cormorant Garamond",Georgia,serif;font-weight:300;font-style:normal;font-size:30px;line-height:1.25;color:#1F2420}
+  [data-style="green"] .verse-foot,[data-style="green"] .copy{color:#6B6F66}
+  [data-style="green"] .verse-foot a{color:#1F2420}
+  [data-style="green"] .today{background:none;box-shadow:none;border-radius:0;padding:0}
+  [data-style="green"] .sub{margin:22px 0 14px;font-family:Karla,sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:#1F2420;border-top:1px solid #1F2420;padding-top:10px}
+  [data-style="green"] .today-head + .sub{margin-top:0}
+  [data-style="green"] .sub::before{content:attr(data-n);color:#4F5E43;margin-right:14px}
+  [data-style="green"] .rows li{grid-template-columns:96px minmax(0,1fr);border-bottom-color:#CFC9BC;padding:11px 0}
+  [data-style="green"] .when{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#6B6F66}
+  [data-style="green"] .what{font-family:"Cormorant Garamond",Georgia,serif;font-size:21px}
+  [data-style="green"] .what small,[data-style="green"] .msg,[data-style="green"] .none{color:#6B6F66}
+  [data-style="green"] .note{background:none;border-radius:0;border-left:2px solid #4F5E43;padding:4px 0 4px 12px}
+  [data-style="green"] .note b{font-family:Karla,sans-serif;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#4F5E43}
+  [data-style="green"] .btn{border-radius:0;background:#4F5E43;color:#F7F5F1}
+  [data-style="green"] .btn:hover{background:#3E4A36}
+  [data-style="green"] .btn.light{background:#ECE7DD;color:#1F2420}
+  [data-style="green"] .small-actions button,[data-style="green"] .more{color:#1F2420}
+  [data-style="green"] .cal-pick{background:#ECE7DD;border-radius:0}
+  [data-style="green"] .apps-head{margin:44px 0 14px;display:block}
+  [data-style="green"] .tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;counter-reset:tile}
+  @media (max-width:700px){[data-style="green"] .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  [data-style="green"] .tiles li{counter-increment:tile}
+  [data-style="green"] .tile{border-radius:0;min-height:190px;padding:18px 20px;background:#ECE7DD;color:#1F2420;border:1px solid #ECE7DD;transform:none!important}
+  [data-style="green"] .tile.t-red{background:#4F5E43;color:#F7F5F1;border-color:#4F5E43}
+  [data-style="green"] .tile.t-line,[data-style="green"] div.tile{background:transparent;border-color:#CFC9BC}
+  [data-style="green"] .tile svg{display:none}
+  [data-style="green"] .tile::before{content:"0" counter(tile);font-size:11.5px;font-weight:700;letter-spacing:.16em;opacity:.85}
+  [data-style="green"] .tile strong,[data-style="green"] .t-rose strong,[data-style="green"] .t-line strong{font-family:"Cormorant Garamond",Georgia,serif;font-style:normal;font-weight:400;font-size:34px;color:inherit;letter-spacing:-.01em}
+  [data-style="green"] .tile .d{opacity:.8;font-size:13.5px}
+  [data-style="green"] .tile .top-row{position:absolute;right:20px;top:18px}
+  [data-style="green"] .tile{position:relative}
+  [data-style="green"] .tile .soon{font-family:Karla,sans-serif;font-size:11.5px!important;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6B6F66!important}
+  [data-style="green"] .foot{text-align:left;border-top:1px solid #1F2420;padding-top:12px}
+  [data-style="green"] .foot .meta{justify-content:space-between;font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#6B6F66}
+  [data-style="green"] .foot button,[data-style="green"] .foot a{color:#1F2420}
+  [data-style="green"] .apps-head .g-label span{font-family:inherit;font-size:inherit;font-weight:inherit;color:#4F5E43}
+  [data-style="green"] .small-actions span{color:#6B6F66!important}
+  [data-style="green"] .verse-label{display:block}
+  .style-pick{display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .style-pick button[aria-pressed="true"]{text-decoration:none;font-weight:700;color:inherit;cursor:default}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <header class="g-only g-mast">
+    <div class="g-top"><span>The Johnston Home</span><span id="g-issue"></span></div>
+    <div class="g-row"><h1 id="g-hello">Good morning.</h1><p class="g-dek">A quiet record of the day: weather, word, table and plans.</p></div>
+  </header>
   <div class="top">
     <section class="hero" aria-labelledby="hi">
       <svg class="check" aria-hidden="true" preserveAspectRatio="none">
@@ -130,12 +203,13 @@
         <rect x="-10%" y="-10%" width="120%" height="120%" fill="url(#chk)" filter="url(#wave)"/>
       </svg>
       <div class="letter">
-        <svg class="sp" aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" style="top:18px;left:26px" stroke-width="1.6"><path d="M12 2c.6 5.4 3.6 8.4 9 9-5.4.6-8.4 3.6-9 9-.6-5.4-3.6-8.4-9-9 5.4-.6 8.4-3.6 9-9z"/></svg>
-        <svg class="sp" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" style="top:44px;left:52px" stroke-width="2"><path d="M12 2c.6 5.4 3.6 8.4 9 9-5.4.6-8.4 3.6-9 9-.6-5.4-3.6-8.4-9-9 5.4-.6 8.4-3.6 9-9z"/></svg>
-        <svg class="sp" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" style="top:26px;right:30px" stroke-width="1.6"><path d="M12 2c.6 5.4 3.6 8.4 9 9-5.4.6-8.4 3.6-9 9-.6-5.4-3.6-8.4-9-9 5.4-.6 8.4-3.6 9-9z"/></svg>
-        <p class="hello" id="hello">good morning,</p>
-        <h1 id="hi">JOHNSTONS</h1>
-        <p class="date" id="date"></p>
+        <p class="g-only g-label"><span>01</span>Today</p>
+        <svg class="sp p-only" aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" style="top:18px;left:26px" stroke-width="1.6"><path d="M12 2c.6 5.4 3.6 8.4 9 9-5.4.6-8.4 3.6-9 9-.6-5.4-3.6-8.4-9-9 5.4-.6 8.4-3.6 9-9z"/></svg>
+        <svg class="sp p-only" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" style="top:44px;left:52px" stroke-width="2"><path d="M12 2c.6 5.4 3.6 8.4 9 9-5.4.6-8.4 3.6-9 9-.6-5.4-3.6-8.4-9-9 5.4-.6 8.4-3.6 9-9z"/></svg>
+        <svg class="sp p-only" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" style="top:26px;right:30px" stroke-width="1.6"><path d="M12 2c.6 5.4 3.6 8.4 9 9-5.4.6-8.4 3.6-9 9-.6-5.4-3.6-8.4-9-9 5.4-.6 8.4-3.6 9-9z"/></svg>
+        <p class="hello p-only" id="hello">good morning,</p>
+        <h1 id="hi" class="p-only">JOHNSTONS</h1>
+        <p class="date p-only" id="date"></p>
         <div class="weather" id="weather" aria-live="polite"><span class="w-sub">Checking the weather…</span></div>
         <p class="quip" id="quip"></p>
         <div class="verse">
@@ -148,19 +222,19 @@
     </section>
 
     <section class="today" aria-labelledby="today-h">
-      <div class="today-head">
+      <div class="today-head p-only">
         <h2 id="today-h">Today</h2>
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DA0A14" stroke-width="1.7" stroke-linejoin="round"><path d="M12 2c.6 5.4 3.6 8.4 9 9-5.4.6-8.4 3.6-9 9-.6-5.4-3.6-8.4-9-9 5.4-.6 8.4-3.6 9-9z"/></svg>
       </div>
-      <p class="sub">coming up</p>
+      <p class="sub" data-n="02">coming up</p>
       <div id="events"><p class="msg">Loading…</p></div>
-      <p class="sub">on the menu</p>
+      <p class="sub" data-n="03">on the menu</p>
       <div id="meals"><p class="msg">Loading…</p></div>
       <a class="more" href="./mealplanner/">Open the meal planner</a>
     </section>
   </div>
 
-  <div class="apps-head"><h2>Family apps</h2><span>everything in one place</span></div>
+  <div class="apps-head"><h2 class="p-only">Family apps</h2><span class="p-only">everything in one place</span><p class="g-only g-label"><span>04</span>Family apps</p></div>
   <ul class="tiles">
     <li><a class="tile t-red" href="./mealplanner/">
       <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 3c-2.2 2-2.2 7 0 9v9"/></svg>
@@ -183,8 +257,8 @@
   </ul>
 
   <footer class="foot">
-    <p class="love">made with love for the Johnstons</p>
-    <div class="meta"><span id="who"></span><span id="acct"></span><span>Weather from <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span></div>
+    <p class="love p-only">made with love for the Johnstons</p>
+    <div class="meta"><span id="who"></span><span id="acct"></span><span id="style-pick" class="style-pick"></span><span>Weather from <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span></div>
   </footer>
 </div>
 
@@ -201,6 +275,23 @@ function paintGreeting(){
   const now = new Date(), h = now.getHours();
   document.getElementById('hello').textContent = h<12 ? 'good morning,' : h<17 ? 'good afternoon,' : 'good evening,';
   document.getElementById('date').textContent = now.toLocaleDateString('en-AU',{weekday:'long', day:'numeric', month:'long'});
+  const part = h<12 ? 'Good morning' : h<17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('g-hello').innerHTML = `${part},<br>${esc(window.firstName || 'Johnstons')}.`;
+  document.getElementById('g-issue').textContent = `Issue ${dayOfYear(now)} · ${now.toLocaleDateString('en-AU',{weekday:'long', day:'numeric', month:'long', year:'numeric'})}`;
+}
+/* Each person's style, shared by all the family apps */
+function applyStyle(st){
+  const s = st==='green' ? 'green' : 'default';
+  document.documentElement.dataset.style = s;
+  try{ localStorage.setItem('johnston-style', s); }catch(e){}
+  const m = document.querySelector('meta[name="theme-color"]'); if(m) m.content = s==='green' ? '#F7F5F1' : '#F3D6D6';
+  paintStylePick();
+}
+function paintStylePick(){
+  const el = document.getElementById('style-pick'); if(!el) return;
+  if(!window.DASH || !window.DASH.signedIn){ el.innerHTML=''; return; }
+  const cur = document.documentElement.dataset.style==='green' ? 'green' : 'default';
+  el.innerHTML = `My style: <button aria-pressed="${cur==='default'}" onclick="DASH.setStyle('default')">Original</button> · <button aria-pressed="${cur==='green'}" onclick="DASH.setStyle('green')">Classic green</button>`;
 }
 paintGreeting();
 
@@ -535,13 +626,24 @@ window.DASH = {
     }
   },
   signOut(){ clearToken(); return signOut(auth); },
+  signedIn:false,
+  async setStyle(st){ applyStyle(st); if(user){ try{ await setDoc(doc(db,'households',HOUSEHOLD,'prefs',String(user.email).toLowerCase()), {style:st}, {merge:true}); }catch(e){} } },
   refresh(){ loadMeals(); loadEvents(); },
   connectCalendar, toggleCalendarPicker, saveCalendars
 };
 getRedirectResult(auth).catch(()=>{});
 onAuthStateChanged(auth, u=>{
   user = u; calendars = null;
+  DASH.signedIn = !!u;
   showAccount(u && u.email);
+  if(u){
+    window.firstName = ((u.displayName||'').trim().split(/\s+/)[0]) || '';
+    paintGreeting();
+    getDoc(doc(db,'households',HOUSEHOLD,'prefs',String(u.email).toLowerCase())).then(d=>{
+      const fallback = (window.STYLE_BY_EMAIL||{})[String(u.email).toLowerCase()];
+      applyStyle((d.exists() && d.data().style) || fallback || 'default');
+    }).catch(()=>paintStylePick());
+  } else paintStylePick();
   if(!u){ showMeals({status:'signedOut'}); showEvents({status:'signedOut'}); return; }
   showMeals({status:'loading'}); paintCal({status:'loading', events:[]});
   loadMeals(); loadEvents();

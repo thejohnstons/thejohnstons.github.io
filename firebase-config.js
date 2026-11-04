@@ -15,3 +15,8 @@ window.HOUSEHOLD_ID = "johnston";
 // It looks like 1234567890-abc123.apps.googleusercontent.com. It is not a secret.
 // Leave it empty and the dashboard simply says the calendar isn't set up yet.
 window.GOOGLE_CALENDAR_CLIENT_ID = "";
+
+// Optional: each person's starting style, by Google email (lower case).
+// Either of you can change your own style any time in the apps ("My style").
+// e.g. window.STYLE_BY_EMAIL = { "nathan@gmail.com": "green" };
+window.STYLE_BY_EMAIL = {};

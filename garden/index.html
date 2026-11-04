@@ -2,6 +2,7 @@
 <html lang="en-AU">
 <head>
 <meta charset="utf-8">
+<script>try{document.documentElement.dataset.style=localStorage.getItem("johnston-style")||"default"}catch(e){document.documentElement.dataset.style="default"}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F1EADF">
 <meta name="apple-mobile-web-app-title" content="Garden">
@@ -11,7 +12,7 @@
 <title>Johnston Garden</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Jost:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Jost:wght@400;500;600&family=Karla:wght@400;500;700&display=swap">
 <style>
   :root{
     --linen:#F1EADF; --cream:#FAF5EA; --ink:#4A3431; --cocoa:#5E4440; --muted:#7E5F54; --line:#E7DCC8;
@@ -176,6 +177,64 @@
   .gate{max-width:460px;margin:12vh auto;text-align:center}
   .modal-bg{position:fixed;inset:0;background:rgba(60,40,35,.35);z-index:30}
   .modal{position:fixed;z-index:31;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100% - 24px));max-height:calc(100vh - 40px);overflow:auto;background:var(--cream);border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:14px}
+
+  /* ===== Classic green (Nathan's style): an editorial garden journal ===== */
+  :root[data-style="green"]{
+    --linen:#F7F5F1; --cream:#F7F5F1; --ink:#1F2420; --cocoa:#3E4A36; --muted:#6B6F66; --line:#CFC9BC;
+    --sage:#4F5E43; --sage2:#E2E6D9; --blush:#ECE7DD; --peach:#E2E6D9; --mustard:#D9D4C7; --apricot:#C9CFBF; --oat:#ECE7DD;
+    --display:"Cormorant Garamond", Georgia, serif; --script:"Cormorant Garamond", Georgia, serif; --sans:Karla, "Helvetica Neue", Arial, sans-serif;
+  }
+  [data-style="green"] body{font-size:15px}
+  [data-style="green"] .script,[data-style="green"] .ptitle .s,[data-style="green"] .area h2,[data-style="green"] .pcard .v,[data-style="green"] .tile .n,[data-style="green"] .jobs .k,[data-style="green"] .year .r span:first-child{font-style:italic;color:#6B6F66}
+  [data-style="green"] .jobs .k,[data-style="green"] .year .r span:first-child{color:#C9CFBF;font-size:19px}
+  [data-style="green"] .ptitle h1{font-weight:400;letter-spacing:-.015em}
+  [data-style="green"] .h2{font-family:var(--sans);font-size:11.5px;font-weight:700;letter-spacing:.16em}
+  [data-style="green"] .card{border-radius:0;background:transparent;border-top:1px solid var(--ink);padding:14px 0 6px}
+  [data-style="green"] .dark{border-radius:0}
+  [data-style="green"] .dark .h2{color:#C9CFBF}
+  [data-style="green"] .btn{border-radius:0;background:var(--sage)}
+  [data-style="green"] .btn.line{background:transparent}
+  [data-style="green"] .btn.blush{background:#ECE7DD;color:var(--ink)}
+  [data-style="green"] .chip,[data-style="green"] .pill,[data-style="green"] .often{border-radius:0}
+  [data-style="green"] .chip.dk{background:var(--sage)}
+  [data-style="green"] .field,[data-style="green"] .search,[data-style="green"] .notice{border-radius:0}
+  [data-style="green"] nav.main{font-family:var(--sans);font-size:14px;font-weight:500;gap:22px}
+  [data-style="green"] nav.main a{padding:4px 0;border-radius:0;border-bottom:2px solid transparent;min-height:0}
+  [data-style="green"] nav.main a[aria-current="page"]{background:none;color:var(--ink);border-bottom-color:var(--sage)}
+  [data-style="green"] .filters a{border-radius:0;background:transparent;border-bottom:2px solid transparent;padding:4px 2px}
+  [data-style="green"] .filters a[aria-current="true"]{background:none;color:var(--ink);border-bottom-color:var(--sage)}
+  [data-style="green"] .pcard,[data-style="green"] .packet,[data-style="green"] .group,[data-style="green"] .area,[data-style="green"] .photo-main,[data-style="green"] .thumbs button,[data-style="green"] .thumbs label,[data-style="green"] .wish,[data-style="green"] .modal{border-radius:0}
+  [data-style="green"] .pcard{background:#ECE7DD}
+  [data-style="green"] .area.front{background:#ECE7DD}[data-style="green"] .area.side{background:#E2E6D9}
+  [data-style="green"] .k-bed{background:#C9CFBF}[data-style="green"] .k-pot{background:#F7F5F1}[data-style="green"] .k-trough{background:#D9D4C7}
+  [data-style="green"] .entry .card{border-top:1px solid var(--line)}
+  [data-style="green"] .cal .c.g{background:#9AA88A}[data-style="green"] .cal .c.g.now{background:#3E4A36}
+  [data-style="green"] .cal .c.s{background:#D9D4C7}[data-style="green"] .cal .c.s.now{background:#8E8A7C}
+  [data-style="green"] .tick{border-radius:0}
+  [data-style="green"] .gate h1{font-weight:400}
+  .g-mast{border-bottom:1px solid var(--ink);padding-bottom:6px}
+  .g-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--sans);font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .g-top a{color:var(--muted);text-decoration:none}
+  .g-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin:22px 0 18px}
+  .g-row .t{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(50px,8vw,76px);line-height:.95;letter-spacing:-.015em}
+  .g-dek{margin:0;max-width:340px;font-family:var(--serif);font-style:italic;font-size:20px;line-height:1.35;color:var(--muted)}
+  .g-label{display:flex;gap:14px;align-items:baseline;border-top:1px solid var(--ink);padding-top:10px;margin:0 0 14px;font-family:var(--sans);font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+  .g-label span{color:var(--sage)}
+  .g-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px}
+  @media (max-width:800px){.g-two{grid-template-columns:1fr;gap:30px}}
+  .g-month{background:var(--cocoa);color:#F7F5F1;padding:26px 28px}
+  .g-month .m{margin:0;font-family:var(--serif);font-weight:300;font-size:54px;line-height:1}
+  .g-month .b{margin:6px 0 16px;font-family:var(--serif);font-style:italic;font-size:19px;color:#C9CFBF}
+  .g-job{display:grid;grid-template-columns:70px minmax(0,1fr) 28px;gap:12px;padding:9px 0;border-top:1px solid rgba(247,245,241,.25);font-size:14.5px;align-items:start}
+  .g-job .k{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#C9CFBF;padding-top:2px}
+  .g-job .tick{border-color:#C9CFBF}.g-job .tick.on{background:#C9CFBF;color:var(--cocoa)}
+  .g-idx a{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:16px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line);text-decoration:none}
+  .g-idx a:hover .t{color:var(--sage)}
+  .g-idx .n{font-family:var(--sans);font-size:11.5px;font-weight:700;letter-spacing:.16em;color:var(--sage)}
+  .g-idx .t{font-family:var(--serif);font-size:clamp(26px,3.4vw,32px);line-height:1}
+  .g-idx .d{font-size:13.5px;color:var(--muted)}
+  @media (max-width:600px){.g-idx a{grid-template-columns:40px minmax(0,1fr)}.g-idx .d{grid-column:2}}
+  .style-pick button[aria-pressed="true"]{text-decoration:none;font-weight:700;cursor:default}
 </style>
 </head>
 <body>
@@ -388,7 +447,19 @@ document.addEventListener('focusout', ()=>setTimeout(()=>{ if(S.pending){ const 
 window.addEventListener('hashchange', ()=>{ S.ui={}; S.error=''; render(); const r=route(); const t = r.page==='plants' && r.id==='wish' ? $('wish') : null; if(t) t.scrollIntoView({block:'start'}); else window.scrollTo(0,0); });
 
 const NAV = [['home','Home'],['map','Garden map'],['plants','Plants'],['seeds','Seed box'],['bloom','Bloom calendar'],['diary','Diary']];
+const isGreen = () => document.documentElement.dataset.style==='green';
 function header(active){
+  if(isGreen()){
+    const now=new Date(), m=now.getMonth()+1;
+    return `<header class="g-mast">
+      <div class="g-top"><a href="../">← The Johnston Home</a><span>The Johnston Garden · ${MONTHS[m-1]} · ${esc(SEASON[m-1][0])}</span></div>
+      <div class="g-row"><p class="t">The<br>Garden</p><p class="g-dek">A small cutting garden, kept season by season.</p></div>
+      <nav class="main" aria-label="Garden sections">${NAV.map(([k,l])=>`<a href="#${k}"${k===active?' aria-current="page"':''}>${l}</a>`).join('')}</nav>
+    </header>
+    ${S.demo?`<div class="notice">This is a demo. Nothing is saved.</div>`:''}
+    ${S.error?`<div class="notice err" role="alert"><span>${esc(S.error)}</span><button class="link" onclick="G.clearMsg()">Dismiss</button></div>`:''}
+    ${S.info?`<div class="notice" role="status"><span>${esc(S.info)}</span><button class="link" onclick="G.clearMsg()">OK</button></div>`:''}`;
+  }
   return `<header class="top">
     <div class="brand">
       <svg width="50" height="62" viewBox="0 0 64 78" aria-hidden="true"><ellipse cx="32" cy="39" rx="30" ry="37" fill="#5E4440"/><ellipse cx="32" cy="39" rx="25" ry="32" fill="none" stroke="#EBC6CC" stroke-width="1.5" stroke-dasharray="1.5 4" stroke-linecap="round"/><text x="32" y="36" text-anchor="middle" font-family="Italiana, serif" font-size="26" fill="#EBC6CC">j</text><text x="32" y="58" text-anchor="middle" font-family="Italiana, serif" font-size="26" fill="#EBC6CC">g</text></svg>
@@ -426,11 +497,43 @@ function render(){
   const pages = {home:pageHome, map:pageMap, plants:pagePlants, plant:pagePlant, seeds:pageSeeds, bloom:pageBloom, diary:pageDiary};
   const fn = pages[r.page] || pageHome;
   const active = r.page==='plant' ? 'plants' : (pages[r.page] ? r.page : 'home');
-  app.innerHTML = header(active) + fn(r.id) + `<footer class="small muted" style="text-align:center;margin-top:20px">${S.demo?'Demo':esc(S.user.email)} · <button class="link small" onclick="G.signOut()">Sign out</button></footer>` + (S.ui.modal ? S.ui.modal() : '');
+  const cur = isGreen() ? 'green' : 'default';
+  app.innerHTML = header(active) + fn(r.id) + `<footer class="small muted" style="text-align:center;margin-top:20px">${S.demo?'Demo':esc(S.user.email)} · <button class="link small" onclick="G.signOut()">Sign out</button>
+    <span class="style-pick" style="display:block;margin-top:6px">My style: <button class="link small" aria-pressed="${cur==='default'}" onclick="G.setStyle('default')">Original</button> · <button class="link small" aria-pressed="${cur==='green'}" onclick="G.setStyle('green')">Classic green</button></span></footer>` + (S.ui.modal ? S.ui.modal() : '');
 }
 
 /* ---------------- Home ---------------- */
+function pageHomeGreen(){
+  const now = new Date(), m = now.getMonth()+1, [season, blurb, jobs] = SEASON[m-1];
+  const wk = mondayOf(now), weekTicks = (S.meta.week && S.meta.week.week===wk) ? S.meta.week.done||{} : {};
+  const mk = monthKey(now), monthMeta = (S.meta.month && S.meta.month.month===mk) ? S.meta.month : {done:{}, extra:[]};
+  const allJobs = [...jobs.map((j,i)=>({kind:j[0], text:j[1], key:'j'+i})), ...(monthMeta.extra||[]).map((t,i)=>({kind:'Also', text:t, key:'x'+i, extra:i}))];
+  const tasks = S.tasks.slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  const flowering = realPlants().filter(p=>span(p.from,p.to)[m-1] && p.status!=='Finished for now' && p.status!=='Establishing').map(p=>p.name);
+  const toSow = S.seeds.filter(s=>!s.sown && (s.group==='now'||s.group==='either')).length;
+  const editTasks = S.ui.editTasks;
+  const idx = [['map','Garden map',`Front and side gardens, ${S.spots.length} spots`],['plants','Plants',`${realPlants().length} plants`],['seeds','Seed box',`${toSow} packet${toSow===1?'':'s'} to sow now`],['bloom','Bloom calendar','What flowers each month'],['diary','Garden diary',`${S.diary.length} entries`],['plants/wish','Wish list',`${S.plants.filter(p=>p.wish).length} plants for one day`]];
+  return `<div class="g-two">
+    <section aria-label="This month"><p class="g-label"><span>01</span>This month</p>
+      <div class="g-month"><p class="m">${MONTHS[m-1]}</p><p class="b">${esc(blurb)}</p>
+        ${allJobs.map(j=>{ const on=!!(monthMeta.done||{})[j.key]; return `<div class="g-job"><span class="k">${esc(j.kind)}</span><span style="${on?'text-decoration:line-through;color:#A9AE9E':''}">${esc(j.text)}${j.extra!=null?` <button class="link small" style="color:#C9CFBF" onclick="G.delMonthJob(${j.extra})">Remove</button>`:''}</span><button class="tick${on?' on':''}" aria-pressed="${on}" aria-label="${on?'Untick':'Tick'} ${esc(j.text)}" onclick="G.tickMonth('${j.key}')">${on?'✓':''}</button></div>`; }).join('')}
+        <div data-keep style="display:flex;gap:8px;margin-top:12px"><input id="nm-job" class="field" placeholder="Add a job for this month"><button class="btn small blush" onclick="G.addMonthJob()">Add</button></div>
+      </div></section>
+    <section aria-label="This week" class="checklist"><p class="g-label"><span>02</span>This week</p>
+      ${tasks.map(t=>{ const on=!!weekTicks[t.id]; return `<div class="it">
+        <button class="tick${on?' on':''}" aria-pressed="${on}" aria-label="${on?'Untick':'Tick'} ${esc(t.job)}" onclick="G.tickWeek('${t.id}')">${on?'✓':''}</button>
+        <span style="font-size:15px;line-height:1.35"><span class="${on?'done-text':''}">${esc(t.job)}</span>${t.where?`<span class="small muted" style="display:block">${esc(t.where)}</span>`:''}${editTasks?`<button class="link small danger" onclick="G.delTask('${t.id}')">Remove</button>`:''}</span>
+        <span class="small muted" style="text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:700">${esc(t.often||'')}</span></div>`; }).join('')}
+      ${editTasks ? `<div data-keep style="display:grid;gap:8px;margin-top:12px"><input id="nt-job" class="field" placeholder="New job, e.g. feed the roses"><div style="display:flex;gap:8px"><input id="nt-where" class="field" placeholder="Where (e.g. FB)"><input id="nt-often" class="field" placeholder="How often"></div><div style="display:flex;gap:8px"><button class="btn small" onclick="G.addTask()">Add job</button><button class="btn small line" onclick="G.ui('editTasks',false)">Done</button></div></div>`
+        : `<p class="small muted" style="margin:10px 0 0">${esc(WATER_TIP(m))} <button class="link small" onclick="G.ui('editTasks',true)">Edit jobs</button></p>`}
+      <p class="g-label" style="margin-top:26px"><span>03</span>In flower now</p>
+      <p style="margin:0;font-family:var(--serif);font-size:22px;line-height:1.5">${flowering.length?esc(andList(flowering)):'Nothing marked as flowering this month.'}</p>
+    </section></div>
+  <section aria-label="Contents"><p class="g-label"><span>04</span>Contents</p>
+    <div class="g-idx">${idx.map(([h,t,d],i)=>`<a href="#${h}"><span class="n">0${i+1}</span><span class="t">${t}</span><span class="d">${esc(d)}</span></a>`).join('')}</div></section>`;
+}
 function pageHome(){
+  if(isGreen()) return pageHomeGreen();
   const now = new Date(), m = now.getMonth()+1, [season, blurb, jobs] = SEASON[m-1];
   const wk = mondayOf(now), weekTicks = (S.meta.week && S.meta.week.week===wk) ? S.meta.week.done||{} : {};
   const mk = monthKey(now), monthMeta = (S.meta.month && S.meta.month.month===mk) ? S.meta.month : {done:{}, extra:[]};
@@ -710,6 +813,10 @@ window.G = {
   signIn: async ()=>{ try{ await signInWithPopup(auth, new GoogleAuthProvider()); }catch(e){ if(e && (e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment')) await signInWithRedirect(auth, new GoogleAuthProvider()); else if(e && e.code!=='auth/popup-closed-by-user'){ S.error=`Sign-in didn't work (${e.code}).`; render(); } } },
   signOut: ()=>{ if(S.demo){ location.reload(); return; } signOut(auth); },
   demo: startDemo,
+  setStyle: async st=>{
+    applyStyle(st); render();
+    if(!S.demo && S.user && db){ try{ await setDoc(doc(db, ...base(), 'prefs', String(S.user.email).toLowerCase()), {style:st}, {merge:true}); }catch(e){} }
+  },
   clearMsg: ()=>{ S.error=''; S.info=''; render(); },
   ui: (k,v)=>{ S.ui[k]=v; render(); },
   closeModal: ()=>{ S.ui.modal=null; render(); },
@@ -774,6 +881,22 @@ window.G = {
   delDiary: id=>{ if(!confirm('Delete this diary entry?')) return; const d=S.diary.find(x=>x.id===id); (d&&d.photos||[]).forEach(dropPhoto); remove('diary',id); }
 };
 
+/* ---------------- Each person's style ---------------- */
+function applyStyle(st){
+  const s = st==='green' ? 'green' : 'default';
+  document.documentElement.dataset.style = s;
+  try{ localStorage.setItem('johnston-style', s); }catch(e){}
+  const m = document.querySelector('meta[name="theme-color"]'); if(m) m.content = '#F7F5F1';
+}
+async function loadStyle(email){
+  try{
+    const d = await getDoc(doc(db, ...base(), 'prefs', String(email).toLowerCase()));
+    const fallback = (window.STYLE_BY_EMAIL||{})[String(email).toLowerCase()];
+    const st = (d.exists() && d.data().style) || fallback || 'default';
+    if(st !== (isGreen()?'green':'default')){ applyStyle(st); render(); }
+  }catch(e){}
+}
+
 /* ---------------- Start ---------------- */
 const cfg = window.FIREBASE_CONFIG;
 if(new URLSearchParams(location.search).has('demo')) startDemo();
@@ -788,6 +911,7 @@ else {
     S.user = u;
     if(!u){ S.status='signedOut'; unsubs.forEach(x=>x()); unsubs=[]; render(); return; }
     S.status='ready'; render();
+    loadStyle(u.email);
     try{ await seedDefaults(); }catch(e){ if(e.code==='permission-denied'){ S.status='denied'; render(); return; } }
     listen();
   });
