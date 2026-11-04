@@ -87,7 +87,7 @@
   .apps-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:40px 0 16px}
   .apps-head h2{margin:0;font-family:var(--serif);font-style:italic;font-weight:500;font-size:34px;color:var(--red2)}
   .apps-head span{font-family:var(--hand);font-weight:700;font-size:22px;color:var(--red)}
-  .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;list-style:none;margin:0;padding:0}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;list-style:none;margin:0;padding:0}
   .tile{display:flex;flex-direction:column;justify-content:space-between;gap:26px;min-height:176px;height:100%;padding:20px;border-radius:22px;text-decoration:none;transition:transform .15s ease}
   a.tile:hover{transform:translateY(-2px)}
   .tile svg{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -128,11 +128,14 @@
   [data-style="green"] :focus-visible{outline-color:#4F5E43}
   [data-style="green"] .wrap{max-width:1160px}
   .g-mast{border-bottom:1px solid #1F2420;padding-bottom:22px;margin-bottom:30px}
-  .g-top{display:flex!important;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6B6F66;padding-bottom:14px;border-bottom:1px solid #CFC9BC}
-  .g-row{display:flex!important;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-top:24px}
+  [data-style="green"] .g-top{display:flex!important}
+  .g-top{justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#6B6F66;padding-bottom:14px;border-bottom:1px solid #CFC9BC}
+  [data-style="green"] .g-row{display:flex!important}
+  .g-row{justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-top:24px}
   .g-row h1{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(50px,8vw,76px);line-height:.95;letter-spacing:-.015em}
   .g-dek{margin:0;max-width:360px;font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:20px;line-height:1.35;color:#6B6F66}
-  .g-label{display:flex!important;gap:14px;align-items:baseline;border-top:1px solid #1F2420;padding-top:10px;margin:0 0 14px;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+  [data-style="green"] .g-label{display:flex!important}
+  .g-label{gap:14px;align-items:baseline;border-top:1px solid #1F2420;padding-top:10px;margin:0 0 14px;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
   .g-label span{color:#4F5E43}
   [data-style="green"] .top{gap:48px}
   [data-style="green"] .hero{background:none;padding:0;border-radius:0;display:block;overflow:visible}
@@ -164,14 +167,14 @@
   [data-style="green"] .small-actions button,[data-style="green"] .more{color:#1F2420}
   [data-style="green"] .cal-pick{background:#ECE7DD;border-radius:0}
   [data-style="green"] .apps-head{margin:44px 0 14px;display:block}
-  [data-style="green"] .tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;counter-reset:tile}
-  @media (max-width:700px){[data-style="green"] .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  [data-style="green"] .tiles{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;counter-reset:tile}
+  @media (max-width:900px){[data-style="green"] .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
   [data-style="green"] .tiles li{counter-increment:tile}
   [data-style="green"] .tile{border-radius:0;min-height:190px;padding:18px 20px;background:#ECE7DD;color:#1F2420;border:1px solid #ECE7DD;transform:none!important}
   [data-style="green"] .tile.t-red{background:#4F5E43;color:#F7F5F1;border-color:#4F5E43}
   [data-style="green"] .tile.t-line,[data-style="green"] div.tile{background:transparent;border-color:#CFC9BC}
   [data-style="green"] .tile svg{display:none}
-  [data-style="green"] .tile::before{content:"0" counter(tile);font-size:11.5px;font-weight:700;letter-spacing:.16em;opacity:.85}
+  [data-style="green"] .tile::before{content:counter(tile, decimal-leading-zero);font-size:11.5px;font-weight:700;letter-spacing:.16em;opacity:.85}
   [data-style="green"] .tile strong,[data-style="green"] .t-rose strong,[data-style="green"] .t-line strong{font-family:"Cormorant Garamond",Georgia,serif;font-style:normal;font-weight:400;font-size:34px;color:inherit;letter-spacing:-.01em}
   [data-style="green"] .tile .d{opacity:.8;font-size:13.5px}
   [data-style="green"] .tile .top-row{position:absolute;right:20px;top:18px}
@@ -183,6 +186,54 @@
   [data-style="green"] .apps-head .g-label span{font-family:inherit;font-size:inherit;font-weight:inherit;color:#4F5E43}
   [data-style="green"] .small-actions span{color:#6B6F66!important}
   [data-style="green"] .verse-label{display:block}
+
+  /* Search and the combined to-do list */
+  .search{display:flex;gap:10px;align-items:center;margin:0 0 22px;background:var(--paper);border:2px solid var(--red);border-radius:999px;padding:6px 6px 6px 18px;max-width:640px;color:var(--red2);box-shadow:0 6px 18px rgba(120,10,20,.08)}
+  .search input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:16px;color:var(--wine);min-height:40px}
+  .search input:focus{outline:none}
+  .search:focus-within{box-shadow:0 0 0 3px rgba(218,10,20,.25)}
+  .search button{background:var(--red2);color:#FFF7F6;border-radius:999px;padding:0 18px;min-height:40px;font-weight:700;font-size:14px}
+  .todo{margin-top:22px;background:var(--paper);border-radius:26px;padding:24px 26px;box-shadow:0 10px 30px rgba(120,10,20,.10)}
+  .todo-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .todo-head > div{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .todo h2{margin:0;font-family:var(--serif);font-style:italic;font-weight:500;font-size:34px;color:var(--red2)}
+  .todo-tag{font-family:var(--hand);font-weight:700;font-size:24px;color:var(--red)}
+  .todo-count{font-size:13px;color:var(--muted)}
+  .todo-filters{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+  .todo-filters button{padding:5px 13px;border-radius:999px;font-size:13.5px;font-weight:700;background:#F6D3D7;color:#7E0C16;min-height:34px}
+  .todo-filters button[aria-pressed="true"]{background:var(--red2);color:#FFF7F6}
+  .todo-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));column-gap:34px}
+  @media (max-width:500px){.todo-list{grid-template-columns:1fr}}
+  .ti{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+  .ti .tk{width:24px;height:24px;border-radius:50%;border:2px solid var(--red2);display:grid;place-items:center;color:#FFF7F6;font-size:13px}
+  .ti .tk.on{background:var(--red2)}
+  .ti .tx{font-size:16px;line-height:1.3}
+  .ti.done .tx{text-decoration:line-through;color:#A86A70}
+  .ti .sb{display:block;font-size:12.5px;color:var(--muted)}
+  .src{border-radius:999px;padding:4px 11px;font-size:12.5px;font-weight:700;white-space:nowrap}
+  .todo-add{display:flex;gap:8px;margin-top:14px}
+  .todo-add input{flex:1;min-width:0;min-height:44px;border-radius:999px;border:2px solid var(--line);background:#fff;padding:0 16px;font:inherit;color:var(--wine)}
+  .todo-add button{background:var(--rose);color:var(--deep);border-radius:999px;padding:0 18px;font-weight:700;min-height:44px}
+  .todo-note{margin:12px 0 0;font-size:13px;color:var(--muted)}
+  .todo-note button{text-decoration:underline;color:var(--deep);font-weight:700}
+  [data-style="green"] .search{border-radius:0;border:1px solid #1F2420;box-shadow:none;background:transparent;color:#1F2420;max-width:none}
+  [data-style="green"] .search button{border-radius:0;background:#4F5E43}
+  [data-style="green"] .todo{background:none;box-shadow:none;border-radius:0;padding:0;margin-top:44px}
+  [data-style="green"] .todo-head{display:block}
+  [data-style="green"] .todo-head > div{display:block}
+  [data-style="green"] .ti .sb,[data-style="green"] .todo-count,[data-style="green"] .todo-note,[data-style="green"] .msg{color:#6B6F66}
+  [data-style="green"] .todo-note button{color:#1F2420}
+  [data-style="green"] .todo-count{display:block;margin-top:-6px;margin-bottom:6px}
+  [data-style="green"] .todo-filters button{border-radius:0;background:none;color:#1F2420;border-bottom:2px solid transparent;padding:4px 0;margin-right:14px;font-weight:500}
+  [data-style="green"] .todo-filters button[aria-pressed="true"]{background:none;color:#1F2420;border-bottom-color:#4F5E43}
+  [data-style="green"] .ti{border-bottom-color:#CFC9BC}
+  [data-style="green"] .ti .tk{border-radius:0;border:1px solid #1F2420}
+  [data-style="green"] .ti .tk.on{background:#4F5E43;border-color:#4F5E43}
+  [data-style="green"] .ti .tx{font-family:"Cormorant Garamond",Georgia,serif;font-size:20px}
+  [data-style="green"] .src{border-radius:0;background:#ECE7DD!important;color:#1F2420!important;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  [data-style="green"] .todo-add input,[data-style="green"] .todo-add button{border-radius:0}
+  [data-style="green"] .todo-add input{border:1px solid #CFC9BC}
+  [data-style="green"] .todo-add button{background:#4F5E43;color:#F7F5F1}
   .style-pick{display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap}
   .style-pick button[aria-pressed="true"]{text-decoration:none;font-weight:700;color:inherit;cursor:default}
 </style>
@@ -193,6 +244,11 @@
     <div class="g-top"><span>The Johnston Home</span><span id="g-issue"></span></div>
     <div class="g-row"><h1 id="g-hello">Good morning.</h1><p class="g-dek">A quiet record of the day: weather, word, table and plans.</p></div>
   </header>
+  <form class="search" role="search" onsubmit="event.preventDefault();const q=this.q.value.trim();if(q){window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank','noopener');this.q.value='';}">
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    <input name="q" type="search" placeholder="Search Google…" aria-label="Search Google" enterkeyhint="search">
+    <button type="submit">Search</button>
+  </form>
   <div class="top">
     <section class="hero" aria-labelledby="hi">
       <svg class="check" aria-hidden="true" preserveAspectRatio="none">
@@ -234,25 +290,38 @@
     </section>
   </div>
 
-  <div class="apps-head"><h2 class="p-only">Family apps</h2><span class="p-only">everything in one place</span><p class="g-only g-label"><span>04</span>Family apps</p></div>
+  <section class="todo" aria-labelledby="todo-h">
+    <div class="todo-head"><div><h2 id="todo-h" class="p-only">To do</h2><span class="p-only todo-tag">everything in one list</span><p class="g-only g-label"><span>04</span>To do</p></div><span id="todo-count" class="todo-count"></span></div>
+    <div id="todo-filters" class="todo-filters"></div>
+    <div id="todo-list"><p class="msg">Loading…</p></div>
+    <div class="todo-add"><input id="todo-new" placeholder="Jot something down (goes to your Someday list as “Soon”)" aria-label="Add a to-do" onkeydown="if(event.key==='Enter')DASH.quickAdd()"><button onclick="DASH.quickAdd()">Add</button></div>
+    <p class="todo-note" id="todo-note"></p>
+  </section>
+  <div class="apps-head"><h2 class="p-only">Family apps</h2><span class="p-only">everything in one place</span><p class="g-only g-label"><span>05</span>Family apps</p></div>
   <ul class="tiles">
     <li><a class="tile t-red" href="./mealplanner/">
       <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 3c-2.2 2-2.2 7 0 9v9"/></svg>
-      <span><strong>Meal Planner</strong><span class="d">Plan, recipes, shopping and freezer</span></span></a></li>
-    <li><a class="tile t-rose" href="https://calendar.google.com/" target="_blank" rel="noopener">
+      <span><strong>Meal Planner</strong><span class="d">Plan, recipes and freezer</span></span></a></li>
+    <li><a class="tile t-rose" href="./mealplanner/#shop">
+      <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M4 5h2l2.2 10.2a1 1 0 0 0 1 .8h8.6a1 1 0 0 0 1-.8L20 8H7"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>
+      <span><strong>Shopping list</strong><span class="d">Straight to this week’s shop</span></span></a></li>
+    <li><a class="tile t-line" href="./calendar/">
       <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-      <span><strong>Calendar</strong><span class="d">Opens Google Calendar</span></span></a></li>
-    <li><div class="tile t-line" aria-disabled="true">
-      <span class="top-row"><svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M6 10a6 6 0 0 1 12 0v10a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1z"/><path d="M9 21v-6h6v6M10 4.2V3h4v1.2"/></svg><span class="soon" style="color:#DA0A14">coming soon</span></span>
-      <span><strong>Kids and school</strong><span class="d">School info, links, key dates</span></span></div></li>
-    <li><a class="tile t-deep" href="./garden/">
+      <span><strong>Family calendar</strong><span class="d">The whole month at a glance</span></span></a></li>
+    <li><a class="tile t-deep" href="./kids/">
+      <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M6 10a6 6 0 0 1 12 0v10a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1z"/><path d="M9 21v-6h6v6M10 4.2V3h4v1.2"/></svg>
+      <span><strong>Kids’ corner</strong><span class="d">Links, reminders and dates</span></span></a></li>
+    <li><a class="tile t-rose" href="./garden/">
       <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M7 4l2 3 3-3 3 3 2-3v5a5 5 0 0 1-10 0z"/><path d="M12 17c-2-2-5-2-6-1M12 17c2-2 5-2 6-1"/></svg>
       <span><strong>Cutting garden</strong><span class="d">Map, plants, seed box and diary</span></span></a></li>
-    <li><div class="tile t-rose" aria-disabled="true">
-      <span class="top-row"><svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg><span class="soon" style="color:#C20A16">coming soon</span></span>
-      <span><strong>To-do</strong><span class="d">Shared family jobs and lists</span></span></div></li>
-    <li><div class="tile t-line" aria-disabled="true">
-      <span class="top-row"><svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M4 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a1 1 0 0 1-1-1z"/><path d="M4 7l11-3v3M16 13.5h2"/></svg><span class="soon" style="color:#DA0A14">coming soon</span></span>
+    <li><a class="tile t-red" href="./todo/">
+      <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg>
+      <span><strong>Someday list</strong><span class="d">Things to do when there’s time</span></span></a></li>
+    <li><a class="tile t-line" href="https://calendar.google.com/" target="_blank" rel="noopener">
+      <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+      <span><strong>Google Calendar</strong><span class="d">Opens in a new tab</span></span></a></li>
+    <li><div class="tile t-deep" aria-disabled="true">
+      <span class="top-row"><svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M4 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a1 1 0 0 1-1-1z"/><path d="M4 7l11-3v3M16 13.5h2"/></svg><span class="soon" style="color:#F6C4CC">coming soon</span></span>
       <span><strong>Budget</strong><span class="d">Monthly categories, spending</span></span></div></li>
   </ul>
 
@@ -455,11 +524,30 @@ function showEvents(state){
   if(state.error) html += `<p class="msg" style="color:var(--deep)">${esc(state.error)}</p>`;
   box.innerHTML = html;
 }
+const SRC_STYLE = {Kitchen:['#D0E3FF','#3A2208'], Kids:['#F5B3DC','#7E0C16'], Garden:['#CBD8A9','#3E4A1C'], Someday:['#C20A16','#FFF7F6'], 'Google Tasks':['#BFD3F2','#1F3B66']};
+let todoState = {items:[], filter:'All', note:''};
+function showTodos(st){
+  if(st) todoState = {...todoState, ...st};
+  const {items, filter, note} = todoState;
+  const list = document.getElementById('todo-list'), fl = document.getElementById('todo-filters'), ct = document.getElementById('todo-count'), nt = document.getElementById('todo-note');
+  if(todoState.status==='signedOut'){ list.innerHTML = '<p class="msg">Sign in to see your to-dos.</p>'; fl.innerHTML=''; ct.textContent=''; nt.innerHTML=''; return; }
+  if(todoState.status==='loading'){ list.innerHTML = '<p class="msg">Loading…</p>'; return; }
+  const srcs = ['All', ...Object.keys(SRC_STYLE).filter(k=>items.some(i=>i.src===k))];
+  fl.innerHTML = srcs.map(k=>`<button aria-pressed="${filter===k}" onclick="DASH.todoFilter('${k}')">${esc(k)}${k!=='All'?` (${items.filter(i=>i.src===k && !i.done).length})`:''}</button>`).join('');
+  const shown = items.filter(i=>filter==='All' || i.src===filter);
+  const left = items.filter(i=>!i.done).length, done = items.filter(i=>i.done).length;
+  ct.textContent = items.length ? `${left} left${done?` · ${done} done`:''}` : '';
+  list.className = 'todo-list';
+  list.innerHTML = shown.length ? shown.map((i,n)=>`<div class="ti${i.done?' done':''}"><button class="tk${i.done?' on':''}" aria-pressed="${!!i.done}" aria-label="${i.done?'Untick':'Tick'} ${esc(i.text)}" onclick="DASH.tickTodo(${items.indexOf(i)})">${i.done?'✓':''}</button>
+    <span class="tx">${esc(i.text)}<span class="sb">${esc(i.sub||'')}</span></span><span class="src" style="background:${SRC_STYLE[i.src][0]};color:${SRC_STYLE[i.src][1]}">${esc(i.src)}</span></div>`).join('')
+    : `<p class="msg">${filter==='All'?'Nothing to do today. Enjoy!':'Nothing here today.'}</p>`;
+  nt.innerHTML = note || '';
+}
 function showAccount(email){
   document.getElementById('who').textContent = email ? `Signed in as ${email}` : '';
   document.getElementById('acct').innerHTML = email ? `<button onclick="DASH.signOut()">Sign out</button>` : '';
 }
-showMeals({status:'loading'}); showEvents({status:'loading'});
+showMeals({status:'loading'}); showEvents({status:'loading'}); showTodos({status:'loading'});
 
 // Coming back to the page later (or the next morning) refreshes everything.
 let lastDay = isoDate(new Date());
@@ -477,11 +565,12 @@ import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signI
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { getFirestore, collection, query, where, getDocs, doc, getDoc, setDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { SEASON } from './garden/season.js';
 
 const cfg = window.FIREBASE_CONFIG || {};
 const HOUSEHOLD = window.HOUSEHOLD_ID || 'johnston';
 const CAL_CLIENT_ID = window.GOOGLE_CALENDAR_CLIENT_ID || '';
-const CAL_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
+const CAL_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/tasks';
 const app = initializeApp(cfg);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -512,7 +601,8 @@ async function loadMeals(){
 // The access token Google gives lasts about an hour. Today's events are also saved
 // to the family database, so they still show (for both of you) after it runs out.
 function savedToken(){ try{ const t = JSON.parse(localStorage.getItem('jd-cal-token')||'null'); return t && t.exp > Date.now()+60000 ? t.token : null; }catch(e){ return null; } }
-function saveToken(token, secs){ try{ localStorage.setItem('jd-cal-token', JSON.stringify({token, exp:Date.now()+(secs||3600)*1000})); }catch(e){} }
+function saveToken(token, secs, scope){ try{ localStorage.setItem('jd-cal-token', JSON.stringify({token, exp:Date.now()+(secs||3600)*1000, scope:scope||''})); }catch(e){} }
+function tokenHasTasks(){ try{ const t=JSON.parse(localStorage.getItem('jd-cal-token')||'null'); return !!(t && t.exp>Date.now()+60000 && /auth\/tasks/.test(t.scope||'')); }catch(e){ return false; } }
 function clearToken(){ try{ localStorage.removeItem('jd-cal-token'); }catch(e){} }
 function paintCal(extra){ calState = {...calState, ...(extra||{})}; showEvents({...calState, picker: pickerOpen ? pickerHtml() : ''}); }
 
@@ -578,7 +668,7 @@ function connectCalendar(){
       client_id: CAL_CLIENT_ID, scope: CAL_SCOPE,
       callback: async resp=>{
         if(resp.error){ paintCal({error:"Calendar wasn't connected. Please try again."}); return; }
-        saveToken(resp.access_token, +resp.expires_in);
+        saveToken(resp.access_token, +resp.expires_in, resp.scope); loadTodos();
         paintCal({status:'loading', error:''});
         try{ const fresh = await fetchEvents(resp.access_token); paintCal({status:'ready', ...fresh}); }
         catch(e){ paintCal({status:'needConnect', error:"Couldn't load the calendar. Please try again."}); }
@@ -615,6 +705,90 @@ async function saveCalendars(){
   if(token){ try{ const fresh = await fetchEvents(token); paintCal({status:'ready', ...fresh}); }catch(e){ paintCal({status:'needConnect'}); } }
 }
 
+
+/* ---------- The combined to-do list ---------- */
+const hh = (...p) => doc(db,'households',HOUSEHOLD,...p);
+let todoItems = [];
+function remDue(r, t, wd){
+  if(r.days && r.days.length) return r.days.includes(wd) ? {done: r.doneOn===t, sub:'Today'} : null;
+  if(r.date && r.date<=t){ const done=!!r.doneOn; if(r.date<t && done) return null; return {done, sub: r.date===t ? 'Today' : 'Overdue'}; }
+  return null;
+}
+async function loadTodos(){
+  if(!user) return;
+  const now = new Date(), t = isoDate(now), wd = now.getDay(), mk = t.slice(0,7);
+  const items = [];
+  const safeGet = async f => { try{ return await f(); }catch(e){ return null; } };
+  // Kitchen: day tasks from the meal planner
+  const plan = await safeGet(()=>getDocs(query(collection(db,'households',HOUSEHOLD,'plan'), where('date','==',t))));
+  (plan ? plan.docs : []).forEach(d=>{ const v=d.data(); if(v.type==='tasks') (v.items||[]).forEach(i=>items.push({src:'Kitchen', text:i.text, sub:'Today · meal planner', done:!!i.done, act:{k:'kitchen', key:d.id, id:i.id}})); });
+  // Kids: reminders due today
+  const [kids, rems] = await Promise.all([safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'kids_children'))), safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'kids_reminders')))]);
+  const kidName = id => { if(id==='both') return 'Both'; const k = kids && kids.docs.find(d=>d.id===id); return k ? k.data().name : ''; };
+  (rems ? rems.docs : []).forEach(d=>{ const r=d.data(), due=remDue(r,t,wd); if(due) items.push({src:'Kids', text:r.text, sub:[kidName(r.child), due.sub].filter(Boolean).join(' · '), done:due.done, act:{k:'kids', id:d.id, weekly: !!(r.days&&r.days.length)}}); });
+  // Someday list: things marked "Soon"
+  const todo = await safeGet(()=>getDocs(query(collection(db,'households',HOUSEHOLD,'todo_items'), where('priority','==','soon'))));
+  (todo ? todo.docs : []).forEach(d=>{ const v=d.data(); if(!v.done || Date.now()-v.done < 12*3600000) items.push({src:'Someday', text:v.text, sub:'Someday list · soon', done:!!v.done, act:{k:'todo', id:d.id}}); });
+  // Garden: this week's and this month's jobs
+  const [gt, gw, gm] = await Promise.all([safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'garden_tasks'))), safeGet(()=>getDoc(hh('garden_meta','week'))), safeGet(()=>getDoc(hh('garden_meta','month')))]);
+  const monday = (()=>{ const x=new Date(now); x.setDate(x.getDate()-((x.getDay()+6)%7)); return isoDate(x); })();
+  const wDone = gw && gw.exists() && gw.data().week===monday ? (gw.data().done||{}) : {};
+  (gt ? gt.docs : []).sort((a,b)=>(a.data().order||0)-(b.data().order||0)).forEach(d=>{ const v=d.data(); items.push({src:'Garden', text:v.job, sub:['This week', v.where, v.often].filter(Boolean).join(' · '), done:!!wDone[d.id], act:{k:'gweek', id:d.id}}); });
+  if(gt){
+    const mm = gm && gm.exists() && gm.data().month===mk ? gm.data() : {done:{}, extra:[]};
+    SEASON[now.getMonth()][2].forEach(([kind,text],i)=>items.push({src:'Garden', text:`${kind}: ${text}`, sub:'This month', done:!!(mm.done||{})['j'+i], act:{k:'gmonth', key:'j'+i}}));
+    (mm.extra||[]).forEach((text,i)=>items.push({src:'Garden', text, sub:'This month', done:!!(mm.done||{})['x'+i], act:{k:'gmonth', key:'x'+i}}));
+  }
+  // Google Tasks due today or overdue
+  let note = '';
+  if(CAL_CLIENT_ID){
+    const tok = tokenHasTasks() ? savedToken() : null;
+    if(tok){
+      try{
+        const end = new Date(now); end.setHours(23,59,59,999);
+        const lists = (await gfetch('https://tasks.googleapis.com/tasks/v1/users/@me/lists?maxResults=100', tok)).items || [];
+        for(const l of lists){
+          const tasks = (await gfetch(`https://tasks.googleapis.com/tasks/v1/lists/${encodeURIComponent(l.id)}/tasks?showCompleted=false&maxResults=100&dueMax=${encodeURIComponent(end.toISOString())}`, tok)).items || [];
+          tasks.filter(x=>x.due && x.title).forEach(x=>{ const d=x.due.slice(0,10); items.push({src:'Google Tasks', text:x.title, sub: d===t ? 'Due today' : 'Overdue', done:false, act:{k:'gtask', list:l.id, id:x.id}}); });
+        }
+      }catch(e){ note = 'Couldn’t reach Google Tasks just now. <button onclick="DASH.connectCalendar()">Reconnect</button>'; }
+    } else note = 'Google Tasks will show here once Google is connected. <button onclick="DASH.connectCalendar()">Connect Google</button>';
+  }
+  const order = {'Google Tasks':0, Kitchen:1, Kids:2, Someday:3, Garden:4};
+  items.sort((a,b)=>(a.done-b.done) || order[a.src]-order[b.src]);
+  todoItems = items;
+  showTodos({status:'ready', items, note});
+}
+async function gfetch(url, token, opts={}){
+  const r = await fetch(url, {...opts, headers:{Authorization:'Bearer '+token, 'Content-Type':'application/json'}});
+  if(!r.ok){ const e=new Error('http '+r.status); e.code=r.status; throw e; }
+  return r.status===204 ? null : r.json();
+}
+async function tickTodo(n){
+  const it = todoItems[n]; if(!it) return;
+  const now = new Date(), t = isoDate(now), a = it.act, on = !it.done;
+  it.done = on; showTodos({items: todoItems});
+  try{
+    if(a.k==='kitchen'){ const d = await getDoc(hh('plan', a.key)); if(d.exists()){ const v=d.data(); await setDoc(hh('plan', a.key), {...v, items:(v.items||[]).map(i=>i.id===a.id?{...i, done:on}:i)}); } }
+    else if(a.k==='kids'){ await setDoc(hh('kids_reminders', a.id), {doneOn: on ? t : ''}, {merge:true}); }
+    else if(a.k==='todo'){ await setDoc(hh('todo_items', a.id), {done: on ? Date.now() : 0}, {merge:true}); }
+    else if(a.k==='gweek'){ const x=new Date(now); x.setDate(x.getDate()-((x.getDay()+6)%7)); const wk=isoDate(x);
+      const d = await getDoc(hh('garden_meta','week')); const done = d.exists() && d.data().week===wk ? {...(d.data().done||{})} : {};
+      if(on) done[a.id]=true; else delete done[a.id]; await setDoc(hh('garden_meta','week'), {week:wk, done}); }
+    else if(a.k==='gmonth'){ const mk=t.slice(0,7); const d = await getDoc(hh('garden_meta','month')); const m = d.exists() && d.data().month===mk ? d.data() : {month:mk, done:{}, extra:[]};
+      const done={...(m.done||{})}; if(on) done[a.key]=true; else delete done[a.key]; await setDoc(hh('garden_meta','month'), {month:mk, done, extra:m.extra||[]}); }
+    else if(a.k==='gtask'){ const tok=savedToken(); if(!tok) throw new Error('no token');
+      await gfetch(`https://tasks.googleapis.com/tasks/v1/lists/${encodeURIComponent(a.list)}/tasks/${encodeURIComponent(a.id)}`, tok, {method:'PATCH', body: JSON.stringify(on ? {status:'completed'} : {status:'needsAction', completed:null})}); }
+  }catch(e){ it.done = !on; showTodos({items: todoItems, note:'Couldn’t save that tick. Check the internet connection and try again.'}); }
+}
+async function quickAdd(){
+  const el = document.getElementById('todo-new'), text = (el.value||'').trim(); if(!text || !user) return;
+  el.value = '';
+  const id = 't' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+  try{ await setDoc(hh('todo_items', id), {text, priority:'soon', category:'home', time:'30min', added:Date.now(), done:0}); loadTodos(); }
+  catch(e){ showTodos({note:'Couldn’t add that. Check the database rules (see the setup guide).'}); }
+}
+
 /* ---------- Sign-in ---------- */
 window.DASH = {
   async signIn(){
@@ -628,7 +802,8 @@ window.DASH = {
   signOut(){ clearToken(); return signOut(auth); },
   signedIn:false,
   async setStyle(st){ applyStyle(st); if(user){ try{ await setDoc(doc(db,'households',HOUSEHOLD,'prefs',String(user.email).toLowerCase()), {style:st}, {merge:true}); }catch(e){} } },
-  refresh(){ loadMeals(); loadEvents(); },
+  refresh(){ loadMeals(); loadEvents(); loadTodos(); },
+  tickTodo, quickAdd, todoFilter(k){ showTodos({filter:k}); },
   connectCalendar, toggleCalendarPicker, saveCalendars
 };
 getRedirectResult(auth).catch(()=>{});
@@ -644,9 +819,9 @@ onAuthStateChanged(auth, u=>{
       applyStyle((d.exists() && d.data().style) || fallback || 'default');
     }).catch(()=>paintStylePick());
   } else paintStylePick();
-  if(!u){ showMeals({status:'signedOut'}); showEvents({status:'signedOut'}); return; }
+  if(!u){ showMeals({status:'signedOut'}); showEvents({status:'signedOut'}); showTodos({status:'signedOut'}); return; }
   showMeals({status:'loading'}); paintCal({status:'loading', events:[]});
-  loadMeals(); loadEvents();
+  loadMeals(); loadEvents(); loadTodos();
 });
 </script>
 </body>

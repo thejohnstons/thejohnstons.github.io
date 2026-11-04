@@ -261,6 +261,7 @@ import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager
   collection, doc, setDoc, deleteDoc, getDoc, onSnapshot, writeBatch }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
+import { SEASON } from './season.js';
 /* ---------------- Helpers ---------------- */
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -283,20 +284,6 @@ function dateText(s){
 
 /* ---------------- Month guide (Adelaide Hills) ---------------- */
 // A general guide written for the Adelaide Hills; frosts and heatwaves can shift things a few weeks.
-const SEASON = [
-  ['high summer','Long hot days. Water deeply and pick early in the morning.',[['Sow','Last zinnias and cosmos for autumn flowers'],['Care','Water deeply in the early morning; shade pots on heatwave days'],['Care','Keep deadheading so summer flowers keep coming'],['Cut','Pick in the cool of the morning, straight into water']]],
-  ['late summer','Still hot, but autumn is coming. Plan the cool-season flowers.',[['Plan','Order ranunculus and anemone corms for autumn planting'],['Sow','Stock in trays for winter and spring flowers'],['Care','Keep watering; feed dahlias and zinnias'],['Cut','Dahlias and zinnias, as often as you can']]],
-  ['early autumn','Cooler nights. A great time to sow for spring.',[['Sow','Sweet peas around St Patrick’s Day, plus annual scabiosa and gypsophila'],['Plant','Stock seedlings'],['Care','Pull out finished summer annuals'],['Cut','The first chrysanthemums']]],
-  ['autumn in the hills','The planting season for spring flowers.',[['Plant','Ranunculus and anemone corms (soak them for a few hours first)'],['Sow','Sweet peas, if you haven’t yet'],['Care','Mulch the beds as the weather cools'],['Cut','Chrysanthemums']]],
-  ['late autumn','Frosts begin. Tuck the garden in.',[['Plant','Finish planting corms and stock seedlings'],['Care','After frost blackens the dahlias, cut them back and lift or mulch the tubers'],['Care','Watch for snails on new seedlings'],['Cut','The last of the chrysanthemums']]],
-  ['early winter','Quiet and cold. A month for planning.',[['Plant','Bare-root roses'],['Care','Cut chrysanthemums back once they finish'],['Care','Protect seedlings on frosty nights'],['Plan','Look through the seed box for spring']]],
-  ['midwinter','Pruning time.',[['Care','Prune the roses'],['Care','Prune the hydrangeas'],['Plant','Bare-root roses, if not done'],['Cut','The first anemones']]],
-  ['late winter','The first signs of spring.',[['Care','Feed the roses as new growth starts'],['Care','Check sweet peas and tall flowers have support'],['Sow','Warm-season seeds in trays near the end of the month'],['Cut','Anemones and stock']]],
-  ['early spring','Everything starts growing fast.',[['Care','Feed everything and watch for aphids on new growth'],['Plant','Summer seedlings once the risk of frost has passed'],['Care','Weed while the weeds are small'],['Cut','Ranunculus, anemones and stock']]],
-  ['spring in the hills','Warm soil at last. Sowing time.',[['Sow','Zinnias, cosmos and strawflowers, straight into warm soil'],['Plant','Dahlia tubers'],['Care','Mulch, and stake tall plants early'],['Cut','Ranunculus and the first roses']]],
-  ['late spring in the hills','Warm days, cool nights. Time to sow the summer flowers.',[['Sow','Zinnias, strawflowers, dahlia seed and chives, now the soil is warm'],['Plant','Lisianthus seedlings, and any empty spots in the beds'],['Care','Mulch before the heat, and water deeply in the mornings'],['Cut','Pick often and deadhead roses to keep the flowers coming']]],
-  ['early summer','Abundance! The cutting garden comes into its own.',[['Sow','A last round of zinnias and cosmos for autumn colour'],['Care','Pinch chrysanthemums for the last time before midsummer'],['Care','Water deeply, and shade pots on very hot days'],['Cut','Lisianthus, hydrangeas and the first dahlias']]]
-];
 const WATER_TIP = m => ([12,1,2].includes(m) ? 'Summer: pots can need water every day in a heatwave.' : [6,7,8].includes(m) ? 'Winter: only water when the soil is dry.' : 'Check pots with your finger; they dry out faster than beds.');
 
 /* ---------------- Starting data (written once, then edited by you) ---------------- */

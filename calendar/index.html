@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<script>try{document.documentElement.dataset.style=localStorage.getItem("johnston-style")||"default"}catch(e){document.documentElement.dataset.style="default"}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FBEFF1">
+<meta name="apple-mobile-web-app-title" content="Calendar">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon-64.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Family calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;700;800;900&family=Caveat:wght@600;700&family=Karla:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&display=swap">
+<style>
+  :root{--page:#FBEFF1;--mbg:#F6B9C3;--mink:#1F3A7A;--cell:#FFF6EE;--text:#2A1F3D;--muted:#6A5560;--line:#F0D9DE;--accent:#F2462A;
+    --spartan:"League Spartan","Arial Black",sans-serif;--hand:Caveat,"Bradley Hand",cursive;--sans:Karla,"Helvetica Neue",Arial,sans-serif;color-scheme:light}
+  :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  *,*::before,*::after{box-sizing:inherit}
+  body{margin:0;background:var(--page);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:var(--mink)}
+  button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+  :focus-visible{outline:3px solid var(--mink);outline-offset:3px;border-radius:6px}
+  .wrap{max-width:1200px;margin:0 auto;padding:clamp(14px,3vw,26px) clamp(12px,3vw,32px) 64px;display:flex;flex-direction:column;gap:20px}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+  .back{font-size:13.5px;font-weight:700;text-decoration:none}
+  .brand{margin:2px 0 0;font-family:var(--hand);font-weight:700;font-size:30px;color:var(--accent);line-height:1}
+  .tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13.5px}
+  .pill{border:2px solid var(--mink);border-radius:999px;padding:7px 14px;font-weight:700;color:var(--mink);background:var(--cell);min-height:40px}
+  .pill.solid{background:var(--mink);color:var(--cell)}
+  .muted{color:var(--muted)}
+  .main{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+  .month{flex:1 1 760px;min-width:0;background:var(--mbg);border-radius:26px;padding:24px 24px 20px}
+  .mhead{display:flex;align-items:center;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+  .nav{width:44px;height:44px;border-radius:50%;border:2px solid var(--mink);display:grid;place-items:center;font-size:22px;color:var(--mink);font-weight:700}
+  .mhead h1{margin:0;font-family:var(--spartan);font-weight:900;font-size:clamp(56px,9vw,90px);line-height:.85;letter-spacing:-.02em;color:var(--mink)}
+  .mhead .yr{font-family:var(--spartan);font-weight:700;font-size:26px;color:var(--mink);align-self:flex-end}
+  .wd,.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+  .wd span{font-family:var(--spartan);font-weight:800;font-size:13px;letter-spacing:.08em;color:var(--mink);padding-bottom:6px}
+  .day{background:var(--cell);min-height:104px;padding:7px;display:flex;flex-direction:column;gap:3px;min-width:0;text-align:left;align-items:stretch}
+  .day.blank{background:transparent}
+  .day .n{font-family:var(--spartan);font-weight:800;font-size:18px;color:var(--mink)}
+  .day.today{box-shadow:inset 0 0 0 3px var(--mink)}
+  .day.today .n{color:var(--accent)}
+  .day.sel{box-shadow:inset 0 0 0 3px var(--accent)}
+  .chip{display:block;border-radius:6px;padding:2px 6px;font-size:11.5px;font-weight:700;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .more{font-size:11.5px;font-weight:700;color:var(--mink)}
+  @media (max-width:640px){.day{min-height:62px;padding:4px}.day .n{font-size:14px}.chip{font-size:0;height:7px;padding:0;border-radius:4px}.more{font-size:10px}.month{padding:16px 12px}}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:13px;font-weight:600}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:12px;height:12px;border-radius:4px;display:inline-block}
+  aside{flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--cell);border-radius:26px;padding:20px 22px}
+  .card.dark{background:var(--mink);color:var(--cell)}
+  .card h2{margin:0 0 6px;font-family:var(--spartan);font-weight:800;font-size:22px;color:var(--mink);text-transform:uppercase}
+  .card.dark h2{color:var(--cell)}
+  .ev{display:grid;grid-template-columns:70px minmax(0,1fr);gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .ev:last-child{border-bottom:0}
+  .ev .w{font-family:var(--spartan);font-weight:800;font-size:13px;color:var(--mink)}
+  .ev .t{font-weight:700}
+  .ev .c{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted);margin-top:2px}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .msg{background:var(--cell);border:2px solid var(--mink);border-radius:16px;padding:12px 16px;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+  .pick label{display:flex;gap:10px;align-items:center;padding:6px 0;min-height:36px}
+  .pick input{width:18px;height:18px;accent-color:var(--mink)}
+  .gate{max-width:460px;margin:14vh auto;text-align:center}
+  .foot{text-align:center;font-size:13px;color:var(--muted)}
+  .foot .link{text-decoration:underline}
+  .foot .link[aria-pressed="true"]{text-decoration:none;font-weight:800}
+
+  /* ===== Classic green (Nathan's style) ===== */
+  [data-style="green"]{--page:#F7F5F1;--mbg:transparent;--mink:#1F2420;--cell:transparent;--text:#1F2420;--muted:#6B6F66;--line:#CFC9BC;--accent:#4F5E43;
+    --spartan:"Cormorant Garamond",Georgia,serif;--hand:"Cormorant Garamond",Georgia,serif;--sans:Karla,"Helvetica Neue",Arial,sans-serif}
+  [data-style="green"] body{font-size:15px}
+  [data-style="green"] .brand{font-style:italic;font-weight:400;color:#6B6F66}
+  [data-style="green"] .pill{border-radius:0;border-width:1px;background:transparent;font-weight:500}
+  [data-style="green"] .pill.solid{background:#4F5E43;border-color:#4F5E43;color:#F7F5F1}
+  [data-style="green"] .month{border-radius:0;padding:0;border-top:1px solid #1F2420}
+  [data-style="green"] .mhead{border-bottom:1px solid #CFC9BC;padding:16px 0}
+  [data-style="green"] .mhead h1{font-weight:400;letter-spacing:-.015em;font-size:clamp(50px,8vw,76px)}
+  [data-style="green"] .nav{border-radius:0;border-width:1px}
+  [data-style="green"] .wd span{font-family:Karla,sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;color:#6B6F66}
+  [data-style="green"] .wd,[data-style="green"] .grid{gap:0}
+  [data-style="green"] .grid{border-top:1px solid #1F2420;border-left:1px solid #CFC9BC}
+  [data-style="green"] .day{border-right:1px solid #CFC9BC;border-bottom:1px solid #CFC9BC}
+  [data-style="green"] .day.blank{border-right:1px solid #CFC9BC}
+  [data-style="green"] .day .n{font-weight:500}
+  [data-style="green"] .day.today{background:#ECE7DD;box-shadow:none}
+  [data-style="green"] .day.sel{box-shadow:inset 0 0 0 2px #4F5E43}
+  [data-style="green"] .chip{border-radius:0}
+  [data-style="green"] .card{border-radius:0;border-top:1px solid #1F2420;padding:12px 0}
+  [data-style="green"] .card h2{font-family:Karla,sans-serif;font-size:11.5px;font-weight:700;letter-spacing:.16em}
+  [data-style="green"] .card.dark{background:#3E4A36;color:#F7F5F1;padding:18px 20px;border-top:0}
+  [data-style="green"] .card.dark h2{color:#C9CFBF}
+  [data-style="green"] .ev .w{font-family:Karla,sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6B6F66}
+  [data-style="green"] .msg{border-radius:0;border-width:1px}
+  [data-style="green"] .doodle{display:none}
+  .style-btn{text-decoration:underline;text-underline-offset:3px}
+  .style-btn[aria-pressed="true"]{text-decoration:none;font-weight:800;cursor:default}
+</style>
+</head>
+<body>
+<div id="app" class="wrap"><p>Loading…</p></div>
+<script src="../firebase-config.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script type="module">
+import * as F from '../family.js';
+const {esc, isoDate, MONTHS} = F;
+// One look per month, like a set of wall calendars: [background, lettering]
+const THEMES = [['#F7C9CF','#C8282E'],['#F2B83C','#6E2A7A'],['#F6C9D3','#7E7A22'],['#F3EFE6','#2B63C6'],['#F7C1A6','#D63A7C'],['#C8C3EC','#2E6B3A'],['#D8E35A','#D93A1E'],['#8FD3E3','#1F3A7A'],['#EBDDB8','#8A1F2E'],['#F4A23C','#6A2C82'],['#F6B9C3','#1F3A7A'],['#9C9A3A','#F6C3D6']];
+const S = {status:'loading', user:null, y:0, m:0, events:[], updated:'', sel:'', calendars:null, conn:'idle', picker:null, msg:''};
+const now = new Date(); S.y = now.getFullYear(); S.m = now.getMonth(); S.sel = isoDate(now);
+const mk = () => `${S.y}-${String(S.m+1).padStart(2,'0')}`;
+
+function textOn(hex){ const h=hex.replace('#',''); const [r,g,b]=[0,2,4].map(i=>parseInt(h.substr(i,2),16)/255); const L=0.2126*r+0.7152*g+0.0722*b; return L>0.6 ? '#2A1F3D' : '#FFFFFF'; }
+function eventsOn(day){ return S.events.filter(e=>e.start<=day && day<(e.end||e.start) || e.start===day).sort((a,b)=>(a.time?1:0)-(b.time?1:0) || String(a.sort).localeCompare(String(b.sort))); }
+
+/* ---------- Render ---------- */
+function render(){
+  const app = document.getElementById('app');
+  if(S.status==='loading'){ app.innerHTML='<p>Loading…</p>'; return; }
+  if(S.status!=='ready'){
+    app.innerHTML = `<div class="gate"><p class="brand">our family calendar</p>${S.status==='noConfig'?'<p>The Firebase settings file wasn’t found. This folder needs to sit inside the dashboard site.</p>'
+      : S.status==='denied' ? `<p>${esc(S.user&&S.user.email)} doesn’t have access. Sign out and use your family Google account.</p><button class="pill" onclick="C.signOut()">Sign out</button>`
+      : `<p>Sign in with your family Google account.</p><button class="pill solid" onclick="C.signIn()">Sign in with Google</button>`}<p><a href="?demo">Or look around a demo</a></p></div>`;
+    return;
+  }
+  const green = F.currentStyle()==='green';
+  const [bg, ink] = THEMES[S.m];
+  const vars = green ? '' : `--mbg:${bg};--mink:${ink};`;
+  const first = new Date(S.y, S.m, 1), lead = (first.getDay()+6)%7, days = new Date(S.y, S.m+1, 0).getDate(), today = isoDate(new Date());
+  let cells = '';
+  for(let i=0;i<lead;i++) cells += `<div class="day blank" aria-hidden="true"></div>`;
+  for(let d=1; d<=days; d++){
+    const iso = `${mk()}-${String(d).padStart(2,'0')}`, ev = eventsOn(iso);
+    cells += `<button class="day${iso===today?' today':''}${iso===S.sel?' sel':''}" onclick="C.pick('${iso}')" aria-label="${esc(new Date(iso+'T00:00:00').toLocaleDateString('en-AU',{weekday:'long', day:'numeric', month:'long'}))}, ${ev.length} event${ev.length===1?'':'s'}">
+      <span class="n">${String(d).padStart(2,'0')}</span>
+      ${ev.slice(0,2).map(e=>`<span class="chip" style="background:${esc(e.colour)};color:${textOn(e.colour)}">${e.time?esc(e.time)+' ':''}${esc(e.title)}</span>`).join('')}
+      ${ev.length>2?`<span class="more">+${ev.length-2} more</span>`:''}</button>`;
+  }
+  const selEv = eventsOn(S.sel);
+  const upcoming = S.events.filter(e=>(e.end||e.start)>today || e.start===today).sort((a,b)=>a.start.localeCompare(b.start) || String(a.sort).localeCompare(String(b.sort))).slice(0,6);
+  const busy = new Set(); for(let d=1; d<=days; d++){ const iso=`${mk()}-${String(d).padStart(2,'0')}`; if(eventsOn(iso).length) busy.add(iso); }
+  const cals = [...new Map(S.events.map(e=>[e.cal, e.colour])).entries()];
+  const evRow = (e, label) => `<div class="ev"><span class="w">${esc(label)}</span><span><span class="t">${esc(e.title)}</span><span class="c"><span class="dot" style="background:${esc(e.colour)}"></span>${esc(e.cal||'')}${e.time?' · '+esc(e.time):' · all day'}</span></span></div>`;
+  const short = iso => new Date(iso+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short', day:'numeric'});
+  const conn = !F.CAL_CLIENT_ID ? '<span class="muted">Calendar connection not set up yet (see the setup guide)</span>'
+    : `<span class="muted">${S.conn==='loading'?'Syncing…':S.updated?`Synced ${esc(S.updated)}`:'Not synced yet'}</span><button class="pill" onclick="C.refresh()">${F.savedToken()?'Refresh':'Connect and refresh'}</button><button class="pill" onclick="C.calendars()">Choose calendars</button>`;
+  app.innerHTML = `
+  <header class="top"><div><a class="back" href="../">← Johnston Dashboard</a><p class="brand">our family calendar</p></div>
+    <div class="tools">${conn}<button class="pill solid" onclick="C.today()">Today</button></div></header>
+  ${S.msg?`<div class="msg" role="status"><span>${esc(S.msg)}</span><button class="pill" onclick="C.clear()">OK</button></div>`:''}
+  ${S.picker?pickerHtml():''}
+  <div class="main">
+    <section class="month" style="${vars}" aria-label="${MONTHS[S.m]} ${S.y}">
+      <div class="mhead"><button class="nav" onclick="C.go(-1)" aria-label="Previous month">‹</button><h1>${green?MONTHS[S.m]:MONTHS[S.m].slice(0,3).toUpperCase()}</h1><span class="yr">${S.y}</span><button class="nav" onclick="C.go(1)" aria-label="Next month">›</button>
+        <svg class="doodle" aria-hidden="true" width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="${ink}" stroke-opacity=".55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto"><path d="M10 18h22v12a9 9 0 0 1-9 9h-4a9 9 0 0 1-9-9z"/><path d="M32 22h4a5 5 0 0 1 0 10h-4M16 8c-2 3 2 4 0 7M23 8c-2 3 2 4 0 7"/></svg></div>
+      <div class="wd">${['MON','TUE','WED','THU','FRI','SAT','SUN'].map(w=>`<span>${w}</span>`).join('')}</div>
+      <div class="grid">${cells}</div>
+      ${cals.length?`<div class="legend">${cals.map(([n,c])=>`<span><span class="sw" style="background:${esc(c)}"></span>${esc(n)}</span>`).join('')}</div>`:''}
+    </section>
+    <aside>
+      <section class="card" aria-labelledby="sel-h"><h2 id="sel-h">${esc(new Date(S.sel+'T00:00:00').toLocaleDateString('en-AU',{weekday:'long', day:'numeric', month:'long'}))}</h2>
+        ${selEv.length?selEv.map(e=>evRow(e, e.time||'All day')).join(''):'<p class="muted" style="margin:0">Nothing on. Enjoy!</p>'}</section>
+      <section class="card" aria-labelledby="up-h"><h2 id="up-h">Coming up</h2>${upcoming.length?upcoming.map(e=>evRow(e, short(e.start))).join(''):'<p class="muted" style="margin:0">Nothing coming up.</p>'}</section>
+      <section class="card dark" aria-labelledby="gl-h"><h2 id="gl-h">${MONTHS[S.m]} at a glance</h2>
+        <p style="margin:6px 0 0">${busy.size} day${busy.size===1?'':'s'} with something on, ${days-busy.size} free.</p></section>
+    </aside>
+  </div>
+  <p class="foot">${F.DEMO?'Demo: sample events, nothing is saved':esc(S.user.email)} · <button class="link" onclick="C.signOut()">Sign out</button> · ${F.stylePicker()}<br>It syncs from Google Calendar whenever one of you opens it, and saves the month so you both see it.</p>`;
+  document.querySelectorAll('[data-style-pick]').forEach(b=>b.onclick=()=>{ F.saveStyle(S.user && S.user.email, b.dataset.stylePick); render(); });
+}
+function pickerHtml(){
+  if(S.picker==='loading') return `<div class="msg"><span>Loading your calendars…</span></div>`;
+  const chosen = new Set((S.calendars||[]).map(c=>c.id));
+  return `<section class="msg pick" style="display:block"><b>Show events from:</b>
+    ${S.picker.map((c,i)=>`<label><input type="checkbox" data-cal="${i}" ${chosen.has(c.id)||(c.primary&&chosen.has('primary'))?'checked':''}> <span class="dot" style="background:${esc(c.colour)}"></span>${esc(c.name)}</label>`).join('')}
+    <div style="display:flex;gap:10px;margin-top:8px"><button class="pill solid" onclick="C.saveCals()">Save</button><button class="pill" onclick="C.closePicker()">Cancel</button></div></section>`;
+}
+
+/* ---------- Google Calendar ---------- */
+async function loadSettings(){
+  if(S.calendars) return S.calendars;
+  try{ const s = await F.getOne('dashboard','settings'); S.calendars = s && s.calendars && s.calendars.length ? s.calendars : [{id:'primary', name:''}]; }
+  catch(e){ S.calendars = [{id:'primary', name:''}]; }
+  return S.calendars;
+}
+async function loadCache(){
+  try{ const c = await F.getOne('calendar_cache', mk()); if(c){ S.events=c.events||[]; S.updated=c.updated||''; } else { S.events=[]; S.updated=''; } }catch(e){}
+}
+async function sync(token){
+  S.conn='loading'; render();
+  const cals = await loadSettings();
+  const start = new Date(S.y, S.m, 1), end = new Date(S.y, S.m+1, 1);
+  let list = [];
+  try{ list = (await F.gfetch('https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=reader', token)).items || []; }catch(e){ if(e.code===401){ S.conn='idle'; S.msg='The Google connection ran out. Tap Connect and refresh.'; render(); return; } }
+  const info = id => { const c = list.find(x=>x.id===id || (id==='primary' && x.primary)); return c ? {name:c.summaryOverride||c.summary||'', colour:c.backgroundColor||'#1F3A7A'} : {name:'', colour:'#1F3A7A'}; };
+  const seen = new Set(), events = [];
+  for(const c of cals){
+    try{
+      const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(c.id)}/events?singleEvents=true&orderBy=startTime&maxResults=250&timeMin=${encodeURIComponent(start.toISOString())}&timeMax=${encodeURIComponent(end.toISOString())}`;
+      const data = await F.gfetch(url, token), meta = info(c.id);
+      (data.items||[]).forEach(ev=>{
+        if(ev.status==='cancelled' || seen.has(ev.iCalUID||ev.id)) return; seen.add(ev.iCalUID||ev.id);
+        const allDay = !!(ev.start && ev.start.date);
+        const s = allDay ? ev.start.date : isoDate(new Date(ev.start.dateTime));
+        const e = allDay ? ev.end.date : '';
+        const t = allDay ? '' : new Date(ev.start.dateTime).toLocaleTimeString('en-AU',{hour:'numeric', minute:'2-digit'}).replace(/\s?([ap])\.?m\.?/i,(m,a)=>' '+a.toLowerCase()+'m');
+        events.push({start:s, end:e, time:t, sort: allDay ? '' : ev.start.dateTime, title: ev.summary||'(No title)', cal: c.name || meta.name, colour: meta.colour});
+      });
+    }catch(e){ if(e.code===401){ S.conn='idle'; S.msg='The Google connection ran out. Tap Connect and refresh.'; render(); return; } }
+  }
+  const updated = new Date().toLocaleString('en-AU',{weekday:'short', hour:'numeric', minute:'2-digit'});
+  S.events = events; S.updated = updated; S.conn='idle';
+  try{ await F.put('calendar_cache', {id:mk(), events, updated, by:S.user.email}); }catch(e){}
+  render();
+}
+async function show(){
+  await loadCache(); render();
+  const t = F.savedToken(); if(t && !F.DEMO) sync(t.token);
+}
+
+/* ---------- Actions ---------- */
+window.C = {
+  signIn: ()=>F.signIn().catch(e=>{ S.msg=`Sign-in didn't work (${e.code}).`; render(); }),
+  signOut: ()=>F.logOut(),
+  clear: ()=>{ S.msg=''; render(); },
+  pick: iso=>{ S.sel=iso; render(); },
+  go: n=>{ S.m+=n; if(S.m<0){S.m=11;S.y--;} if(S.m>11){S.m=0;S.y++;} S.sel=`${mk()}-01`; if(F.DEMO){ demoEvents(); render(); } else show(); },
+  today: ()=>{ const n=new Date(); const changed = n.getFullYear()!==S.y || n.getMonth()!==S.m; S.y=n.getFullYear(); S.m=n.getMonth(); S.sel=isoDate(n); if(changed && !F.DEMO) show(); else { if(F.DEMO) demoEvents(); render(); } },
+  refresh: ()=>{ if(F.DEMO){ S.msg='Demo mode: sample events only.'; render(); return; }
+    const t=F.savedToken(); if(t) sync(t.token); else F.connectGoogle((tok, why)=>{ if(tok) sync(tok); else { S.msg = why==='loading' ? 'Google is still loading. Try again in a moment.' : why==='notSetUp' ? 'The calendar connection isn’t set up yet (see the setup guide).' : 'Calendar wasn’t connected. Please try again.'; render(); } }, S.user && S.user.email); },
+  calendars: async ()=>{ const t=F.savedToken(); if(!t){ S.msg='Tap Connect and refresh first, then choose calendars.'; render(); return; }
+    S.picker='loading'; render();
+    try{ const data = await F.gfetch('https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=reader', t.token); await loadSettings();
+      S.picker=(data.items||[]).map(c=>({id:c.id, name:c.summaryOverride||c.summary||c.id, primary:!!c.primary, colour:c.backgroundColor||'#1F3A7A'})); render(); }
+    catch(e){ S.picker=null; S.msg="Couldn't load your calendar list. Reconnect and try again."; render(); } },
+  closePicker: ()=>{ S.picker=null; render(); },
+  saveCals: async ()=>{ const picked=[...document.querySelectorAll('[data-cal]')].filter(b=>b.checked).map(b=>S.picker[+b.dataset.cal]).map(c=>({id:c.id, name:c.name}));
+    S.calendars = picked.length ? picked : [{id:'primary', name:''}]; S.picker=null;
+    try{ await F.patch('dashboard','settings',{calendars:S.calendars}); }catch(e){}
+    const t=F.savedToken(); if(t) sync(t.token); else render(); }
+};
+function demoEvents(){
+  const d = n => `${mk()}-${String(n).padStart(2,'0')}`;
+  const C = {Family:'#F2462A', Nathan:'#3A6FD8', Thea:'#E86FA8', Kids:'#F2B52C'};
+  const to24 = t => { const m=String(t).match(/(\d+)(?::(\d+))?\s*([ap])m/); if(!m) return ''; let h=+m[1]%12; if(m[3]==='p') h+=12; return String(h).padStart(2,'0')+':'+(m[2]||'00'); };
+  const ev = (n,t,title,cal) => ({start:d(n), end:'', time:t, sort:to24(t), title, cal, colour:C[cal]});
+  S.events = [ev(2,'9:30 am','Kindergym','Kids'),ev(3,'','Bin night','Family'),ev(5,'7 pm','Small group','Nathan'),ev(8,'10 am','Church','Family'),ev(12,'9:30 am','Kindergym','Kids'),ev(12,'6 pm','Dinner with friends','Thea'),
+    ev(15,'2 pm','Birthday party','Kids'),ev(15,'10 am','Church','Family'),ev(19,'9:30 am','Kindergym','Kids'),ev(22,'4 pm','Family BBQ','Family'),ev(26,'9:30 am','Kindergym','Kids'),ev(26,'3 pm','School tour','Family'),ev(26,'7 pm','Small group','Nathan')];
+  S.updated='just now (demo)';
+}
+
+/* ---------- Start ---------- */
+F.watchUser(async (u, why)=>{
+  if(why==='noConfig'){ S.status='noConfig'; render(); return; }
+  S.user=u;
+  if(!u){ S.status='signedOut'; render(); return; }
+  S.status='ready';
+  F.loadStyle(u.email).then(render);
+  if(F.DEMO){ demoEvents(); render(); return; }
+  show();
+});
+render();
+</script>
+</body>
+</html>

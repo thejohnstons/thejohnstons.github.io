@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<script>try{document.documentElement.dataset.style=localStorage.getItem("johnston-style")||"default"}catch(e){document.documentElement.dataset.style="default"}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFFAF0">
+<meta name="apple-mobile-web-app-title" content="Kids">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon-64.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Kids’ corner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Young+Serif&family=Gochi+Hand&family=Nunito:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Karla:wght@400;500;700&display=swap">
+<style>
+  :root{--cream:#F7F1E3;--bg:#FFFAF0;--card:#FFFDF8;--ink:#4A1E0E;--rust:#8B2E12;--tomato:#E23E22;--pink:#F5B3DC;--sky:#82AEEA;--lime:#E3E64B;--lilac:#D8C6EE;--yellow:#FAD04A;--blush:#FBC3B8;--muted:#8A5A48;
+    --chunk:"Lilita One","Arial Rounded MT Bold",sans-serif;--serif:"Young Serif",Georgia,serif;--hand:"Gochi Hand","Comic Sans MS",cursive;--sans:Nunito,"Helvetica Neue",Arial,sans-serif;color-scheme:light}
+  :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  *,*::before,*::after{box-sizing:inherit}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:var(--rust)}
+  button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+  input,select{font:inherit;color:var(--ink)}
+  :focus-visible{outline:3px solid var(--tomato);outline-offset:3px;border-radius:6px}
+  @media (pointer:coarse){input,select{font-size:16px}}
+  .hidden{display:none!important}
+  .wrap{max-width:1180px;margin:0 auto;padding:clamp(14px,3vw,22px) clamp(14px,3vw,32px) 64px;display:flex;flex-direction:column;gap:24px}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-bottom:14px;border-bottom:3px dotted var(--blush)}
+  .top .l{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .back{font-size:13.5px;font-weight:700;text-decoration:none}
+  .logo{font-family:var(--chunk);font-size:30px;color:var(--tomato);letter-spacing:.01em}
+  .logo span{color:var(--lilac)}
+  nav.main{display:flex;gap:16px;flex-wrap:wrap}
+  nav.main a{text-decoration:none;font-weight:800;font-size:15px;padding:6px 4px}
+  .hero{position:relative;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;background:var(--cream);border-radius:30px;padding:34px 40px;min-height:270px;overflow:hidden}
+  .hero .bursts{position:absolute;inset:0;width:100%;height:100%}
+  .hero .txt{position:relative;flex:1 1 420px;max-width:560px}
+  .hero .hi{margin:0;font-family:var(--hand);font-size:26px;color:var(--rust)}
+  .hero h1{margin:2px 0 0;font-family:var(--chunk);font-weight:400;font-size:clamp(50px,7vw,84px);line-height:.92;color:var(--tomato);letter-spacing:.01em}
+  .hero p.lede{margin:14px 0 0;font-family:var(--serif);font-size:21px;line-height:1.45;color:var(--rust)}
+  .stickers{position:relative;flex:0 0 400px;height:250px}
+  .stickers svg{position:absolute}
+  @media (max-width:760px){.stickers{flex-basis:100%;height:150px}.stickers svg{transform:scale(.6);transform-origin:top left}.hero{padding:26px 22px}}
+  .dots{display:flex;justify-content:space-between;height:66px;padding:0 6px}
+  .dots div{width:26px;background-size:26px 22px;background-repeat:repeat-y}
+  .h2row{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .h2{margin:0;font-family:var(--chunk);font-weight:400;font-size:34px;color:var(--tomato);letter-spacing:.01em}
+  .note{font-family:var(--hand);font-size:22px;color:var(--rust)}
+  .links{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+  .link{display:flex;flex-direction:column;justify-content:space-between;gap:14px;min-height:190px;padding:18px;border-radius:26px;color:var(--ink);text-decoration:none;position:relative}
+  .link strong{display:block;font-family:var(--chunk);font-weight:400;font-size:28px;line-height:1;letter-spacing:.01em}
+  .link .d{display:block;font-size:14.5px;font-weight:600;margin-top:4px}
+  .link .u{display:block;font-size:12px;opacity:.75;margin-top:2px;word-break:break-all}
+  .link .ed{position:absolute;top:12px;right:14px;font-size:12.5px;font-weight:800;text-decoration:underline;background:rgba(255,255,255,.6);border-radius:999px;padding:2px 10px}
+  .addtile{display:flex;align-items:center;justify-content:center;min-height:190px;border-radius:26px;border:3px dashed #B59E2C;color:var(--rust);font-family:var(--hand);font-size:24px}
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;align-items:start}
+  .box{background:var(--card);border-radius:30px;padding:24px 22px;position:relative}
+  .kidhead{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+  .kidhead .av{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;flex:none}
+  .kidhead h2{margin:0;font-family:var(--chunk);font-weight:400;font-size:40px;color:var(--tomato);letter-spacing:.01em}
+  .field{display:grid;grid-template-columns:110px minmax(0,1fr);gap:10px;padding:10px 0;border-bottom:2px dotted var(--blush)}
+  .field b{font-weight:800;font-size:13px;color:var(--rust)}
+  .rem{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 0}
+  .tick{width:24px;height:24px;border-radius:7px;border:2.5px solid var(--ink);display:grid;place-items:center;font-size:14px;font-weight:800;color:#fff}
+  .tick.on{background:var(--tomato);border-color:var(--tomato)}
+  .done{text-decoration:line-through;color:var(--muted)}
+  .when{display:block;font-size:12.5px;color:var(--muted);text-decoration:none}
+  .x{font-size:12.5px;color:var(--muted);text-decoration:underline}
+  .addrow{display:grid;gap:8px;margin-top:10px}
+  .addrow .r{display:flex;gap:8px;flex-wrap:wrap}
+  .in{min-height:44px;border-radius:14px;border:2px solid #E8D6C6;background:#fff;padding:8px 12px;flex:1 1 160px;min-width:0}
+  .btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:999px;background:var(--tomato);color:#fff;font-weight:800}
+  .btn.ghost{background:transparent;color:var(--rust);border:2px solid var(--rust)}
+  .linkbtn{font-size:13.5px;font-weight:800;text-decoration:underline;color:var(--rust);min-height:36px;display:inline-flex;align-items:center}
+  .date{display:grid;grid-template-columns:78px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 0;border-bottom:2px dotted var(--blush)}
+  .date .d{font-weight:800;font-size:13.5px;color:var(--rust)}
+  .date .t{font-family:var(--serif);font-size:18px;line-height:1.3}
+  .who{border-radius:999px;padding:3px 12px;font-size:13px;font-weight:800;white-space:nowrap}
+  .msg{background:var(--yellow);border-radius:16px;padding:12px 16px;display:flex;justify-content:space-between;gap:10px}
+  .gate{max-width:460px;margin:14vh auto;text-align:center}
+  .modal-bg{position:fixed;inset:0;background:rgba(60,30,15,.35);z-index:30}
+  .modal{position:fixed;z-index:31;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100% - 24px));max-height:calc(100vh - 40px);overflow:auto;background:var(--card);border-radius:26px;padding:24px;display:flex;flex-direction:column;gap:12px}
+  .modal label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px}
+  .swatches{display:flex;gap:8px;flex-wrap:wrap}
+  .swatches button{width:40px;height:40px;border-radius:50%;border:3px solid transparent}
+  .swatches button[aria-pressed="true"]{border-color:var(--ink)}
+  .foot{text-align:center;font-size:13px;color:var(--muted)}
+  .foot button{text-decoration:underline}
+  .foot button[aria-pressed="true"]{text-decoration:none;font-weight:800}
+  .g-only{display:none}
+
+  /* ===== Classic green (Nathan's style) ===== */
+  [data-style="green"]{--bg:#F7F5F1;--card:transparent;--ink:#1F2420;--rust:#1F2420;--tomato:#4F5E43;--muted:#6B6F66;--blush:#CFC9BC;--cream:#ECE7DD;
+    --chunk:"Cormorant Garamond",Georgia,serif;--serif:"Cormorant Garamond",Georgia,serif;--hand:"Cormorant Garamond",Georgia,serif;--sans:Karla,"Helvetica Neue",Arial,sans-serif}
+  [data-style="green"] body{font-size:15px}
+  [data-style="green"] .g-only{display:block}
+  [data-style="green"] .p-only{display:none!important}
+  [data-style="green"] .top{border-bottom:1px solid #CFC9BC}
+  [data-style="green"] .logo{font-size:15px;font-family:var(--sans);font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#1F2420}
+  [data-style="green"] .logo span{color:#1F2420}
+  [data-style="green"] nav.main a{font-weight:500;font-size:14px;border-bottom:2px solid transparent;border-radius:0;padding:4px 0}
+  [data-style="green"] .hero{background:none;border-radius:0;padding:10px 0 22px;min-height:0;border-bottom:1px solid #1F2420}
+  [data-style="green"] .hero h1{font-weight:400;font-size:clamp(50px,8vw,76px);letter-spacing:-.015em;color:#1F2420}
+  [data-style="green"] .hero .hi,[data-style="green"] .note{font-style:italic;color:#6B6F66}
+  [data-style="green"] .hero p.lede{font-style:italic;color:#6B6F66;font-size:20px}
+  [data-style="green"] .h2,[data-style="green"] .kidhead h2{font-family:var(--sans);font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#1F2420}
+  [data-style="green"] .h2row{border-top:1px solid #1F2420;padding-top:10px}
+  [data-style="green"] .link{border-radius:0;background:#ECE7DD!important;min-height:170px}
+  [data-style="green"] .link:first-child{background:#4F5E43!important;color:#F7F5F1}
+  [data-style="green"] .link strong{font-size:30px}
+  [data-style="green"] .link svg,[data-style="green"] .kidhead .av{display:none}
+  [data-style="green"] .addtile{border-radius:0;border:1px solid #CFC9BC;font-style:italic}
+  [data-style="green"] .box{border-radius:0;border-top:1px solid #1F2420;padding:12px 0 0;box-shadow:none!important}
+  [data-style="green"] .kidhead h2{font-family:"Cormorant Garamond",Georgia,serif;font-size:36px;letter-spacing:-.01em;text-transform:none;font-weight:400}
+  [data-style="green"] .field{border-bottom:1px solid #CFC9BC}
+  [data-style="green"] .field b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6B6F66;font-weight:700}
+  [data-style="green"] .tick{border-radius:0;border-width:1px}
+  [data-style="green"] .tick.on{background:#4F5E43;border-color:#4F5E43}
+  [data-style="green"] .date{border-bottom:1px solid #CFC9BC}
+  [data-style="green"] .who{border-radius:0;background:#ECE7DD!important;color:#1F2420!important}
+  [data-style="green"] .btn{border-radius:0;background:#4F5E43}
+  [data-style="green"] .btn.ghost{background:transparent;color:#1F2420;border-width:1px}
+  [data-style="green"] .in{border-radius:0;border:1px solid #CFC9BC}
+  [data-style="green"] .modal{border-radius:0;background:#F7F5F1}
+  [data-style="green"] .msg{border-radius:0;background:#ECE7DD}
+  .style-btn{text-decoration:underline;text-underline-offset:3px}
+  .style-btn[aria-pressed="true"]{text-decoration:none;font-weight:800;cursor:default}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="sun" viewBox="0 0 80 80"><g fill="#FAD04A" stroke="#4A1E0E" stroke-width="2"><polygon points="40.0,4.0 46.7,15.0 58.0,8.8 58.3,21.7 71.2,22.0 65.0,33.3 76.0,40.0 65.0,46.7 71.2,58.0 58.3,58.3 58.0,71.2 46.7,65.0 40.0,76.0 33.3,65.0 22.0,71.2 21.7,58.3 8.8,58.0 15.0,46.7 4.0,40.0 15.0,33.3 8.8,22.0 21.7,21.7 22.0,8.8 33.3,15.0"/><circle cx="40" cy="40" r="21"/></g><circle cx="33" cy="37" r="2.4" fill="#4A1E0E"/><circle cx="47" cy="37" r="2.4" fill="#4A1E0E"/><path d="M33 46c4 4 10 4 14 0" stroke="#4A1E0E" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="28" cy="45" r="4" fill="#F5B3DC"/><circle cx="52" cy="45" r="4" fill="#F5B3DC"/></symbol>
+<symbol id="starface" viewBox="0 0 80 80"><path d="M40 6l9 20 22 3-16 15 4 22-19-11-19 11 4-22L9 29l22-3z" fill="#FAD04A" stroke="#4A1E0E" stroke-width="2" stroke-linejoin="round"/><circle cx="34" cy="38" r="2.2" fill="#4A1E0E"/><circle cx="46" cy="38" r="2.2" fill="#4A1E0E"/><path d="M35 45c3 3 7 3 10 0" stroke="#4A1E0E" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="29" cy="45" r="3.5" fill="#F5B3DC"/><circle cx="51" cy="45" r="3.5" fill="#F5B3DC"/></symbol>
+<symbol id="bee" viewBox="0 0 80 80"><g stroke="#4A1E0E" stroke-width="2"><ellipse cx="30" cy="22" rx="12" ry="14" fill="#F4EFE6"/><ellipse cx="50" cy="22" rx="12" ry="14" fill="#F4EFE6"/><ellipse cx="40" cy="46" rx="28" ry="22" fill="#FAD04A"/></g><path d="M36 25v42M50 27v38" stroke="#4A1E0E" stroke-width="6"/><circle cx="22" cy="44" r="2.4" fill="#4A1E0E"/><path d="M18 52c3 2 6 2 9 0" stroke="#4A1E0E" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="flower" viewBox="0 0 80 80"><g fill="#F5B3DC" stroke="#4A1E0E" stroke-width="2"><circle cx="40" cy="16" r="13"/><circle cx="63" cy="33" r="13"/><circle cx="54" cy="60" r="13"/><circle cx="26" cy="60" r="13"/><circle cx="17" cy="33" r="13"/></g><circle cx="40" cy="40" r="17" fill="#FAD04A" stroke="#4A1E0E" stroke-width="2"/><circle cx="35" cy="38" r="2" fill="#4A1E0E"/><circle cx="45" cy="38" r="2" fill="#4A1E0E"/><path d="M36 44c2.5 2.5 5.5 2.5 8 0" stroke="#4A1E0E" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="smile" viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="#F7792A" stroke="#4A1E0E" stroke-width="2"/><circle cx="30" cy="34" r="3" fill="#4A1E0E"/><circle cx="50" cy="34" r="3" fill="#4A1E0E"/><path d="M26 46c7 9 21 9 28 0" stroke="#4A1E0E" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="21" cy="46" r="5" fill="#F5B3DC"/><circle cx="59" cy="46" r="5" fill="#F5B3DC"/></symbol>
+<symbol id="rainbow" viewBox="0 0 80 80"><g fill="none" stroke-width="7" stroke-linecap="round"><path d="M10 62a30 30 0 0 1 60 0" stroke="#F2462A"/><path d="M18 62a22 22 0 0 1 44 0" stroke="#FAD04A"/><path d="M26 62a14 14 0 0 1 28 0" stroke="#82AEEA"/></g><circle cx="10" cy="64" r="7" fill="#fff" stroke="#4A1E0E" stroke-width="2"/><circle cx="70" cy="64" r="7" fill="#fff" stroke="#4A1E0E" stroke-width="2"/></symbol>
+</defs></svg>
+<div id="app" class="wrap"><p>Loading…</p></div>
+<script src="../firebase-config.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script type="module">
+import * as F from '../family.js';
+const {esc, isoDate, uid, DAYS} = F;
+const STICKERS = ['sun','starface','bee','flower','smile','rainbow'];
+const COLOURS = ['#FAD04A','#82AEEA','#E3E64B','#F5B3DC','#FDBA8C','#D8C6EE','#B5E0C8'];
+const BURSTS = `<polygon points="44.8,26.5 47.5,37.7 58.8,35.0 53.7,45.4 64.0,50.6 53.4,55.3 58.0,65.9 46.9,62.7 43.6,73.7 37.1,64.1 27.5,70.5 28.7,59.0 17.2,57.6 25.6,49.6 17.7,41.2 29.2,40.5 28.5,28.9 37.9,35.8" fill="#F7792A"/><polygon points="626.2,25.3 626.8,33.3 634.8,34.0 629.6,40.1 634.7,46.2 626.7,46.8 626.0,54.8 619.9,49.6 613.8,54.7 613.2,46.7 605.2,46.0 610.4,39.9 605.3,33.8 613.3,33.2 614.0,25.2 620.1,30.4" fill="#B59E2C"/><polygon points="700.0,228.0 704.1,237.4 712.9,232.2 710.7,242.2 720.9,243.2 713.2,250.0 720.9,256.8 710.7,257.8 712.9,267.8 704.1,262.6 700.0,272.0 695.9,262.6 687.1,267.8 689.3,257.8 679.1,256.8 686.8,250.0 679.1,243.2 689.3,242.2 687.1,232.2 695.9,237.4" fill="#D8C6EE"/><polygon points="48.6,234.2 48.1,242.9 56.8,243.4 50.8,249.7 57.1,255.8 48.4,256.7 49.4,265.4 42.1,260.6 37.3,267.8 34.8,259.5 26.5,261.9 29.9,253.9 22.0,250.4 29.8,246.5 25.9,238.8 34.4,240.8 36.5,232.4 41.6,239.3" fill="#E3E64B"/><polygon points="561.4,216.1 564.0,222.6 570.8,221.1 568.0,227.6 573.9,231.4 567.4,234.0 568.9,240.8 562.4,238.0 558.6,243.9 556.0,237.4 549.2,238.9 552.0,232.4 546.1,228.6 552.6,226.0 551.1,219.2 557.6,222.0" fill="#82AEEA"/>`;
+const DOT_COLS = ['#86B07F','#82AEEA','#D8C6EE','#F5B3DC','#F7792A','#F2A12C','#FAD04A'];
+
+const S = {status:'loading', user:null, children:[], reminders:[], links:[], dates:[], ui:{}, msg:''};
+const DEFAULTS = [
+  ['kids_children', [
+    {id:'thomas', name:'Thomas', sticker:'starface', colour:'#FAD04A', order:1, fields:[{label:'School',value:'King’s Baptist ELC'},{label:'Class',value:''},{label:'Activities',value:'Kindergym'},{label:'Pick-up',value:''}]},
+    {id:'isabel', name:'Isabel', sticker:'flower', colour:'#F5B3DC', order:2, fields:[{label:'Care',value:''},{label:'Activities',value:''},{label:'Naps',value:''},{label:'Notes',value:''}]}
+  ]],
+  ['kids_links', [
+    {id:'l1', title:'Xplor', desc:'Kindy updates and photos', url:'https://home.myxplor.com/', sticker:'sun', colour:'#FAD04A', order:1},
+    {id:'l2', title:'EdClub', desc:'Learning games', url:'https://www.edclub.com/sportal/program-16.game', sticker:'rainbow', colour:'#82AEEA', order:2},
+    {id:'l3', title:'Uniform shop', desc:'Book a uniform fitting', url:'https://kingsbaptistadelaidehills.permapleat.com.au/schoolbookings', sticker:'bee', colour:'#E3E64B', order:3},
+    {id:'l4', title:'King’s Baptist', desc:'Enrolment parent portal', url:'https://enrol.kingsbaptist.sa.edu.au/parent/dashboard/', sticker:'starface', colour:'#F5B3DC', order:4}
+  ]]
+];
+
+/* ---------- Reminders: when are they due? ---------- */
+const today = () => isoDate(new Date());
+function remDone(r){ return r.days && r.days.length ? r.doneOn===today() : !!r.doneOn; }
+function remWhen(r){
+  if(r.days && r.days.length) return 'Every ' + r.days.map(d=>DAYS[d]).join(' and ');
+  if(r.date) return new Date(r.date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short', day:'numeric', month:'short'});
+  return '';
+}
+
+/* ---------- Render ---------- */
+const $ = id => document.getElementById(id);
+function typing(){ const a=document.activeElement; return a && a.closest && a.closest('#app') && /^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName); }
+let pending=false;
+function liveRender(){ if(typing()){ pending=true; return; } render(); }
+document.addEventListener('focusout', ()=>setTimeout(()=>{ if(pending && !typing()){ pending=false; render(); } }, 150));
+function render(){
+  const app = $('app');
+  if(S.status==='loading'){ app.innerHTML = '<p>Loading…</p>'; return; }
+  if(S.status!=='ready'){
+    app.innerHTML = `<div class="gate"><h1 class="h2" style="font-size:44px">KIDS’ CORNER</h1>
+      ${S.status==='noConfig' ? '<p>The Firebase settings file wasn’t found. This folder needs to sit inside the dashboard site.</p>'
+        : S.status==='denied' ? `<p>${esc(S.user && S.user.email)} doesn’t have access. Sign out and use your family Google account.</p><button class="btn ghost" onclick="K.signOut()">Sign out</button>`
+        : `<p>Sign in with your family Google account.</p><button class="btn" onclick="K.signIn()">Sign in with Google</button>`}
+      <p><a href="?demo">Or look around a demo</a></p></div>`;
+    return;
+  }
+  const kids = S.children.slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  const names = kids.map(k=>k.name);
+  const title = names.length ? names.join(' & ') : 'our kids';
+  const stick = [['sun',150,40,20,-8],['flower',120,190,110,10],['starface',96,20,170,-14],['bee',92,190,0,12],['smile',70,300,40,0],['rainbow',100,290,150,-6]]
+    .map(([i,s,x,y,r])=>`<svg width="${s}" height="${s}" style="left:${x}px;top:${y}px;transform:rotate(${r}deg)"><use href="#${i}"/></svg>`).join('');
+  app.innerHTML = `
+  <header class="top"><div class="l"><a class="back" href="../">← Dashboard</a><span class="logo">${names.map(n=>esc(n.toUpperCase())).join('<span> &amp; </span>')}</span></div>
+    <nav class="main" aria-label="Kids sections"><a href="#links">Quick links</a>${kids.map(k=>`<a href="#kid-${k.id}">${esc(k.name)}</a>`).join('')}<a href="#dates">Coming up</a></nav></header>
+  ${S.msg?`<div class="msg" role="status"><span>${esc(S.msg)}</span><button class="linkbtn" onclick="K.clear()">OK</button></div>`:''}
+  <section class="hero" aria-labelledby="hero-h">
+    <svg class="bursts p-only" aria-hidden="true" viewBox="0 0 740 300" preserveAspectRatio="xMinYMid slice">${BURSTS}</svg>
+    <div class="txt"><p class="hi">welcome to the</p><h1 id="hero-h">KIDS’ CORNER</h1>
+      <p class="lede">School, kindy and all the little things for ${esc(names.join(' and ') || 'the kids')}, in one happy place.</p></div>
+    <div class="stickers p-only" aria-hidden="true">${stick}</div>
+  </section>
+  <div class="dots p-only" aria-hidden="true">${Array.from({length:21},(_,i)=>`<div style="background-image:radial-gradient(circle, ${DOT_COLS[i%7]} 12.5px, transparent 13px)"></div>`).join('')}</div>
+  <section id="links" aria-labelledby="links-h"><div class="h2row"><h2 class="h2" id="links-h">QUICK LINKS</h2><span class="note">tap to open in a new tab</span></div>
+    <div class="links">${S.links.slice().sort((a,b)=>(a.order||0)-(b.order||0)).map(l=>`
+      <a class="link" href="${esc(l.url)}" target="_blank" rel="noopener" style="background:${esc(l.colour||'#FAD04A')}">
+        <svg width="66" height="66" aria-hidden="true"><use href="#${esc(l.sticker||'sun')}"/></svg>
+        <span><strong>${esc(l.title)}</strong>${l.desc?`<span class="d">${esc(l.desc)}</span>`:''}<span class="u">${esc(hostOf(l.url))} ↗</span></span>
+        <button class="ed" onclick="event.preventDefault();K.linkForm('${l.id}')" aria-label="Edit ${esc(l.title)}">Edit</button></a>`).join('')}
+      <button class="addtile" onclick="K.linkForm()">+ add a link</button></div>
+  </section>
+  <div class="cols">
+    ${kids.map(kidCard).join('')}
+    ${datesBox()}
+  </div>
+  <p class="foot">${F.DEMO?'Demo: nothing is saved':esc(S.user.email)} · <button onclick="K.signOut()">Sign out</button><br>${F.stylePicker()} · <button onclick="K.childForm()">+ Add a child</button></p>
+  ${S.ui.modal ? S.ui.modal() : ''}`;
+  document.querySelectorAll('[data-style-pick]').forEach(b=>b.onclick=()=>{ F.saveStyle(S.user && S.user.email, b.dataset.stylePick); render(); });
+}
+function hostOf(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return u||''; } }
+function kidCard(k){
+  const rems = S.reminders.filter(r=>r.child===k.id || r.child==='both').sort((a,b)=>(remDone(a)-remDone(b)) || (a.order||0)-(b.order||0));
+  return `<section class="box" id="kid-${k.id}" style="box-shadow:0 0 0 3px ${esc(k.colour||'#FAD04A')}" aria-labelledby="kh-${k.id}">
+    <div class="kidhead"><span class="av" style="background:${esc(k.colour||'#FAD04A')}"><svg width="58" height="58" aria-hidden="true"><use href="#${esc(k.sticker||'sun')}"/></svg></span><h2 id="kh-${k.id}">${esc(k.name)}</h2>
+      <button class="linkbtn" style="margin-left:auto" onclick="K.childForm('${k.id}')">Edit</button></div>
+    ${(k.fields||[]).filter(f=>f.label).map(f=>`<div class="field"><b>${esc(f.label)}</b><span>${f.value?esc(f.value):'<span style="color:var(--muted)">Not filled in yet</span>'}</span></div>`).join('')}
+    <p class="note" style="margin:16px 0 4px">don’t forget!</p>
+    ${rems.map(r=>{ const d=remDone(r); return `<div class="rem"><button class="tick${d?' on':''}" aria-pressed="${d}" aria-label="${d?'Untick':'Tick'} ${esc(r.text)}" onclick="K.tick('${r.id}')">${d?'✓':''}</button>
+      <span><span class="${d?'done':''}">${esc(r.text)}</span>${remWhen(r)?`<span class="when">${esc(remWhen(r))}${r.child==='both'?' · both':''}</span>`:''}</span>
+      <button class="x" onclick="K.delRem('${r.id}')" aria-label="Delete ${esc(r.text)}">Delete</button></div>`; }).join('') || `<p style="margin:4px 0;color:var(--muted)">No reminders yet.</p>`}
+    <div class="addrow"><input id="rt-${k.id}" class="in" placeholder="e.g. Library bag" aria-label="New reminder for ${esc(k.name)}">
+      <div class="r"><select id="rw-${k.id}" class="in" aria-label="When" onchange="document.getElementById('rd-${k.id}').classList.toggle('hidden', this.value!=='date')">
+        <option value="">No set day</option>${DAYS.map((d,i)=>`<option value="w${i}">Every ${d}</option>`).join('')}<option value="date">On a date…</option></select>
+        <input id="rd-${k.id}" type="date" class="in hidden" aria-label="Date"><button class="btn" onclick="K.addRem('${k.id}')">Add</button></div></div>
+  </section>`;
+}
+function datesBox(){
+  const t = today();
+  const list = S.dates.filter(d=>d.date>=t).sort((a,b)=>a.date.localeCompare(b.date));
+  const kids = S.children.slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  const who = id => id==='both' ? ['Both','#E3E64B'] : (k=>k?[k.name,k.colour]:['',''])(kids.find(k=>k.id===id));
+  return `<section class="box" id="dates" style="box-shadow:0 0 0 3px #82AEEA" aria-labelledby="dates-h">
+    <div class="kidhead"><span class="av" style="background:#FDBA8C"><svg width="50" height="50" aria-hidden="true"><use href="#smile"/></svg></span><h2 id="dates-h" style="font-size:34px">COMING UP</h2></div>
+    ${list.map(d=>{ const [n,c]=who(d.who); return `<div class="date"><span class="d">${new Date(d.date+'T00:00:00').toLocaleDateString('en-AU',{day:'numeric', month:'short'})}</span><span class="t">${esc(d.title)}</span>
+      <span style="display:flex;gap:8px;align-items:center">${n?`<span class="who" style="background:${esc(c)}">${esc(n)}</span>`:''}<button class="x" onclick="K.delDate('${d.id}')" aria-label="Delete ${esc(d.title)}">Delete</button></span></div>`; }).join('') || `<p style="color:var(--muted)">Nothing coming up yet.</p>`}
+    <div class="addrow"><input id="dt" class="in" placeholder="e.g. Excursion to the zoo" aria-label="What’s on">
+      <div class="r"><input id="dd" type="date" class="in" aria-label="Date"><select id="dw" class="in" aria-label="Who">${kids.map(k=>`<option value="${k.id}">${esc(k.name)}</option>`).join('')}<option value="both">Both</option></select><button class="btn" onclick="K.addDate()">Add</button></div></div>
+    <p style="margin:10px 0 0;font-size:13px;color:var(--muted)">Past dates tidy themselves away.</p>
+  </section>`;
+}
+
+/* ---------- Forms ---------- */
+function linkForm(id){
+  const l = S.links.find(x=>x.id===id) || {title:'', desc:'', url:'https://', sticker:'sun', colour:'#FAD04A'};
+  S.ui.pick = {sticker:l.sticker, colour:l.colour};
+  S.ui.modal = () => `<div class="modal-bg" onclick="K.close()"></div><div class="modal" role="dialog" aria-modal="true" aria-labelledby="lf-h">
+    <h2 class="h2" id="lf-h">${id?'EDIT LINK':'ADD A LINK'}</h2>
+    <label>Name<input id="lf-t" class="in" value="${esc(l.title)}"></label>
+    <label>What it’s for<input id="lf-d" class="in" value="${esc(l.desc||'')}"></label>
+    <label>Web address<input id="lf-u" class="in" type="url" value="${esc(l.url)}"></label>
+    <div><b style="font-size:14px">Sticker</b><div class="swatches">${STICKERS.map(s=>`<button aria-label="${s}" aria-pressed="${S.ui.pick.sticker===s}" onclick="K.pick('sticker','${s}')" style="background:#fff"><svg width="30" height="30"><use href="#${s}"/></svg></button>`).join('')}</div></div>
+    <div><b style="font-size:14px">Colour</b><div class="swatches">${COLOURS.map(c=>`<button aria-label="Colour ${c}" aria-pressed="${S.ui.pick.colour===c}" onclick="K.pick('colour','${c}')" style="background:${c}"></button>`).join('')}</div></div>
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">${id?`<button class="linkbtn" onclick="K.delLink('${id}')">Remove link</button>`:'<span></span>'}
+      <span style="display:flex;gap:10px"><button class="btn ghost" onclick="K.close()">Cancel</button><button class="btn" onclick="K.saveLink('${id||''}')">Save</button></span></div></div>`;
+  render();
+}
+function childForm(id){
+  const k = S.children.find(x=>x.id===id) || {name:'', sticker:'sun', colour:'#82AEEA', fields:[{label:'School',value:''},{label:'Activities',value:''},{label:'Notes',value:''}]};
+  S.ui.pick = {sticker:k.sticker, colour:k.colour};
+  const f = [...(k.fields||[]), {label:'',value:''}, {label:'',value:''}].slice(0, Math.max(6,(k.fields||[]).length+1));
+  S.ui.modal = () => `<div class="modal-bg" onclick="K.close()"></div><div class="modal" role="dialog" aria-modal="true" aria-labelledby="cf-h">
+    <h2 class="h2" id="cf-h">${id?'EDIT '+esc(k.name.toUpperCase()):'ADD A CHILD'}</h2>
+    <label>Name<input id="cf-n" class="in" value="${esc(k.name)}"></label>
+    <b style="font-size:14px">Details (leave a label empty to remove that line)</b>
+    ${f.map((x,i)=>`<div style="display:flex;gap:8px"><input class="in cf-l" style="flex:0 0 130px" placeholder="Label" value="${esc(x.label)}" aria-label="Label ${i+1}"><input class="in cf-v" placeholder="Details" value="${esc(x.value)}" aria-label="Details ${i+1}"></div>`).join('')}
+    <div><b style="font-size:14px">Sticker</b><div class="swatches">${STICKERS.map(s=>`<button aria-label="${s}" aria-pressed="${S.ui.pick.sticker===s}" onclick="K.pick('sticker','${s}')" style="background:#fff"><svg width="30" height="30"><use href="#${s}"/></svg></button>`).join('')}</div></div>
+    <div><b style="font-size:14px">Colour</b><div class="swatches">${COLOURS.map(c=>`<button aria-label="Colour ${c}" aria-pressed="${S.ui.pick.colour===c}" onclick="K.pick('colour','${c}')" style="background:${c}"></button>`).join('')}</div></div>
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">${id?`<button class="linkbtn" onclick="K.delChild('${id}')">Remove ${esc(k.name)}</button>`:'<span></span>'}
+      <span style="display:flex;gap:10px"><button class="btn ghost" onclick="K.close()">Cancel</button><button class="btn" onclick="K.saveChild('${id||''}')">Save</button></span></div></div>`;
+  render();
+}
+
+/* ---------- Actions ---------- */
+const val = id => ($(id)||{}).value || '';
+const safe = p => p.catch(e=>{ S.msg = e && e.code==='permission-denied' ? "Couldn't save: check the database rules (see the setup guide)." : "Couldn't save that. Check the internet connection."; render(); });
+window.K = {
+  signIn: ()=>F.signIn().catch(e=>{ S.msg=`Sign-in didn't work (${e.code}).`; render(); }),
+  signOut: ()=>F.logOut(),
+  clear: ()=>{ S.msg=''; render(); },
+  close: ()=>{ S.ui.modal=null; render(); },
+  pick: (k,v)=>{ S.ui.pick[k]=v; render(); },
+  linkForm, childForm,
+  saveLink: id=>{ const title=val('lf-t').trim(), url=val('lf-u').trim(); if(!title || !/^https?:\/\/\S+\.\S+/.test(url)){ alert('Please add a name and a full web address (starting with https://).'); return; }
+    const old=S.links.find(x=>x.id===id)||{order:Date.now()};
+    safe(F.put('kids_links',{...old, id:id||uid('l'), title, desc:val('lf-d').trim(), url, sticker:S.ui.pick.sticker, colour:S.ui.pick.colour})); S.ui.modal=null; render(); },
+  delLink: id=>{ if(confirm('Remove this link?')){ safe(F.remove('kids_links',id)); S.ui.modal=null; render(); } },
+  saveChild: id=>{ const name=val('cf-n').trim(); if(!name){ alert('Please add a name.'); return; }
+    const ls=[...document.querySelectorAll('.cf-l')].map(e=>e.value.trim()), vs=[...document.querySelectorAll('.cf-v')].map(e=>e.value.trim());
+    const fields=ls.map((l,i)=>({label:l, value:vs[i]})).filter(f=>f.label);
+    const old=S.children.find(x=>x.id===id)||{order:Date.now()};
+    safe(F.put('kids_children',{...old, id:id||uid('c'), name, fields, sticker:S.ui.pick.sticker, colour:S.ui.pick.colour})); S.ui.modal=null; render(); },
+  delChild: id=>{ const k=S.children.find(x=>x.id===id); if(k && confirm(`Remove ${k.name} and their reminders from the kids' corner?`)){ safe(F.remove('kids_children',id)); S.reminders.filter(r=>r.child===id).forEach(r=>F.remove('kids_reminders',r.id)); S.ui.modal=null; render(); } },
+  addRem: kid=>{ const text=val('rt-'+kid).trim(); if(!text) return; const w=val('rw-'+kid);
+    const item={id:uid('r'), child:kid, text, days: w[0]==='w' ? [+w.slice(1)] : [], date: w==='date' ? val('rd-'+kid) : '', doneOn:'', order:Date.now()};
+    if(w==='date' && !item.date){ alert('Pick the date for this reminder.'); return; }
+    safe(F.put('kids_reminders', item)); },
+  tick: id=>{ const r=S.reminders.find(x=>x.id===id); if(!r) return; safe(F.patch('kids_reminders', id, {doneOn: remDone(r) ? '' : today()})); },
+  delRem: id=>safe(F.remove('kids_reminders', id)),
+  addDate: ()=>{ const title=val('dt').trim(), date=val('dd'); if(!title || !date){ alert('Add what’s on and the date.'); return; } safe(F.put('kids_dates',{id:uid('d'), title, date, who:val('dw')})); },
+  delDate: id=>safe(F.remove('kids_dates', id))
+};
+
+/* ---------- Start ---------- */
+F.watchUser(async (u, why)=>{
+  if(why==='noConfig'){ S.status='noConfig'; render(); return; }
+  S.user=u;
+  if(!u){ S.status='signedOut'; render(); return; }
+  S.status='ready'; render();
+  F.loadStyle(u.email).then(render);
+  try{ await F.seedOnce('kids-seeded', DEFAULTS); }catch(e){ if(e.code==='permission-denied'){ S.status='denied'; render(); return; } }
+  const err = e=>{ if(e && e.code==='permission-denied'){ S.status='denied'; render(); } };
+  F.listen('kids_children', l=>{ S.children=l; liveRender(); }, err);
+  F.listen('kids_reminders', l=>{ S.reminders=l; liveRender(); }, err);
+  F.listen('kids_links', l=>{ S.links=l; liveRender(); }, err);
+  F.listen('kids_dates', l=>{ S.dates=l; liveRender(); }, err);
+});
+render();
+</script>
+</body>
+</html>

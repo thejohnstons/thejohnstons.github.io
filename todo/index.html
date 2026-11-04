@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<script>try{document.documentElement.dataset.style=localStorage.getItem("johnston-style")||"default"}catch(e){document.documentElement.dataset.style="default"}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#E9DECB">
+<meta name="apple-mobile-web-app-title" content="Someday">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon-64.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Someday list</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Karla:wght@400;500;700&display=swap">
+<style>
+  :root{--sand:#E9DECB;--cream:#F8F1E6;--card:#FFFCF6;--ink:#5A3B2E;--muted:#8A6A58;--line:#E6D6C3;--tomato:#D9563A;--peach:#F6B7AB;--must:#C9954A;--pink:#F49BBF;--blue:#9DBBD8;--olive:#9C9630;--orange:#D6782B;
+    --script:"Dancing Script","Snell Roundhand",cursive;--round:Quicksand,"Arial Rounded MT Bold",sans-serif;--sans:Nunito,"Helvetica Neue",Arial,sans-serif;color-scheme:light}
+  :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  *,*::before,*::after{box-sizing:inherit}
+  body{margin:0;background:var(--sand);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:var(--ink)}
+  button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+  input,select{font:inherit;color:var(--ink)}
+  :focus-visible{outline:3px solid var(--tomato);outline-offset:3px;border-radius:6px}
+  @media (pointer:coarse){input,select{font-size:16px}}
+  .wrap{max-width:1180px;margin:0 auto;padding:clamp(14px,3vw,26px) clamp(14px,3vw,32px) 64px;display:flex;flex-direction:column;gap:22px}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+  .top .l{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .back{font-size:13.5px;font-weight:700;text-decoration:none}
+  .logo{font-family:var(--script);font-weight:700;font-size:48px;line-height:1;color:var(--tomato);display:inline-block;transform:rotate(-4deg);
+    text-shadow:4px 0 0 var(--peach),-4px 0 0 var(--peach),0 4px 0 var(--peach),0 -4px 0 var(--peach),3px 3px 0 var(--peach),-3px -3px 0 var(--peach),3px -3px 0 var(--peach),-3px 3px 0 var(--peach)}
+  nav.views{display:flex;gap:8px;flex-wrap:wrap;font-family:var(--round);font-weight:700;font-size:14px;letter-spacing:.06em}
+  nav.views button{background:var(--cream);border-radius:999px;padding:8px 16px;min-height:40px}
+  nav.views button[aria-pressed="true"]{background:var(--ink);color:var(--cream)}
+  .adder{background-color:var(--cream);background-image:linear-gradient(rgba(157,187,216,.4) 2px,transparent 2px),linear-gradient(90deg,rgba(157,187,216,.4) 2px,transparent 2px);background-size:46px 46px;border-radius:30px;padding:24px 26px;display:flex;flex-direction:column;gap:14px}
+  .adder .s{margin:0;font-family:var(--script);font-weight:700;font-size:30px}
+  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:var(--card);border-radius:28px;padding:8px;box-shadow:0 3px 0 var(--line)}
+  .bar input{flex:1 1 260px;min-width:0;border:0;background:transparent;min-height:44px;padding:0 14px;font-size:16px}
+  .bar input:focus{outline:none}
+  .bar select{border:0;border-radius:999px;padding:8px 12px;font-weight:700;font-size:14px;min-height:40px;background:var(--sand)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:999px;background:var(--ink);color:var(--cream);font-weight:700}
+  .cats{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .cats .lab{font-family:var(--round);font-weight:700;letter-spacing:.08em;font-size:13px}
+  .cat{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 14px 4px 6px;font-weight:700;font-size:14px}
+  .linkbtn{font-size:14px;font-weight:700;text-decoration:underline;min-height:36px;display:inline-flex;align-items:center}
+  .have{display:flex;gap:24px;align-items:center;flex-wrap:wrap;background:var(--cream);border-radius:30px;padding:16px 26px}
+  .have h2{margin:0;font-family:var(--script);font-weight:700;font-size:34px;line-height:1}
+  .have .opts{display:flex;gap:10px;flex-wrap:wrap}
+  .have button{position:relative;width:96px;height:96px;display:grid;place-items:center;font-family:var(--round);font-weight:700;font-size:13px;line-height:1.15;color:#fff;text-align:center}
+  .have button svg{position:absolute;inset:0}
+  .have button span{position:relative;padding:0 8px}
+  .have button[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:2px;border-radius:50%}
+  .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:44px;align-items:start}
+  @media (max-width:900px){.cols{grid-template-columns:1fr;margin-top:50px;gap:56px}}
+  .col{background:var(--cream);border-radius:28px;padding:18px 16px;display:flex;flex-direction:column;gap:12px}
+  .col .stamp{display:flex;justify-content:center;margin-top:-50px}
+  .card{background:var(--card);border-radius:18px;padding:14px 16px;display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;box-shadow:0 2px 0 var(--line)}
+  .tick{width:24px;height:24px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-size:13px;color:var(--cream);margin-top:2px}
+  .tick.on{background:var(--ink)}
+  .card .t{margin:0;font-size:16.5px;font-weight:700;line-height:1.3;text-align:left}
+  .card .t:hover{text-decoration:underline}
+  .card.done .t{text-decoration:line-through;color:var(--muted)}
+  .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+  .meta .tm{font-size:13px;font-weight:600;color:var(--muted)}
+  .age{margin:6px 0 0;font-size:12px;color:#A08572}
+  .empty{text-align:center;color:var(--muted);font-size:14px;padding:8px}
+  .list{background:var(--cream);border-radius:28px;padding:18px 16px;display:flex;flex-direction:column;gap:12px}
+  .group-h{margin:8px 0 0;font-family:var(--script);font-weight:700;font-size:28px}
+  .msg{background:var(--peach);border-radius:16px;padding:12px 16px;display:flex;justify-content:space-between;gap:10px}
+  .gate{max-width:460px;margin:14vh auto;text-align:center}
+  .modal-bg{position:fixed;inset:0;background:rgba(60,40,30,.35);z-index:30}
+  .modal{position:fixed;z-index:31;left:50%;top:50%;transform:translate(-50%,-50%);width:min(520px,calc(100% - 24px));max-height:calc(100vh - 40px);overflow:auto;background:var(--card);border-radius:26px;padding:24px;display:flex;flex-direction:column;gap:12px}
+  .modal label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px}
+  .in{min-height:44px;border-radius:14px;border:2px solid var(--line);background:#fff;padding:8px 12px}
+  .foot{text-align:center;font-size:13px;color:var(--muted)}
+  .foot .link{text-decoration:underline}
+  .foot .link[aria-pressed="true"]{text-decoration:none;font-weight:800}
+
+  /* ===== Classic green (Nathan's style) ===== */
+  [data-style="green"]{--sand:#F7F5F1;--cream:transparent;--card:transparent;--ink:#1F2420;--muted:#6B6F66;--line:#CFC9BC;--tomato:#4F5E43;
+    --script:"Cormorant Garamond",Georgia,serif;--round:Karla,"Helvetica Neue",Arial,sans-serif;--sans:Karla,"Helvetica Neue",Arial,sans-serif}
+  [data-style="green"] body{font-size:15px}
+  [data-style="green"] .logo{transform:none;text-shadow:none;font-weight:400;font-size:clamp(46px,7vw,70px);color:#1F2420;letter-spacing:-.015em}
+  [data-style="green"] .top{border-bottom:1px solid #1F2420;padding-bottom:18px}
+  [data-style="green"] nav.views button{border-radius:0;background:none;border-bottom:2px solid transparent;padding:4px 0;margin-right:16px;font-weight:500;letter-spacing:0}
+  [data-style="green"] nav.views button[aria-pressed="true"]{background:none;color:#1F2420;border-bottom-color:#4F5E43}
+  [data-style="green"] .adder{background:none;border-radius:0;border-top:1px solid #1F2420;padding:12px 0 0}
+  [data-style="green"] .adder .s,[data-style="green"] .have h2,[data-style="green"] .group-h{font-style:italic;font-weight:400}
+  [data-style="green"] .bar{border-radius:0;box-shadow:none;border:1px solid #CFC9BC}
+  [data-style="green"] .bar select{border-radius:0;background:#ECE7DD}
+  [data-style="green"] .btn{border-radius:0;background:#4F5E43;color:#F7F5F1}
+  [data-style="green"] .cat{border-radius:0;background:#ECE7DD!important}
+  [data-style="green"] .cat svg{display:none}
+  [data-style="green"] .have{background:none;border-radius:0;border-top:1px solid #1F2420;padding:12px 0 0}
+  [data-style="green"] .have button{width:auto;height:auto;padding:8px 14px;border:1px solid #1F2420;color:#1F2420;border-radius:0}
+  [data-style="green"] .have button svg{display:none}
+  [data-style="green"] .have button[aria-pressed="true"]{background:#4F5E43;color:#F7F5F1;outline:none}
+  [data-style="green"] .cols{margin-top:10px}
+  [data-style="green"] .col,[data-style="green"] .list{border-radius:0;border-top:1px solid #1F2420;padding:12px 0}
+  [data-style="green"] .col .stamp{margin-top:0;justify-content:flex-start}
+  [data-style="green"] .col .stamp svg{display:none}
+  [data-style="green"] .col .stamp .gl{display:flex!important}
+  [data-style="green"] .card{border-radius:0;box-shadow:none;border-bottom:1px solid #CFC9BC;padding:12px 0}
+  [data-style="green"] .tick{border-radius:0;border-width:1px}
+  [data-style="green"] .modal{border-radius:0;background:#F7F5F1}
+  [data-style="green"] .in{border-radius:0;border-width:1px}
+  [data-style="green"] .msg{border-radius:0;background:#ECE7DD}
+  .style-btn{text-decoration:underline;text-underline-offset:3px}
+  .style-btn[aria-pressed="true"]{text-decoration:none;font-weight:800;cursor:default}
+</style>
+</head>
+<body>
+<div id="app" class="wrap"><p>Loading…</p></div>
+<script src="../firebase-config.js"></script>
+<script type="module">
+import * as F from '../family.js';
+const {esc, uid} = F;
+const PRI = [['soon','Soon','do soon','#D9563A','#F8F1E6','#F8F1E6',3],['sometime','Sometime','when I can','#F6B7AB','#FFFFFF','#5A3B2E',5],['oneday','One day','no rush','#C9954A','#F49BBF','#F8F1E6',8]];
+const TIMES = [['5min','5 minutes'],['30min','half an hour'],['1hr','an hour'],['afternoon','an afternoon'],['day','a day'],['weekend','a weekend']];
+const TIME_RANK = Object.fromEntries(TIMES.map(([k],i)=>[k,i]));
+const HAVE = [['5min','5<br>minutes','#F49BBF',11],['30min','half an<br>hour','#9DBBD8',12],['afternoon','an<br>afternoon','#9C9630',13],['day','a whole<br>day','#D6782B',14]];
+const DOODLE = {
+  home:'<path d="M5 15l11-9 11 9"/><path d="M8 13v13h16V13"/><path d="M14 26v-7h4v7"/>',
+  cup:'<path d="M7 13h16v5a7 7 0 0 1-7 7h-2a7 7 0 0 1-7-7z"/><path d="M23 15h2a3 3 0 0 1 0 6h-2"/><path d="M5 27h22"/>',
+  bag:'<path d="M7 11h18l-1.5 15h-15z"/><path d="M12 11V8a4 4 0 0 1 8 0v3"/>',
+  star:'<path d="M16 4l3.2 7.4 8 .7-6 5.3 1.8 7.8L16 21l-7 4.2 1.8-7.8-6-5.3 8-.7z"/>',
+  heart:'<path d="M16 27s-10-6-10-13a5.5 5.5 0 0 1 10-3 5.5 5.5 0 0 1 10 3c0 7-10 13-10 13z"/>',
+  leaf:'<path d="M6 26c0-12 8-20 20-20 0 12-8 20-20 20z"/><path d="M6 26L18 14"/>',
+  book:'<path d="M6 7h8a3 3 0 0 1 3 3v16a2 2 0 0 0-2-2H6z"/><path d="M26 7h-8a3 3 0 0 0-3 3"/><path d="M26 7v17h-9"/>',
+  car:'<path d="M5 20l2-7h18l2 7v5H5z"/><circle cx="10" cy="25" r="2"/><circle cx="22" cy="25" r="2"/>'
+};
+const CAT_COLOURS = ['#FBE0D8','#E1EAF4','#EEEBC8','#FBDDE9','#E3EEDC','#F4E3C8'];
+const DOODLE_INK = {'#FBE0D8':'#D9563A','#E1EAF4':'#6E93BD','#EEEBC8':'#8C861F','#FBDDE9':'#D4669A','#E3EEDC':'#5E8A4E','#F4E3C8':'#B07A2E'};
+const DEFAULT_CATS = [{id:'home',name:'Home',doodle:'home',colour:'#FBE0D8',order:1},{id:'me',name:'Me',doodle:'cup',colour:'#E1EAF4',order:2},{id:'errands',name:'Errands',doodle:'bag',colour:'#EEEBC8',order:3},{id:'projects',name:'Projects',doodle:'star',colour:'#FBDDE9',order:4}];
+
+const S = {status:'loading', user:null, items:[], cats:[], view:'priority', have:'', ui:{}, msg:'', draft:{pri:'sometime', cat:'home', time:'1hr'}};
+
+function blob(cx,cy,r,seed,amp=0.009){
+  const ph=[1,2,3].map(i=>((Math.sin(seed*12.9898+i*78.233)*43758.5453)%1+1)%1*6.28);
+  let d=''; for(let i=0;i<48;i++){ const a=2*Math.PI*i/48, rr=r*(1+amp*Math.sin(3*a+ph[0])+amp*.6*Math.sin(5*a+ph[1])+amp*.4*Math.sin(2*a+ph[2])); d+=(i?'L':'M')+(cx+rr*Math.cos(a)).toFixed(1)+','+(cy+rr*Math.sin(a)).toFixed(1); }
+  return d+'Z';
+}
+function stamp([k,label,sub,bg,ring,ink,seed]){
+  const s=128, r=64;
+  return `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" role="img" aria-label="${label}"><path d="${blob(r,r,r*.96,seed)}" fill="${bg}"/><circle cx="${r}" cy="${r}" r="${r*.8}" fill="none" stroke="${ring}" stroke-width="2"/>
+    <defs><path id="arc-${k}" d="M ${r-r*.6},${r} a ${r*.6},${r*.6} 0 1,1 ${r*1.2},0"/></defs>
+    <text font-family="Quicksand, sans-serif" font-weight="700" font-size="12.8" letter-spacing="2.6" fill="${ink}"><textPath href="#arc-${k}" startOffset="50%" text-anchor="middle">${label.toUpperCase()}</textPath></text>
+    <text x="${r}" y="${(r*1.18).toFixed(1)}" text-anchor="middle" font-family="Quicksand, sans-serif" font-weight="600" font-size="9.6" letter-spacing="1.5" fill="${ink}">${sub.toUpperCase()}</text>
+    <text x="${r}" y="${(r*1.42).toFixed(1)}" text-anchor="middle" font-size="10" fill="${ink}">✦</text></svg>
+    <span class="gl" style="display:none;gap:14px;align-items:baseline;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase"><span style="color:#4F5E43">${label}</span><span style="color:#6B6F66">${sub}</span></span>`;
+}
+const catOf = id => S.cats.find(c=>c.id===id) || {name:'Other', doodle:'star', colour:'#EEEBC8'};
+const doodle = (c, size=22) => `<svg width="${size}" height="${size}" viewBox="0 0 32 32" fill="none" stroke="${DOODLE_INK[c.colour]||'#5A3B2E'}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${DOODLE[c.doodle]||DOODLE.star}</svg>`;
+function ago(ms){
+  const d = Math.floor((Date.now()-ms)/86400000);
+  if(d<1) return 'added today'; if(d===1) return 'added yesterday'; if(d<14) return `added ${d} days ago`;
+  if(d<60) return `added ${Math.round(d/7)} weeks ago`; const m=Math.round(d/30.4); return m<12 ? `added ${m} month${m===1?'':'s'} ago` : `added over a year ago`;
+}
+const timeLabel = k => (TIMES.find(t=>t[0]===k)||['',''])[1];
+
+/* ---------- Render ---------- */
+const $ = id => document.getElementById(id);
+function typing(){ const a=document.activeElement; return a && a.closest && a.closest('#app') && /^(INPUT|SELECT)$/.test(a.tagName); }
+let pending=false;
+function liveRender(){ if(typing()){ pending=true; return; } render(); }
+document.addEventListener('focusout', ()=>setTimeout(()=>{ if(pending && !typing()){ pending=false; render(); } }, 150));
+
+function card(t){
+  const c = catOf(t.category);
+  return `<article class="card${t.done?' done':''}"><button class="tick${t.done?' on':''}" aria-pressed="${!!t.done}" aria-label="${t.done?'Untick':'Tick'} ${esc(t.text)}" onclick="T.tick('${t.id}')">${t.done?'✓':''}</button>
+    <div><button class="t" onclick="T.edit('${t.id}')">${esc(t.text)}</button>
+    <div class="meta"><span class="cat" style="background:${esc(c.colour)}">${doodle(c)}${esc(c.name)}</span>${t.time?`<span class="tm">⏱ ${esc(timeLabel(t.time))}</span>`:''}</div>
+    <p class="age">${t.done?'done '+ago(t.done).replace('added ',''):ago(t.added||Date.now())}</p></div></article>`;
+}
+function render(){
+  const app = $('app');
+  if(S.status==='loading'){ app.innerHTML='<p>Loading…</p>'; return; }
+  if(S.status!=='ready'){
+    app.innerHTML = `<div class="gate"><p class="logo">someday list</p>${S.status==='noConfig'?'<p>The Firebase settings file wasn’t found. This folder needs to sit inside the dashboard site.</p>'
+      : S.status==='denied' ? `<p>${esc(S.user&&S.user.email)} doesn’t have access. Sign out and use your family Google account.</p><button class="btn" onclick="T.signOut()">Sign out</button>`
+      : `<p>Sign in with your family Google account.</p><button class="btn" onclick="T.signIn()">Sign in with Google</button>`}<p><a href="?demo">Or look around a demo</a></p></div>`;
+    return;
+  }
+  const cats = S.cats.slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  const fits = t => !S.have || (TIME_RANK[t.time]??0) <= TIME_RANK[S.have];
+  const open = S.items.filter(t=>!t.done && fits(t));
+  let main = '';
+  if(S.view==='priority'){
+    main = `<div class="cols">${PRI.map(p=>{ const list=open.filter(t=>(t.priority||'sometime')===p[0]).sort((a,b)=>(a.added||0)-(b.added||0));
+      return `<section class="col" aria-label="${p[1]}"><div class="stamp">${stamp(p)}</div>${list.map(card).join('') || `<p class="empty">${S.have?'Nothing that fits.':'Nothing here yet.'}</p>`}
+        <button class="linkbtn" style="justify-content:center" onclick="T.quick('${p[0]}')">+ add to ${p[1].toLowerCase()}</button></section>`; }).join('')}</div>`;
+  } else if(S.view==='category'){
+    main = `<div class="list">${[...cats, {id:'__other', name:'Other', doodle:'star', colour:'#EEEBC8'}].map(c=>{ const list=open.filter(t=>c.id==='__other' ? !cats.some(x=>x.id===t.category) : t.category===c.id); if(!list.length) return '';
+      return `<h2 class="group-h">${esc(c.name)}</h2>${list.map(card).join('')}`; }).join('') || '<p class="empty">Nothing here yet.</p>'}</div>`;
+  } else if(S.view==='oldest'){
+    main = `<div class="list">${open.slice().sort((a,b)=>(a.added||0)-(b.added||0)).map(card).join('') || '<p class="empty">Nothing here yet.</p>'}</div>`;
+  } else {
+    const done = S.items.filter(t=>t.done).sort((a,b)=>b.done-a.done);
+    main = `<div class="list">${done.map(card).join('') || '<p class="empty">Nothing ticked off yet. You’ll get there!</p>'}${done.length?`<button class="linkbtn" style="justify-content:center" onclick="T.clearDone()">Clear finished tasks older than a month</button>`:''}</div>`;
+  }
+  const doneMonth = S.items.filter(t=>t.done && Date.now()-t.done < 30*86400000).length;
+  app.innerHTML = `
+  <header class="top"><div class="l"><a class="back" href="../">← Dashboard</a><span class="logo">someday list</span></div>
+    <nav class="views" aria-label="List views">${[['priority','By priority'],['category','By category'],['oldest','Oldest first'],['done','Done ✓']].map(([k,l])=>`<button aria-pressed="${S.view===k}" onclick="T.view('${k}')">${l}</button>`).join('')}</nav></header>
+  ${S.msg?`<div class="msg" role="status"><span>${esc(S.msg)}</span><button class="linkbtn" onclick="T.clear()">OK</button></div>`:''}
+  <section class="adder" aria-label="Add a task">
+    <p class="s">things I’d love to get done, when there’s time</p>
+    <div class="bar"><input id="new" placeholder="Add something… e.g. sort the linen cupboard" aria-label="New task" onkeydown="if(event.key==='Enter')T.add()">
+      <select id="np" aria-label="Priority">${PRI.map(p=>`<option value="${p[0]}" ${S.draft.pri===p[0]?'selected':''}>${p[1]}</option>`).join('')}</select>
+      <select id="nc" aria-label="Category">${cats.map(c=>`<option value="${c.id}" ${S.draft.cat===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select>
+      <select id="nt" aria-label="How long it takes">${TIMES.map(([k,l])=>`<option value="${k}" ${S.draft.time===k?'selected':''}>⏱ ${l}</option>`).join('')}</select>
+      <button class="btn" onclick="T.add()">Add</button></div>
+    <div class="cats"><span class="lab">CATEGORIES</span>${cats.map(c=>`<button class="cat" style="background:${esc(c.colour)}" onclick="T.catForm('${c.id}')" aria-label="Edit category ${esc(c.name)}">${doodle(c)}${esc(c.name)}</button>`).join('')}<button class="linkbtn" onclick="T.catForm()">+ new category</button></div>
+  </section>
+  <section class="have" aria-label="Filter by the time you have"><div><h2>I’ve got…</h2><p style="margin:4px 0 0;font-size:14px">${S.have?`Showing what fits in ${esc(timeLabel(S.have))}. <button class="linkbtn" onclick="T.have('')">Show everything</button>`:'Tap one to see only what fits.'}</p></div>
+    <div class="opts">${HAVE.map(([k,l,c,seed])=>`<button aria-pressed="${S.have===k}" onclick="T.have('${k}')"><svg width="96" height="96" viewBox="0 0 104 104" aria-hidden="true"><path d="${blob(52,52,49,seed,0.01)}" fill="${c}"/></svg><span>${l}</span></button>`).join('')}</div></section>
+  ${main}
+  <p class="foot">${doneMonth?`${doneMonth} ticked off this month · `:''}Tasks marked “Soon” also show on your dashboard.<br>${F.DEMO?'Demo: nothing is saved':esc(S.user.email)} · <button class="link" onclick="T.signOut()">Sign out</button> · ${F.stylePicker()}</p>
+  ${S.ui.modal?S.ui.modal():''}`;
+  document.querySelectorAll('[data-style-pick]').forEach(b=>b.onclick=()=>{ F.saveStyle(S.user && S.user.email, b.dataset.stylePick); render(); });
+}
+
+/* ---------- Forms ---------- */
+function editForm(id){
+  const t = S.items.find(x=>x.id===id); if(!t) return;
+  const cats = S.cats.slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  S.ui.modal = () => `<div class="modal-bg" onclick="T.close()"></div><div class="modal" role="dialog" aria-modal="true" aria-labelledby="ef-h">
+    <h2 id="ef-h" class="group-h" style="margin:0">Edit task</h2>
+    <label>Task<input id="ef-t" class="in" value="${esc(t.text)}"></label>
+    <label>Priority<select id="ef-p" class="in">${PRI.map(p=>`<option value="${p[0]}" ${t.priority===p[0]?'selected':''}>${p[1]}</option>`).join('')}</select></label>
+    <label>Category<select id="ef-c" class="in">${cats.map(c=>`<option value="${c.id}" ${t.category===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></label>
+    <label>How long it takes<select id="ef-m" class="in">${TIMES.map(([k,l])=>`<option value="${k}" ${t.time===k?'selected':''}>${l}</option>`).join('')}</select></label>
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><button class="linkbtn" onclick="T.del('${id}')">Delete task</button>
+      <span style="display:flex;gap:10px"><button class="btn" style="background:transparent;color:var(--ink);border:2px solid var(--ink)" onclick="T.close()">Cancel</button><button class="btn" onclick="T.save('${id}')">Save</button></span></div></div>`;
+  render(); setTimeout(()=>{ const e=$('ef-t'); if(e) e.focus(); },50);
+}
+function catForm(id){
+  const c = S.cats.find(x=>x.id===id) || {name:'', doodle:'heart', colour:'#E3EEDC'};
+  S.ui.pick = {doodle:c.doodle, colour:c.colour};
+  S.ui.modal = () => `<div class="modal-bg" onclick="T.close()"></div><div class="modal" role="dialog" aria-modal="true" aria-labelledby="cf-h">
+    <h2 id="cf-h" class="group-h" style="margin:0">${id?'Edit category':'New category'}</h2>
+    <label>Name<input id="cf-n" class="in" value="${esc(c.name)}" placeholder="e.g. Health"></label>
+    <div><b style="font-size:14px">Doodle</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">${Object.keys(DOODLE).map(d=>`<button aria-label="${d}" aria-pressed="${S.ui.pick.doodle===d}" onclick="T.pick('doodle','${d}')" style="width:44px;height:44px;border-radius:12px;background:#fff;border:2px solid ${S.ui.pick.doodle===d?'var(--ink)':'var(--line)'}">${doodle({doodle:d, colour:S.ui.pick.colour},26)}</button>`).join('')}</div></div>
+    <div><b style="font-size:14px">Colour</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">${CAT_COLOURS.map(k=>`<button aria-label="Colour ${k}" aria-pressed="${S.ui.pick.colour===k}" onclick="T.pick('colour','${k}')" style="width:40px;height:40px;border-radius:50%;background:${k};border:3px solid ${S.ui.pick.colour===k?'var(--ink)':'transparent'}"></button>`).join('')}</div></div>
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">${id?`<button class="linkbtn" onclick="T.delCat('${id}')">Remove category</button>`:'<span></span>'}
+      <span style="display:flex;gap:10px"><button class="btn" style="background:transparent;color:var(--ink);border:2px solid var(--ink)" onclick="T.close()">Cancel</button><button class="btn" onclick="T.saveCat('${id||''}')">Save</button></span></div></div>`;
+  render();
+}
+
+/* ---------- Actions ---------- */
+const val = id => ($(id)||{}).value || '';
+const safe = p => p.catch(e=>{ S.msg = e && e.code==='permission-denied' ? "Couldn't save: check the database rules (see the setup guide)." : "Couldn't save that. Check the internet connection."; render(); });
+window.T = {
+  signIn: ()=>F.signIn().catch(e=>{ S.msg=`Sign-in didn't work (${e.code}).`; render(); }),
+  signOut: ()=>F.logOut(),
+  clear: ()=>{ S.msg=''; render(); },
+  close: ()=>{ S.ui.modal=null; render(); },
+  pick: (k,v)=>{ S.ui.pick[k]=v; render(); },
+  view: v=>{ S.view=v; render(); },
+  have: k=>{ S.have = S.have===k ? '' : k; render(); },
+  quick: p=>{ S.draft.pri=p; render(); const e=$('new'); if(e){ e.focus(); e.scrollIntoView({block:'center'}); } },
+  add: ()=>{ const text=val('new').trim(); if(!text) return; S.draft={pri:val('np'), cat:val('nc'), time:val('nt')};
+    safe(F.put('todo_items',{id:uid('t'), text, priority:S.draft.pri, category:S.draft.cat, time:S.draft.time, added:Date.now(), done:0})); $('new').value=''; },
+  tick: id=>{ const t=S.items.find(x=>x.id===id); if(t) safe(F.patch('todo_items', id, {done: t.done ? 0 : Date.now()})); },
+  edit: editForm,
+  save: id=>{ const text=val('ef-t').trim(); if(!text) return; safe(F.patch('todo_items', id, {text, priority:val('ef-p'), category:val('ef-c'), time:val('ef-m')})); S.ui.modal=null; render(); },
+  del: id=>{ if(confirm('Delete this task?')){ safe(F.remove('todo_items', id)); S.ui.modal=null; render(); } },
+  clearDone: ()=>{ S.items.filter(t=>t.done && Date.now()-t.done > 30*86400000).forEach(t=>F.remove('todo_items', t.id)); },
+  catForm,
+  saveCat: id=>{ const name=val('cf-n').trim(); if(!name) return; const old=S.cats.find(c=>c.id===id)||{order:Date.now()};
+    safe(F.put('todo_categories',{...old, id:id||uid('c'), name, doodle:S.ui.pick.doodle, colour:S.ui.pick.colour})); S.ui.modal=null; render(); },
+  delCat: id=>{ const n=S.items.filter(t=>t.category===id).length; if(!confirm(n?`${n} task${n===1?'':'s'} use this category. Remove it anyway? They'll show under “Other”.`:'Remove this category?')) return; safe(F.remove('todo_categories', id)); S.ui.modal=null; render(); }
+};
+
+/* ---------- Start ---------- */
+F.watchUser(async (u, why)=>{
+  if(why==='noConfig'){ S.status='noConfig'; render(); return; }
+  S.user=u;
+  if(!u){ S.status='signedOut'; render(); return; }
+  S.status='ready'; render();
+  F.loadStyle(u.email).then(render);
+  try{ await F.seedOnce('todo-seeded', [['todo_categories', DEFAULT_CATS]]); }catch(e){ if(e.code==='permission-denied'){ S.status='denied'; render(); return; } }
+  const err = e=>{ if(e && e.code==='permission-denied'){ S.status='denied'; render(); } };
+  F.listen('todo_items', l=>{ S.items=l; liveRender(); }, err);
+  F.listen('todo_categories', l=>{ S.cats=l; if(!l.some(c=>c.id===S.draft.cat) && l[0]) S.draft.cat=l[0].id; liveRender(); }, err);
+});
+render();
+</script>
+</body>
+</html>
