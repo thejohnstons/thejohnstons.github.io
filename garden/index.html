@@ -96,7 +96,7 @@
   /* Map */
   .areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
   .area{border-radius:22px;padding:18px 20px 22px}
-  .area.front{background:#F6E3E6}.area.side{background:#ECEDD9}
+  .area.front{background:#F6E3E6}.area.side{background:#ECEDD9}.area.back{background:#E9E4F0}
   .area h2{margin:0 0 12px;font-family:var(--script);font-weight:400;font-size:30px;color:#8B5E4E}
   .toks{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
   .tok{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:600;font-size:15px;border:1.5px solid var(--cocoa);text-align:center;line-height:1.1}
@@ -234,6 +234,7 @@
   .g-idx .t{font-family:var(--serif);font-size:clamp(26px,3.4vw,32px);line-height:1}
   .g-idx .d{font-size:13.5px;color:var(--muted)}
   @media (max-width:600px){.g-idx a{grid-template-columns:40px minmax(0,1fr)}.g-idx .d{grid-column:2}}
+  .yr{display:inline-block;font-size:11.5px;opacity:.85;margin-left:4px;white-space:nowrap}
   .style-pick button[aria-pressed="true"]{text-decoration:none;font-weight:700;cursor:default}
 </style>
 </head>
@@ -354,20 +355,20 @@ const DEFAULTS = {
 };
 const GROUPS = [['now','Sow now','late spring, soil is warm','#E7E8CF'],['either','Now or autumn','either works','#F3DDE0'],['autumn','Autumn','for spring flowers','#F8E2D3'],['aprmay','Plant in April to May','bulbs, corms and seedlings','#EFE6D6'],['later','Later','saved for another time','#EDE6DA']];
 const METHOD = {direct:['Direct sow','#D9DCB8'], trays:['Start in trays','#F6CBAE'], plant:['Plant straight in','#D9DCB8']};
-const STATUS_BG = {'Growing':'#D9DCB8','Seedlings':'#F6CBAE','Establishing':'#EBC6CC','Finished for now':'#E6DED0','Wish list':'#EFE6D6','Flowering':'#F2C9D2'};
-const TYPES = ['Perennial','Annual','Bulb','Corm','Shrub','Tree','Herb','Check type'];
-const STATUSES = ['Growing','Seedlings','Establishing','Flowering','Finished for now'];
+const STATUS_BG = {'Growing':'#D9DCB8','Sown':'#F3E4B5','Seedlings':'#F6CBAE','Establishing':'#EBC6CC','Finished for now':'#E6DED0','Wish list':'#EFE6D6','Flowering':'#F2C9D2'};
+const TYPES = ['Perennial','Annual','Bulb','Corm','Shrub','Climber / vine','Hedge','Lawn','Tree','Herb','Check type'];
+const STATUSES = ['Sown','Seedlings','Growing','Establishing','Flowering','Finished for now'];
 const KINDS = [['bed','Garden bed'],['pot','Pot'],['trough','Trough'],['patch','Patch'],['planned','Planned (later)']];
 
 /* ---------------- State ---------------- */
 const S = { status:'loading', user:null, demo:false, error:'', info:'',
-  spots:[], plants:[], seeds:[], diary:[], tasks:[], meta:{}, photos:{},
+  spots:[], plants:[], seeds:[], diary:[], tasks:[], yearly:[], meta:{}, photos:{},
   loaded:{}, ui:{} };
 
 /* ---------------- Data backend ---------------- */
 let db = null, auth = null, unsubs = [];
 const base = () => ['households', window.HOUSEHOLD_ID || 'johnston'];
-const COLS = {spots:'garden_spots', plants:'garden_plants', seeds:'garden_seeds', diary:'garden_diary', tasks:'garden_tasks'};
+const COLS = {spots:'garden_spots', plants:'garden_plants', seeds:'garden_seeds', diary:'garden_diary', tasks:'garden_tasks', yearly:'garden_yearly'};
 function colRef(k){ return collection(db, ...base(), COLS[k] || k); }
 function docRef(k, id){ return doc(db, ...base(), COLS[k] || k, id); }
 
@@ -400,6 +401,11 @@ function photoSrc(id){ if(!id) return ''; if(S.photos[id]===undefined) getPhoto(
 function fail(e){ S.error = e && e.code==='permission-denied' ? "Couldn't save: this account doesn't have access, or the database rules need updating (see the setup guide)." : "Couldn't save that change. Check the internet connection and try again."; render(); }
 
 function withIds(prefix, list){ return list.map((x,i)=>({id: x.id || `${prefix}${String(i+1).padStart(2,'0')}`, ...x})); }
+let updateTried = false;
+function maybeUpdate(){
+  if(updateTried || S.demo || !Object.keys(COLS).every(k=>S.loaded[k])) return;
+  updateTried = true; applyUpdate().catch(()=>{}); importFromHash();
+}
 async function seedDefaults(){
   // Writes the starting data the first time only. A marker stops it ever running again.
   const mark = await getDoc(doc(db, ...base(), 'garden_meta', 'seeded'));
@@ -416,14 +422,75 @@ async function seedDefaults(){
 function listen(){
   unsubs.forEach(u=>u()); unsubs=[];
   Object.keys(COLS).forEach(k=>{
-    unsubs.push(onSnapshot(colRef(k), snap=>{ S[k]=snap.docs.map(d=>({...d.data(), id:d.id})); S.loaded[k]=true; liveRender(); }, err=>{ if(err.code==='permission-denied'){ S.status='denied'; render(); } }));
+    unsubs.push(onSnapshot(colRef(k), snap=>{ S[k]=snap.docs.map(d=>({...d.data(), id:d.id})); S.loaded[k]=true; maybeUpdate(); liveRender(); }, err=>{ if(err.code==='permission-denied'){ S.status='denied'; render(); } }));
   });
   unsubs.push(onSnapshot(collection(db, ...base(), 'garden_meta'), snap=>{ snap.docs.forEach(d=>{ S.meta[d.id]=d.data(); }); liveRender(); }, ()=>{}));
 }
+
+/* ---------------- November 2026 update ----------------
+   Adds what Thea shared in our garden chats, once only, without touching anything
+   already edited in the app: new spots, the pots sown on 5 November, and the rest
+   of the garden (climbers, hedges, lawn, back roses). */
+const UPDATE_ID = 'update-2026-11';
+const UPDATE = {
+  spots: [
+    {id:'MB', code:'MB', name:'Bed by the meter box', area:'front', kind:'bed', note:'Next to the hedges, in front of the meter box', order:1.5},
+    {id:'BG', code:'BG', name:'Back garden', area:'back', kind:'bed', note:'', order:20},
+    {id:'DK', code:'DK', name:'Deck', area:'back', kind:'patch', note:'', order:21}
+  ],
+  plants: [
+    {id:'u01', name:'Gypsophila', variety:'Snowflake (perennial)', spot:'MB', type:'Perennial', status:'Sown', from:11, to:2, colour:'#F4F1EA', planted:'November 2026 (direct-sown)', sun:'Full sun', picking:'Pick when about half the tiny flowers are open', vase:'About a week, and it dries well'},
+    {id:'u02', name:'Scabiosa', variety:'Fama', spot:'P3', type:'Perennial', status:'Sown', from:11, to:3, colour:'#A9B8D6', planted:'5 November 2026 (direct-sown)', sun:'Full sun', picking:'Pick when the flowers are just opening', vase:'About a week'},
+    {id:'u03', name:'Scabiosa', variety:'Fama', spot:'P4', type:'Perennial', status:'Sown', from:11, to:3, colour:'#F2F0F6', planted:'5 November 2026 (direct-sown)', sun:'Full sun', picking:'Pick when the flowers are just opening', vase:'About a week'},
+    {id:'u04', name:'Feverfew', variety:'Golden Ball', spot:'P1', type:'Perennial', status:'Sown', from:11, to:2, colour:'#F2D45C', planted:'5 November 2026 (direct-sown)', sun:'Full sun to part shade', picking:'Pick when most of the flowers are open', vase:'About a week', notes:'Big pot: if it went into the other big pot, change the spot to P2.'},
+    {id:'u05', name:'Chives', variety:'', spot:'P5', type:'Herb', status:'Sown', from:10, to:12, colour:'#C9A9DD', planted:'5 November 2026 (direct-sown)', sun:'Full sun to part shade', water:'Keep moist'},
+    {id:'u06', name:'Star jasmine', variety:'Trachelospermum jasminoides', spot:'', type:'Climber / vine', status:'Growing', from:10, to:12, colour:'#FFFFFF', sun:'Sun or part shade', water:'Regularly until established, then fairly drought hardy',
+      care:{spring:'Flowers start: beautifully scented', summer:'Trim lightly after flowering to keep it tidy', autumn:'Tie in any new long shoots', winter:'Little to do'}},
+    {id:'u07', name:'Creeping fig', variety:'Ficus pumila', spot:'', type:'Climber / vine', status:'Growing', from:0, to:0, colour:'#8FAF7A', sun:'Sun or shade', water:'Moderate',
+      care:{spring:'Trim back hard if it’s getting too thick or woody', summer:'Trim again to keep the small, flat leaves', autumn:'Keep it off gutters and windows', winter:'Little to do'}},
+    {id:'u08', name:'TifTuf grass', variety:'Hybrid Bermuda lawn', spot:'BG', type:'Lawn', status:'Growing', from:0, to:0, colour:'#8DB46A', sun:'Full sun', water:'Drought tolerant once established; water deeply rather than often',
+      care:{spring:'Fertilise as it greens up; start regular mowing', summer:'Mow often; water deeply in dry spells', autumn:'A last feed early in autumn', winter:'Goes dormant and browner in the cold; mow rarely'}},
+    {id:'u09', name:'White roses', variety:'out the back (name to find)', spot:'BG', type:'Shrub', status:'Growing', from:10, to:4, colour:'#FFFFFF', picking:'Pick when the buds are just starting to open', vase:'About 5 to 7 days',
+      care:{spring:'Feed as new growth starts; watch for aphids', summer:'Deadhead and water deeply', autumn:'A light feed early in autumn', winter:'Prune in July'}},
+    {id:'u10', name:'Ornamental grapevine', variety:'on the deck posts', spot:'DK', type:'Climber / vine', status:'Growing', from:0, to:0, colour:'#9E3B4E', sun:'Full sun',
+      care:{spring:'New leaves: tie in the shoots you want to keep', summer:'Trim wayward growth', autumn:'Enjoy the leaf colour', winter:'Prune back to the main framework while it’s bare'}},
+    {id:'u11', name:'Box hedges', variety:'Buxus', spot:'', type:'Hedge', status:'Growing', from:0, to:0, colour:'#6E8F55', water:'Water in long dry spells',
+      care:{spring:'First trim once new growth has firmed up', summer:'Second trim late in summer; water in dry spells', autumn:'Little to do', winter:'Little to do'}}
+  ],
+  sownSeeds: [['Scabiosa','2026-11-05'],['Feverfew','2026-11-05'],['Chives','2026-11-05']],
+  spotNotes: {P4:'', P5:''},
+  diary: [{id:'d-u01', date:'2026-11-05', spots:['P1','P3','P4','P5'], text:'Sowed the side garden pots: Fama scabiosa (P3 and P4), feverfew (big pot) and chives (P5). Direct-sowing everything this year.'}]
+};
+function updateItems(){
+  const names = new Set(S.plants.map(p=>(p.name+'|'+(p.spot||'')).toLowerCase()));
+  return {
+    spots: UPDATE.spots.filter(sp=>!S.spots.some(x=>x.code===sp.code)),
+    plants: UPDATE.plants.filter(p=>!names.has((p.name+'|'+(p.spot||'')).toLowerCase())),
+    seeds: UPDATE.sownSeeds.map(([n,d])=>{ const sd=S.seeds.find(x=>x.name===n && !x.sown); return sd ? {...sd, sown:d} : null; }).filter(Boolean),
+    spotNotes: S.spots.filter(sp=>sp.code in UPDATE.spotNotes && /perennials going in/i.test(sp.note||'')).map(sp=>({...sp, note:UPDATE.spotNotes[sp.code]})),
+    diary: UPDATE.diary.filter(d=>!S.diary.some(x=>x.id===d.id))
+  };
+}
+async function applyUpdate(){
+  if(S.demo){ const u=updateItems(); S.spots.push(...u.spots); S.plants.push(...u.plants);
+    u.seeds.forEach(x=>{ const i=S.seeds.findIndex(y=>y.id===x.id); S.seeds[i]=x; }); u.spotNotes.forEach(x=>{ const i=S.spots.findIndex(y=>y.id===x.id); S.spots[i]=x; }); S.diary.push(...u.diary); return; }
+  const mark = await getDoc(doc(db, ...base(), 'garden_meta', UPDATE_ID));
+  if(mark.exists()) return;
+  const u = updateItems();
+  const b = writeBatch(db);
+  u.spots.forEach(({id,...r})=>b.set(docRef('spots',id), r));
+  u.plants.forEach(({id,...r})=>b.set(docRef('plants',id), r));
+  [...u.seeds].forEach(({id,...r})=>b.set(docRef('seeds',id), r));
+  u.spotNotes.forEach(({id,...r})=>b.set(docRef('spots',id), r));
+  u.diary.forEach(({id,...r})=>b.set(docRef('diary',id), r));
+  b.set(doc(db, ...base(), 'garden_meta', UPDATE_ID), {at:Date.now()});
+  await b.commit();
+}
+
 function startDemo(){
   S.demo=true; S.status='ready'; S.user={email:'demo'};
-  S.spots=withIds('s',DEFAULTS.spots); S.plants=withIds('pl',DEFAULTS.plants); S.seeds=withIds('sd',DEFAULTS.seeds); S.diary=withIds('d',DEFAULTS.diary); S.tasks=withIds('t',DEFAULTS.tasks);
-  Object.keys(COLS).forEach(k=>S.loaded[k]=true); render();
+  S.spots=withIds('s',DEFAULTS.spots); S.plants=withIds('pl',DEFAULTS.plants); S.seeds=withIds('sd',DEFAULTS.seeds); S.diary=withIds('d',DEFAULTS.diary); S.tasks=withIds('t',DEFAULTS.tasks); S.yearly=[];
+  Object.keys(COLS).forEach(k=>S.loaded[k]=true); applyUpdate(); importFromHash(); render();
 }
 
 /* ---------------- Rendering ---------------- */
@@ -481,20 +548,24 @@ function render(){
     return;
   }
   const r = route();
-  const pages = {home:pageHome, map:pageMap, plants:pagePlants, plant:pagePlant, seeds:pageSeeds, bloom:pageBloom, diary:pageDiary};
+  const pages = {home:pageHome, map:pageMap, plants:pagePlants, plant:pagePlant, seeds:pageSeeds, bloom:pageBloom, diary:pageDiary, add:pageAdd, yearly:pageYearly};
   const fn = pages[r.page] || pageHome;
-  const active = r.page==='plant' ? 'plants' : (pages[r.page] ? r.page : 'home');
+  const active = r.page==='yearly' ? 'home' : r.page==='plant' || r.page==='add' ? 'plants' : (pages[r.page] ? r.page : 'home');
   const cur = isGreen() ? 'green' : 'default';
   app.innerHTML = header(active) + fn(r.id) + `<footer class="small muted" style="text-align:center;margin-top:20px">${S.demo?'Demo':esc(S.user.email)} · <button class="link small" onclick="G.signOut()">Sign out</button>
     <span class="style-pick" style="display:block;margin-top:6px">My style: <button class="link small" aria-pressed="${cur==='default'}" onclick="G.setStyle('default')">Original</button> · <button class="link small" aria-pressed="${cur==='green'}" onclick="G.setStyle('green')">Classic green</button></span></footer>` + (S.ui.modal ? S.ui.modal() : '');
 }
 
+/* Ticked jobs tidy themselves away (after a moment, so you see the tick); "Show ticked" brings them back. */
+function shownTick(on, key){ return !on || S.ui.showTicked || S.ui.justTicked===key; }
+function tickToggle(n){ return n ? `<button class="link small" style="margin-top:8px" onclick="G.ui('showTicked',${!S.ui.showTicked})">${S.ui.showTicked ? 'Hide ticked jobs' : `Show ticked jobs (${n})`}</button>` : ''; }
+function justTicked(key){ S.ui.justTicked = key; setTimeout(()=>{ if(S.ui.justTicked===key){ S.ui.justTicked = null; render(); } }, 900); }
 /* ---------------- Home ---------------- */
 function pageHomeGreen(){
   const now = new Date(), m = now.getMonth()+1, [season, blurb, jobs] = SEASON[m-1];
   const wk = mondayOf(now), weekTicks = (S.meta.week && S.meta.week.week===wk) ? S.meta.week.done||{} : {};
   const mk = monthKey(now), monthMeta = (S.meta.month && S.meta.month.month===mk) ? S.meta.month : {done:{}, extra:[]};
-  const allJobs = [...jobs.map((j,i)=>({kind:j[0], text:j[1], key:'j'+i})), ...(monthMeta.extra||[]).map((t,i)=>({kind:'Also', text:t, key:'x'+i, extra:i}))];
+  const allJobs = [...jobs.map((j,i)=>({kind:j[0], text:j[1], key:'j'+i})), ...(S.yearly||[]).filter(y=>+y.month===m).map(y=>({kind:y.kind||'Also', text:y.text, key:'y'+y.id, yearly:true})), ...(monthMeta.extra||[]).map((t,i)=>({kind:'Also', text:t, key:'x'+i, extra:i}))];
   const tasks = S.tasks.slice().sort((a,b)=>(a.order||0)-(b.order||0));
   const flowering = realPlants().filter(p=>span(p.from,p.to)[m-1] && p.status!=='Finished for now' && p.status!=='Establishing').map(p=>p.name);
   const toSow = S.seeds.filter(s=>!s.sown && (s.group==='now'||s.group==='either')).length;
@@ -503,14 +574,14 @@ function pageHomeGreen(){
   return `<div class="g-two">
     <section aria-label="This month"><p class="g-label"><span>01</span>This month</p>
       <div class="g-month"><p class="m">${MONTHS[m-1]}</p><p class="b">${esc(blurb)}</p>
-        ${allJobs.map(j=>{ const on=!!(monthMeta.done||{})[j.key]; return `<div class="g-job"><span class="k">${esc(j.kind)}</span><span style="${on?'text-decoration:line-through;color:#A9AE9E':''}">${esc(j.text)}${j.extra!=null?` <button class="link small" style="color:#C9CFBF" onclick="G.delMonthJob(${j.extra})">Remove</button>`:''}</span><button class="tick${on?' on':''}" aria-pressed="${on}" aria-label="${on?'Untick':'Tick'} ${esc(j.text)}" onclick="G.tickMonth('${j.key}')">${on?'✓':''}</button></div>`; }).join('')}
-        <div data-keep style="display:flex;gap:8px;margin-top:12px"><input id="nm-job" class="field" placeholder="Add a job for this month"><button class="btn small blush" onclick="G.addMonthJob()">Add</button></div>
+        ${allJobs.filter(j=>shownTick(!!(monthMeta.done||{})[j.key], j.key)).map(j=>{ const on=!!(monthMeta.done||{})[j.key]; return `<div class="g-job"><span class="k">${esc(j.kind)}</span><span style="${on?'text-decoration:line-through;color:#A9AE9E':''}">${esc(j.text)}${j.yearly?` <span class="yr">↻ every year</span>`:''}${j.extra!=null?` <button class="link small" style="color:#C9CFBF" onclick="G.delMonthJob(${j.extra})">Remove</button>`:''}</span><button class="tick${on?' on':''}" aria-pressed="${on}" aria-label="${on?'Untick':'Tick'} ${esc(j.text)}" onclick="G.tickMonth('${j.key}')">${on?'✓':''}</button></div>`; }).join('')}
+        <div data-keep style="display:flex;gap:8px;margin-top:12px"><input id="nm-job" class="field" placeholder="Add a job, e.g. buy corms"><select id="nm-rep" class="field" style="max-width:150px" aria-label="How often"><option value="once">This month</option><option value="year">Every year</option></select><button class="btn small blush" onclick="G.addMonthJob()">Add</button></div><a class="link small" href="#yearly" style="color:inherit;margin-top:6px">All yearly jobs</a>
       </div></section>
     <section aria-label="This week" class="checklist"><p class="g-label"><span>02</span>This week</p>
-      ${tasks.map(t=>{ const on=!!weekTicks[t.id]; return `<div class="it">
+      ${tasks.filter(t=>shownTick(!!weekTicks[t.id], t.id)).map(t=>{ const on=!!weekTicks[t.id]; return `<div class="it">
         <button class="tick${on?' on':''}" aria-pressed="${on}" aria-label="${on?'Untick':'Tick'} ${esc(t.job)}" onclick="G.tickWeek('${t.id}')">${on?'✓':''}</button>
         <span style="font-size:15px;line-height:1.35"><span class="${on?'done-text':''}">${esc(t.job)}</span>${t.where?`<span class="small muted" style="display:block">${esc(t.where)}</span>`:''}${editTasks?`<button class="link small danger" onclick="G.delTask('${t.id}')">Remove</button>`:''}</span>
-        <span class="small muted" style="text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:700">${esc(t.often||'')}</span></div>`; }).join('')}
+        <span class="small muted" style="text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:700">${esc(t.often||'')}</span></div>`; }).join('')}${tickToggle(tasks.filter(t=>weekTicks[t.id]).length + allJobs.filter(j=>(monthMeta.done||{})[j.key]).length)}
       ${editTasks ? `<div data-keep style="display:grid;gap:8px;margin-top:12px"><input id="nt-job" class="field" placeholder="New job, e.g. feed the roses"><div style="display:flex;gap:8px"><input id="nt-where" class="field" placeholder="Where (e.g. FB)"><input id="nt-often" class="field" placeholder="How often"></div><div style="display:flex;gap:8px"><button class="btn small" onclick="G.addTask()">Add job</button><button class="btn small line" onclick="G.ui('editTasks',false)">Done</button></div></div>`
         : `<p class="small muted" style="margin:10px 0 0">${esc(WATER_TIP(m))} <button class="link small" onclick="G.ui('editTasks',true)">Edit jobs</button></p>`}
       <p class="g-label" style="margin-top:26px"><span>03</span>In flower now</p>
@@ -524,12 +595,12 @@ function pageHome(){
   const now = new Date(), m = now.getMonth()+1, [season, blurb, jobs] = SEASON[m-1];
   const wk = mondayOf(now), weekTicks = (S.meta.week && S.meta.week.week===wk) ? S.meta.week.done||{} : {};
   const mk = monthKey(now), monthMeta = (S.meta.month && S.meta.month.month===mk) ? S.meta.month : {done:{}, extra:[]};
-  const allJobs = [...jobs.map((j,i)=>({kind:j[0], text:j[1], key:'j'+i})), ...(monthMeta.extra||[]).map((t,i)=>({kind:'Also', text:t, key:'x'+i, extra:i}))];
+  const allJobs = [...jobs.map((j,i)=>({kind:j[0], text:j[1], key:'j'+i})), ...(S.yearly||[]).filter(y=>+y.month===m).map(y=>({kind:y.kind||'Also', text:y.text, key:'y'+y.id, yearly:true})), ...(monthMeta.extra||[]).map((t,i)=>({kind:'Also', text:t, key:'x'+i, extra:i}))];
   const tasks = S.tasks.slice().sort((a,b)=>(a.order||0)-(b.order||0));
   const flowering = realPlants().filter(p=>span(p.from,p.to)[m-1] && p.status!=='Finished for now' && p.status!=='Establishing').map(p=>p.name);
   const next = realPlants().filter(p=>{ const n=m%12; return p.status!=='Establishing' && span(p.from,p.to)[n] && !span(p.from,p.to)[m-1]; }).map(p=>p.name);
   const toSow = S.seeds.filter(s=>!s.sown && (s.group==='now'||s.group==='either')).length;
-  const front = spotsSorted().filter(s=>s.area==='front'), side = spotsSorted().filter(s=>s.area==='side');
+  const front = spotsSorted().filter(s=>s.area==='front'), side = spotsSorted().filter(s=>s.area==='side'), back = spotsSorted().filter(s=>s.area==='back');
   const editTasks = S.ui.editTasks;
   return `
   <div class="row">
@@ -540,25 +611,25 @@ function pageHome(){
     </section>
     <section class="card checklist" style="flex:1 1 380px" aria-labelledby="week-h">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h2 class="h2" id="week-h">This week</h2><span class="script" style="font-size:20px">resets each Monday</span></div>
-      ${tasks.map(t=>{ const on=!!weekTicks[t.id]; return `<div class="it">
+      ${tasks.filter(t=>shownTick(!!weekTicks[t.id], t.id)).map(t=>{ const on=!!weekTicks[t.id]; return `<div class="it">
         <button class="tick${on?' on':''}" aria-pressed="${on}" aria-label="${on?'Untick':'Tick'} ${esc(t.job)}" onclick="G.tickWeek('${t.id}')">${on?'✓':''}</button>
         <span style="font-size:15px;line-height:1.35"><span class="${on?'done-text':''}">${esc(t.job)}</span>${t.where?`<span class="small muted" style="display:block">${esc(t.where)}</span>`:''}${editTasks?`<button class="link small danger" onclick="G.delTask('${t.id}')">Remove</button>`:''}</span>
-        <span class="often">${esc(t.often||'')}</span></div>`; }).join('')}
+        <span class="often">${esc(t.often||'')}</span></div>`; }).join('')}${tickToggle(tasks.filter(t=>weekTicks[t.id]).length + allJobs.filter(j=>(monthMeta.done||{})[j.key]).length)}
       ${editTasks ? `<div data-keep style="display:grid;gap:8px;margin-top:12px"><input id="nt-job" class="field" placeholder="New job, e.g. feed the roses"><div style="display:flex;gap:8px"><input id="nt-where" class="field" placeholder="Where (e.g. FB)"><input id="nt-often" class="field" placeholder="How often"></div><div style="display:flex;gap:8px"><button class="btn small" onclick="G.addTask()">Add job</button><button class="btn small line" onclick="G.ui('editTasks',false)">Done</button></div></div>`
         : `<p class="small muted" style="margin:10px 0 0">${esc(WATER_TIP(m))} <button class="link small" onclick="G.ui('editTasks',true)">Edit jobs</button></p>`}
     </section>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px">
     <section class="dark jobs" aria-labelledby="jobs-h"><h2 class="h2" id="jobs-h" style="margin-bottom:10px">This month</h2>
-      ${allJobs.map(j=>{ const on=!!(monthMeta.done||{})[j.key]; return `<div class="j"><span class="k">${esc(j.kind)}</span><span class="${on?'done-text':''}" style="${on?'color:#C9B6AC':''}">${esc(j.text)}${j.extra!=null?` <button class="link small" style="color:#EBC6CC" onclick="G.delMonthJob(${j.extra})">Remove</button>`:''}</span><button class="tick${on?' on':''}" aria-pressed="${on}" aria-label="${on?'Untick':'Tick'} ${esc(j.text)}" onclick="G.tickMonth('${j.key}')">${on?'✓':''}</button></div>`; }).join('')}
-      <div data-keep style="display:flex;gap:8px;margin-top:12px"><input id="nm-job" class="field" placeholder="Add a job for this month"><button class="btn small blush" onclick="G.addMonthJob()">Add</button></div>
+      ${allJobs.filter(j=>shownTick(!!(monthMeta.done||{})[j.key], j.key)).map(j=>{ const on=!!(monthMeta.done||{})[j.key]; return `<div class="j"><span class="k">${esc(j.kind)}</span><span class="${on?'done-text':''}" style="${on?'color:#C9B6AC':''}">${esc(j.text)}${j.yearly?` <span class="yr">↻ every year</span>`:''}${j.extra!=null?` <button class="link small" style="color:#EBC6CC" onclick="G.delMonthJob(${j.extra})">Remove</button>`:''}</span><button class="tick${on?' on':''}" aria-pressed="${on}" aria-label="${on?'Untick':'Tick'} ${esc(j.text)}" onclick="G.tickMonth('${j.key}')">${on?'✓':''}</button></div>`; }).join('')}
+      <div data-keep style="display:flex;gap:8px;margin-top:12px"><input id="nm-job" class="field" placeholder="Add a job, e.g. buy corms"><select id="nm-rep" class="field" style="max-width:150px" aria-label="How often"><option value="once">This month</option><option value="year">Every year</option></select><button class="btn small blush" onclick="G.addMonthJob()">Add</button></div><a class="link small" href="#yearly" style="color:inherit;margin-top:6px">All yearly jobs</a>
     </section>
     <section class="card" style="background:var(--blush);display:flex;flex-direction:column;gap:12px" aria-labelledby="fl-h"><h2 class="h2" id="fl-h">In flower now</h2>
       <div style="display:flex;flex-wrap:wrap;gap:7px">${flowering.length?flowering.map(f=>`<span class="pill" style="background:var(--cream)">${esc(f)}</span>`).join(''):'<span class="muted">Nothing marked as flowering this month.</span>'}</div>
       ${next.length?`<p style="margin:auto 0 0;font-family:var(--serif);font-style:italic;font-size:17px">Next month: ${esc(andList(next))}.</p>`:''}
     </section>
     <section class="card" style="display:flex;flex-direction:column;gap:10px" aria-labelledby="sp-h"><h2 class="h2" id="sp-h">Spot codes</h2>
-      ${[['Front garden',front,true],['Side garden',side,false]].map(([n,list,isF])=>`<div><span class="script" style="font-size:22px">${n}</span><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">${list.map(s=>`<a href="#map/${encodeURIComponent(s.code)}" class="chip${isF?' front':''}" style="text-decoration:none;min-height:30px">${esc(s.code)}</a>`).join('')}</div></div>`).join('')}
+      ${[['Front garden',front,true],['Side garden',side,false],['Back garden and deck',back,false]].filter(x=>x[1].length).map(([n,list,isF])=>`<div><span class="script" style="font-size:22px">${n}</span><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">${list.map(s=>`<a href="#map/${encodeURIComponent(s.code)}" class="chip${isF?' front':''}" style="text-decoration:none;min-height:30px">${esc(s.code)}</a>`).join('')}</div></div>`).join('')}
     </section>
   </div>
   <div style="display:flex;align-items:baseline;gap:12px;margin-top:6px;flex-wrap:wrap"><h2 style="margin:0;font-family:var(--display);font-weight:400;font-size:38px">In the garden</h2><span class="script" style="font-size:22px">everything in one place</span></div>
@@ -577,13 +648,13 @@ function pageMap(code){
   return ptitle('Garden map','where everything is', `<button class="btn line" onclick="G.spotForm()">+ Add a spot</button>`) + `
   <div class="row" style="align-items:flex-start">
     <section class="card" style="flex:1.6 1 520px" aria-label="Garden plan">
-      <div class="areas">${area('front','Front garden')}${area('side','Side garden')}</div>
+      <div class="areas">${area('front','Front garden')}${area('side','Side garden')}${area('back','Back garden and deck')}</div>
       <p class="small muted" style="margin:12px 0 0">Not to scale. Tap a spot to see what’s growing there. Dashed outlines are plans for later.</p>
     </section>
     <div style="flex:1 1 320px;display:flex;flex-direction:column;gap:20px;min-width:0">
       ${sel ? `<section class="dark" aria-labelledby="sel-h">
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="chip" style="background:var(--blush);color:var(--ink)">${esc(sel.code)}</span><h2 class="h2" id="sel-h" style="font-size:22px;color:#F3EBD3">${esc(sel.name)}</h2></div>
-        <p class="small" style="color:#EBC6CC;margin:8px 0 12px">${esc([sel.area==='front'?'Front garden':'Side garden', sel.note, `${here.length} plant${here.length===1?'':'s'}`].filter(Boolean).join(' · '))}</p>
+        <p class="small" style="color:#EBC6CC;margin:8px 0 12px">${esc([sel.area==='front'?'Front garden':sel.area==='back'?'Back garden and deck':'Side garden', sel.note, `${here.length} plant${here.length===1?'':'s'}`].filter(Boolean).join(' · '))}</p>
         <div style="display:flex;flex-wrap:wrap;gap:6px">${here.map(p=>`<a class="pill" href="#plant/${p.id}" style="background:var(--cream);color:var(--ink);text-decoration:none">${esc(p.name)}</a>`).join('') || '<span style="color:#EBC6CC">Nothing here yet.</span>'}</div>
         <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap"><a class="btn blush" href="#plant/new?spot=${encodeURIComponent(sel.code)}">+ Add a plant</a><button class="btn line" style="color:#F3EBD3;border-color:#EBC6CC" onclick="G.spotForm('${sel.id}')">Edit spot</button></div>
       </section>` : ''}
@@ -599,7 +670,7 @@ function spotForm(id){
     <h2 class="h2" id="sf-h">${id?'Edit spot':'Add a spot'}</h2>
     <div class="grid2"><label class="f">Code<input id="sf-code" class="field" maxlength="4" value="${esc(s.code)}" placeholder="e.g. P6"></label>
       <label class="f">Name<input id="sf-name" class="field" value="${esc(s.name)}" placeholder="e.g. Blue pot by the gate"></label></div>
-    <div class="grid2"><label class="f">Garden<select id="sf-area" class="field"><option value="front" ${s.area==='front'?'selected':''}>Front garden</option><option value="side" ${s.area==='side'?'selected':''}>Side garden</option></select></label>
+    <div class="grid2"><label class="f">Garden<select id="sf-area" class="field"><option value="front" ${s.area==='front'?'selected':''}>Front garden</option><option value="side" ${s.area==='side'?'selected':''}>Side garden</option><option value="back" ${s.area==='back'?'selected':''}>Back garden and deck</option></select></label>
       <label class="f">Kind<select id="sf-kind" class="field">${KINDS.map(([k,l])=>`<option value="${k}" ${s.kind===k?'selected':''}>${l}</option>`).join('')}</select></label></div>
     <label class="f">Note<input id="sf-note" class="field" value="${esc(s.note||'')}" placeholder="e.g. Full sun, afternoon shade"></label>
     <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between">
@@ -613,11 +684,11 @@ function spotForm(id){
 function pagePlants(id){
   const f = S.ui.filter || (id==='wish' ? 'wish' : 'All'), q = (S.ui.q||'').toLowerCase().trim();
   const m = new Date().getMonth()+1;
-  const tests = {'All':p=>true, 'In flower now':p=>span(p.from,p.to)[m-1] && p.status!=='Finished for now' && p.status!=='Establishing', 'Perennials':p=>p.type==='Perennial', 'Annuals':p=>p.type==='Annual', 'Bulbs and corms':p=>p.type==='Bulb'||p.type==='Corm', 'Front garden':p=>(spotByCode(p.spot)||{}).area==='front', 'Side garden':p=>(spotByCode(p.spot)||{}).area==='side'};
+  const tests = {'All':p=>true, 'In flower now':p=>span(p.from,p.to)[m-1] && p.status!=='Finished for now' && p.status!=='Establishing', 'Perennials':p=>p.type==='Perennial', 'Annuals':p=>p.type==='Annual', 'Bulbs and corms':p=>p.type==='Bulb'||p.type==='Corm', 'Front garden':p=>(spotByCode(p.spot)||{}).area==='front', 'Side garden':p=>(spotByCode(p.spot)||{}).area==='side', 'Back garden':p=>(spotByCode(p.spot)||{}).area==='back', 'No spot':p=>!p.spot};
   const list = realPlants().filter(tests[f]||tests.All).filter(p=>!q || [p.name,p.variety,p.spot,p.type,p.status].join(' ').toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name));
   const wish = S.plants.filter(p=>p.wish);
   const tones = ['#EBC6CC','#D9DCB8','#F6CBAE'];
-  return ptitle('Plants','what we grow', `<a class="btn" href="#plant/new">+ Add a plant</a>`) + `
+  return ptitle('Plants','what we grow', `<a class="btn line" href="#add">+ From a website</a><a class="btn" href="#plant/new">+ Add a plant</a>`) + `
   <div class="filters"><input type="search" class="search" placeholder="Search plants" aria-label="Search plants" value="${esc(S.ui.q||'')}" data-keep oninput="G.search(this.value)">
     ${Object.keys(tests).map(k=>`<a href="#plants" aria-current="${k===f}" onclick="event.preventDefault();G.filter('${k}')">${k}</a>`).join('')}</div>
   <div class="pgrid" id="pgrid">${list.map((p,i)=>`<a class="pcard" href="#plant/${p.id}">
@@ -636,7 +707,8 @@ function pagePlant(idRaw){
   const [id, qs] = String(idRaw).split('?');
   const params = new URLSearchParams(qs||'');
   const isNew = id==='new';
-  const p = isNew ? {id:'', name:'', variety:'', spot:params.get('spot')||'', type:'Perennial', status:params.get('wish')?'Wish list':'Growing', wish:!!params.get('wish'), from:0, to:0, colour:'#EBC6CC', care:{}} : S.plants.find(x=>x.id===id);
+  const imp = isNew && params.get('import') && S.importData ? {...S.importData.plant, ...(S.importKind==='wish' ? {status:'Wish list', wish:true, spot:''} : {})} : {};
+  const p = isNew ? {id:'', name:'', variety:'', spot:params.get('spot')||'', type:'Perennial', status:params.get('wish')?'Wish list':'Growing', wish:!!params.get('wish'), from:0, to:0, colour:'#EBC6CC', care:{}, ...imp} : S.plants.find(x=>x.id===id);
   if(!p) return `<p>That plant couldn’t be found. <a href="#plants">Back to plants</a></p>`;
   if(isNew || S.ui.edit) return plantForm(p, isNew);
   const sp = spotByCode(p.spot), photos = p.photos||[];
@@ -702,15 +774,15 @@ function pageSeeds(){
     ${s.note?`<span class="small muted">${esc(s.note)}</span>`:''}
     <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:4px"><button class="link small" onclick="G.sow('${s.id}')">${s.sown?'Mark as not sown':(s.method==='plant'?'Mark as planted':'Mark as sown')}</button><button class="link small" onclick="G.seedForm('${s.id}')">Edit</button></div>
   </article>`; };
-  return ptitle('Seed box','sow, grow, repeat', `<button class="btn" onclick="G.seedForm()">+ Add a packet</button>`) + `
+  return ptitle('Seed box','sow, grow, repeat', `<a class="btn line" href="#add">+ From a website</a><button class="btn" onclick="G.seedForm()">+ Add a packet</button>`) + `
   <div class="dark" style="padding:14px 20px;font-size:15px;line-height:1.45">You like to keep seed-raising to one or two rounds a year, so packets you can <strong>sow straight into the garden</strong> are marked “Direct sow”. Only those marked “Start in trays” need a seed-raising session.</div>
   ${GROUPS.map(([k,t,sub,bg])=>{ const list=S.seeds.filter(s=>(s.group||'later')===k); if(!list.length) return ''; return `<section class="group" style="background:${bg}" aria-label="${t}">
     <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><h2 class="h2">${t}</h2><span class="script" style="font-size:22px">${sub}</span></div>
     <div class="packets">${list.sort((a,b)=>a.name.localeCompare(b.name)).map(packet).join('')}</div></section>`; }).join('')}
   <p class="small muted" style="margin:0">Sowing times are a general guide for the Adelaide Hills; check each packet too.</p>`;
 }
-function seedForm(id){
-  const s = S.seeds.find(x=>x.id===id) || {name:'', variety:'', group:'now', method:'direct', note:'', from:0, to:0};
+function seedForm(id, pre){
+  const s = S.seeds.find(x=>x.id===id) || {name:'', variety:'', group:'now', method:'direct', note:'', from:0, to:0, ...(pre||{})};
   const monthOpts = v => `<option value="0">Not set</option>`+MONTHS.map((n,i)=>`<option value="${i+1}" ${+v===i+1?'selected':''}>${n}</option>`).join('');
   S.ui.modal = () => `<div class="modal-bg" onclick="G.closeModal()"></div><div class="modal" role="dialog" aria-modal="true" aria-labelledby="sd-h" data-keep>
     <h2 class="h2" id="sd-h">${id?'Edit packet':'Add a packet'}</h2>
@@ -781,6 +853,100 @@ function pageDiary(){
   </div>`;
 }
 
+
+/* ---------------- "+ Garden" bookmark: add a plant or seed packet from a shop's page ---------------- */
+// It reads what the page shows (name, description and labelled details like "Position:" or
+// "Flowering:") and opens the garden with a filled-in form to check before saving.
+const GARDEN_BM = `(function(){var A='__APP__';var p=null;function f(o,d){if(!o||p||d>8||typeof o!=='object')return;if(Array.isArray(o)){o.forEach(function(x){f(x,d+1)});return}var t=o['@type'];if(t==='Product'||(Array.isArray(t)&&t.indexOf('Product')>-1)){p=o;return}for(var k in o){if(o[k]&&typeof o[k]==='object')f(o[k],d+1)}}document.querySelectorAll('script[type="application/ld+json"]').forEach(function(s){try{f(JSON.parse(s.textContent),0)}catch(e){}});var m=function(n){var e=document.querySelector('meta[property="'+n+'"],meta[name="'+n+'"]');return e?e.content:''};var h1=document.querySelector('h1');var L=[];document.querySelectorAll('dl').forEach(function(dl){dl.querySelectorAll('dt').forEach(function(dt){var dd=dt.nextElementSibling;if(dd)L.push(dt.innerText.trim()+': '+dd.innerText.trim())})});document.querySelectorAll('tr').forEach(function(tr){var c=tr.querySelectorAll('th,td');if(c.length===2)L.push(c[0].innerText.trim()+': '+c[1].innerText.trim())});var root=document.querySelector('main')||document.querySelector('article')||document.body;var x=root.innerText||'';var ls=x.split('\\n').map(function(l){return l.trim()}).filter(Boolean);var K=/^(position|aspect|sun|sunlight|light|flowering|flowering time|flowering season|flower colour|height|mature height|width|spread|spacing|plant spacing|sow|sowing|sow direct|when to sow|sowing time|sowing season|best time to sow|planting time|harvest|days to harvest|days to maturity|water|watering|plant type|type|life cycle|climate|germination|frost tolerant)$/i;ls.forEach(function(l,i){if(/^[A-Za-z][A-Za-z \\/()]{1,32}\\s*:\\s*\\S/.test(l)&&l.length<200)L.push(l);else if(K.test(l)&&ls[i+1]&&ls[i+1].length<120)L.push(l+': '+ls[i+1])});var d={n:(p&&p.name)||(h1&&h1.innerText)||m('og:title')||document.title,t:document.title,desc:(p&&p.description)||m('og:description')||m('description'),l:L.slice(0,90),x:x.slice(0,4000),u:location.href};var url=A+'#import='+encodeURIComponent(JSON.stringify(d));var w=window.open(url,'_blank');if(!w)location.href=url})();`;
+function gardenBookmark(){ return 'javascript:' + encodeURI(GARDEN_BM.replace('__APP__', location.origin + location.pathname)); }
+const hostOf = u => { try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return ''; } };
+const MON_RE = /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\b/gi;
+const MON_IX = {jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,sept:9,oct:10,nov:11,dec:12};
+function monthsFrom(str){
+  str = String(str||'');
+  const ms = [...str.matchAll(MON_RE)].map(m=>MON_IX[m[1].toLowerCase()]).filter(Boolean);
+  if(ms.length) return [ms[0], ms[ms.length-1]];
+  const SEA = {spring:[9,11], summer:[12,2], autumn:[3,5], fall:[3,5], winter:[6,8]};
+  const ss = [...str.matchAll(/\b(early |late |mid[- ]?)?(spring|summer|autumn|fall|winter)\b/gi)].map(m=>{ const [a,b]=SEA[m[2].toLowerCase()]; const q=(m[1]||'').toLowerCase(); return q.startsWith('early') ? [a,a] : q.startsWith('late') ? [b,b] : q.startsWith('mid') ? [a%12+1,a%12+1] : [a,b]; });
+  return ss.length ? [ss[0][0], ss[ss.length-1][1]] : [0,0];
+}
+function parseGardenImport(d){
+  const clean = v => String(v||'').replace(/\s+/g,' ').trim();
+  const host = hostOf(d.u);
+  const name = clean(d.n || d.t).split(/\s[|–—]\s|\s-\s/)[0].replace(/\b(seeds?|seed packet|plants?)\s*$/i,'').trim() || 'New plant';
+  const lines = (d.l||[]).map(clean);
+  const find = re => { const r = new RegExp('^(' + re + ')\\s*[:\\-–]\\s*(.+)$','i'); for(const l of lines){ const m = l.match(r); if(m) return m[2].trim().slice(0,160); } return ''; };
+  const sun = find('position|aspect|sun(?: requirements?)?|sunlight|light|location');
+  const water = find('water(?:ing)?(?: needs?| requirements?)?');
+  const sow = find('sow(?:ing)?(?: time| season| period)?|when to sow|best time to sow|sow direct|planting time|plant(?:ing)? season');
+  const flower = find('flower(?:ing)?(?: time| season| period)?|blooms?|bloom time');
+  const height = find('(?:mature )?height'), spread = find('width|spread|(?:plant )?spacing');
+  const harvest = find('harvest(?: time)?|days to (?:maturity|harvest)|maturity');
+  const all = [name, d.desc, ...lines, d.x].join('\n').toLowerCase();
+  const t = (find('(?:plant )?type|life ?cycle|habit') + ' ' + all);
+  const type = /climb|climber|vine|creeper/.test(t) ? 'Climber / vine' : /perennial/.test(t) ? 'Perennial' : /\bannual\b/.test(t) ? 'Annual' : /\bbulbs?\b/.test(t) ? 'Bulb' : /\bcorms?\b/.test(t) ? 'Corm' : /hedge/.test(t) ? 'Hedge' : /shrub/.test(t) ? 'Shrub' : /\bherb\b/.test(t) ? 'Herb' : 'Check type';
+  const [from, to] = monthsFrom(flower);
+  const sowM = monthsFrom(sow), now = new Date().getMonth()+1;
+  const group = sowM[0] && span(sowM[0], sowM[1])[now-1] ? 'now' : sowM[0] && [3,4,5].some(x=>span(sowM[0], sowM[1])[x-1]) ? 'autumn' : 'later';
+  const method = /seed raising|seed-raising|punnet|trays?\b|transplant/.test(all) && !/direct/.test(all) ? 'trays' : 'direct';
+  const extra = [sow && 'Sow: '+sow, height && 'Height: '+height, spread && 'Spacing: '+spread, harvest && 'Harvest: '+harvest].filter(Boolean);
+  const desc = clean(d.desc).slice(0, 320);
+  return { host, url: d.u, northern: !!host && !/\.(au|nz)$/.test(host), found: [sun,water,sow,flower,height,spread,harvest].filter(Boolean).length,
+    plant: {name, variety:'', type, status:'Growing', from, to, sun, water, colour:'#EBC6CC', notes: [host && 'From '+host+(d.u?' ('+d.u+')':''), desc, ...extra].filter(Boolean).join('\n')},
+    seed: {name, variety:'', group, method, from, to, note: [extra.join(' · '), host && 'from '+host].filter(Boolean).join(' · ')} };
+}
+function importFromHash(){
+  const h = location.hash;
+  if(!h.startsWith('#import=')) return;
+  try{ S.importData = parseGardenImport(JSON.parse(decodeURIComponent(h.slice(8)))); }catch(e){ S.error = "Couldn't read that page. Try the bookmark again."; }
+  history.replaceState(null, '', location.pathname + location.search + '#add');
+  S.ui = {}; render(); window.scrollTo(0,0);
+}
+window.addEventListener('hashchange', ()=>{ if(location.hash.startsWith('#import=')) importFromHash(); });
+function pageAdd(){
+  const d = S.importData;
+  const row = (k,v) => v ? `<div class="r"><b>${k}</b><span>${esc(v)}</span></div>` : '';
+  return ptitle('Add from a website','seeds, bulbs and plants', '') + (d ? `
+  <section class="card" style="display:flex;flex-direction:column;gap:14px">
+    <p style="margin:0">From <b>${esc(d.host||'the page')}</b>. ${d.found ? `Found ${d.found} growing detail${d.found===1?'':'s'}; check them before saving.` : 'This page doesn’t list its growing details in a way the bookmark can read, so you’ll fill those in.'}</p>
+    ${d.northern ? `<div class="notice err">This looks like an overseas website, so its timings may be for the northern hemisphere (their spring is our autumn). Double-check the months.</div>` : ''}
+    <div class="facts">${row('Name', d.plant.name)}${row('Type', d.plant.type)}${row('Sun', d.plant.sun)}${row('Water', d.plant.water)}${row('Flowers', bloomText(d.plant.from, d.plant.to))}${row('Notes', d.plant.notes)}</div>
+    <fieldset style="border:0;padding:0;margin:0"><legend style="font-weight:600;margin-bottom:8px">Save it as</legend>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">${[['plant','A plant'],['seed','A seed packet'],['wish','A wish list plant']].map(([k,l],i)=>`<label style="display:flex;gap:8px;align-items:center;min-height:40px"><input type="radio" name="imp-kind" value="${k}" ${i===0?'checked':''}> ${l}</label>`).join('')}</div></fieldset>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" onclick="G.importContinue()">Continue</button><button class="btn line" onclick="G.importCancel()">Cancel</button></div>
+  </section>` : `
+  <section class="card" style="display:flex;flex-direction:column;gap:12px;max-width:760px">
+    <p style="margin:0">Save this button as a bookmark. On a plant or seed page (Bunnings, Mr Fothergill’s, Tesselaar, Veggie Garden Seeds or most other shops), tap it: the garden opens with the details filled in for you to check and save, as a plant, a seed packet or a wish list plant.</p>
+    <p style="margin:0"><a class="btn" href="${esc(gardenBookmark())}" onclick="event.preventDefault();alert('Drag this button to your bookmarks bar, or use Copy bookmark code below.')">+ Garden</a></p>
+    <p class="small muted" style="margin:0"><b>On a computer:</b> drag the + Garden button to your bookmarks bar.<br><b>On an iPhone:</b> tap Copy bookmark code, bookmark any page in Safari, then edit that bookmark and paste the code over its address.</p>
+    <p style="margin:0"><button class="btn line" onclick="G.copyBookmark(this)">Copy bookmark code</button></p>
+    <p class="small muted" style="margin:0">Honest note: every shop lays out its growing details differently, so sometimes you’ll get just the name, description and link, and add the rest yourself.</p>
+  </section>`);
+}
+
+
+/* ---------------- Yearly jobs: your own jobs that come back every year ---------------- */
+const YEAR_KINDS = ['Buy','Sow','Plant','Care','Feed','Prune','Cut','Other'];
+function pageYearly(){
+  const now = new Date().getMonth()+1;
+  return ptitle('Yearly jobs','every year, right on time') + `
+  <section class="card" data-keep style="display:flex;flex-direction:column;gap:12px;max-width:820px">
+    <p style="margin:0">Jobs here come back every year in their month. They show on the garden’s This month card and on your dashboard’s To do list, alongside the built-in monthly guide.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <select id="yj-m" class="field" style="max-width:150px" aria-label="Month">${MONTHS.map((n,i)=>`<option value="${i+1}" ${i+1===now?'selected':''}>${n}</option>`).join('')}</select>
+      <select id="yj-k" class="field" style="max-width:120px" aria-label="Kind of job">${YEAR_KINDS.map(k=>`<option>${k}</option>`).join('')}</select>
+      <input id="yj-t" class="field" style="flex:1 1 220px" placeholder="e.g. Buy ranunculus corms from Tesselaar" onkeydown="if(event.key==='Enter')G.addYearly()">
+      <button class="btn" onclick="G.addYearly()">Add</button>
+    </div>
+  </section>
+  <section class="card" style="max-width:820px">
+    ${MONTHS.map((n,i)=>{ const list=(S.yearly||[]).filter(y=>+y.month===i+1); return `<div style="padding:10px 0;border-bottom:1px solid var(--line)">
+      <div style="display:flex;align-items:baseline;gap:10px"><b style="font-family:var(--serif);font-size:20px;min-width:110px">${n}</b>${i+1===now?'<span class="pill">this month</span>':''}</div>
+      ${list.length?list.map(y=>`<div style="display:flex;gap:10px;align-items:center;padding:4px 0 4px 2px;font-size:15px"><span class="chip">${esc(y.kind||'Other')}</span><span style="flex:1">${esc(y.text)}</span><button class="link small danger" onclick="G.delYearly('${y.id}')" aria-label="Delete ${esc(y.text)}">Delete</button></div>`).join(''):'<span class="small muted">Nothing yet</span>'}
+    </div>`; }).join('')}
+  </section>`;
+}
+
 /* ---------------- Photos ---------------- */
 const PHOTO_MAX = 700000;
 async function loadBitmap(file){ try{ return await createImageBitmap(file); }catch(e){ return await new Promise((res,rej)=>{ const img=new Image(); img.onload=()=>res(img); img.onerror=rej; img.src=URL.createObjectURL(file); }); } }
@@ -810,9 +976,9 @@ window.G = {
   search: v=>{ S.ui.q=v; const el=$('pgrid'); const keep=document.activeElement; render(); const s=document.querySelector('.search'); if(s && keep && keep.classList.contains('search')){ s.focus(); s.setSelectionRange(v.length,v.length); } },
   filter: k=>{ S.ui.filter=k; render(); },
   dspot: k=>{ S.ui.dspot=k; render(); },
-  tickWeek: id=>{ const wk=mondayOf(new Date()); const cur=(S.meta.week&&S.meta.week.week===wk)?{...S.meta.week.done}:{}; if(cur[id]) delete cur[id]; else cur[id]=true; putMeta('week',{week:wk, done:cur}); },
-  tickMonth: key=>{ const mk=monthKey(new Date()); const m=(S.meta.month&&S.meta.month.month===mk)?S.meta.month:{month:mk,done:{},extra:[]}; const done={...(m.done||{})}; if(done[key]) delete done[key]; else done[key]=true; putMeta('month',{month:mk, done, extra:m.extra||[]}); },
-  addMonthJob: ()=>{ const t=val('nm-job').trim(); if(!t) return; const mk=monthKey(new Date()); const m=(S.meta.month&&S.meta.month.month===mk)?S.meta.month:{month:mk,done:{},extra:[]}; putMeta('month',{month:mk, done:m.done||{}, extra:[...(m.extra||[]), t]}); },
+  tickWeek: id=>{ justTicked(id); const wk=mondayOf(new Date()); const cur=(S.meta.week&&S.meta.week.week===wk)?{...S.meta.week.done}:{}; if(cur[id]) delete cur[id]; else cur[id]=true; putMeta('week',{week:wk, done:cur}); },
+  tickMonth: key=>{ justTicked(key); const mk=monthKey(new Date()); const m=(S.meta.month&&S.meta.month.month===mk)?S.meta.month:{month:mk,done:{},extra:[]}; const done={...(m.done||{})}; if(done[key]) delete done[key]; else done[key]=true; putMeta('month',{month:mk, done, extra:m.extra||[]}); },
+  addMonthJob: ()=>{ const t=val('nm-job').trim(); if(!t) return; if(val('nm-rep')==='year'){ put('yearly',{id:uid('y'), month:new Date().getMonth()+1, kind:'Also', text:t}); return; } const mk=monthKey(new Date()); const m=(S.meta.month&&S.meta.month.month===mk)?S.meta.month:{month:mk,done:{},extra:[]}; putMeta('month',{month:mk, done:m.done||{}, extra:[...(m.extra||[]), t]}); },
   delMonthJob: i=>{ const mk=monthKey(new Date()); const m=S.meta.month; if(!m||m.month!==mk) return; const extra=(m.extra||[]).filter((_,j)=>j!==i); const done={}; Object.entries(m.done||{}).forEach(([k,v])=>{ if(k[0]==='j') done[k]=v; else { const n=+k.slice(1); if(n<i) done[k]=v; else if(n>i) done['x'+(n-1)]=v; } }); putMeta('month',{month:mk, done, extra}); },
   addTask: ()=>{ const job=val('nt-job').trim(); if(!job) return; put('tasks',{id:uid('t'), job, where:val('nt-where').trim(), often:val('nt-often').trim()||'Weekly', order:Date.now()}); },
   delTask: id=>remove('tasks',id),
@@ -837,7 +1003,7 @@ window.G = {
       picking:val('pf-picking').trim(), vase:val('pf-vase').trim(), notes:val('pf-notes').trim(),
       care:{spring:val('pf-spring').trim(), summer:val('pf-summer').trim(), autumn:val('pf-autumn').trim(), winter:val('pf-winter').trim()}};
     if(item.from && !item.to) item.to = item.from;
-    put('plants', item); S.ui.edit=false; S.ui.confirmDel=false;
+    put('plants', item); S.ui.edit=false; S.ui.confirmDel=false; S.importData=null; S.importKind=null;
     if(location.hash !== '#plant/'+item.id) location.hash = '#plant/'+item.id; else render();
   },
   delPlant: id=>{ const p=S.plants.find(x=>x.id===id); (p&&p.photos||[]).forEach(dropPhoto); remove('plants',id); S.ui={}; location.hash='#plants'; },
@@ -850,6 +1016,13 @@ window.G = {
     catch(e){ if(st) st.textContent = e.message==='too_large' ? "That photo is too big even after shrinking. Try another." : "Couldn't save the photo. Try again."; }
   },
   seedForm,
+  addYearly: ()=>{ const text=val('yj-t').trim(); if(!text) return; put('yearly',{id:uid('y'), month:+val('yj-m'), kind:val('yj-k'), text}); const e=$('yj-t'); if(e) e.value=''; },
+  delYearly: id=>{ if(confirm('Delete this yearly job?')) remove('yearly', id); },
+  importContinue: ()=>{ const k = (document.querySelector('input[name="imp-kind"]:checked')||{}).value || 'plant';
+    if(k==='seed'){ const pre = S.importData.seed; location.hash = '#seeds'; setTimeout(()=>{ seedForm(null, pre); S.importData = null; }, 60); }
+    else { S.importKind = k; location.hash = '#plant/new?import=1'; } },
+  importCancel: ()=>{ S.importData = null; render(); },
+  copyBookmark: async btn=>{ try{ await navigator.clipboard.writeText(gardenBookmark()); btn.textContent='Copied!'; }catch(e){ prompt('Copy this bookmark code:', gardenBookmark()); } },
   saveSeed: id=>{ const name=val('sd-name').trim(); if(!name){ alert('Please give the packet a name.'); return; } const old=S.seeds.find(s=>s.id===id)||{};
     put('seeds',{...old, id:id||uid('sd'), name, variety:val('sd-variety').trim(), group:val('sd-group'), method:val('sd-method'), note:val('sd-note').trim(), from:+val('sd-from'), to:+val('sd-to')}); S.ui.modal=null; render(); },
   delSeed: id=>{ if(!confirm('Remove this seed packet?')) return; remove('seeds',id); S.ui.modal=null; render(); },

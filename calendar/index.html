@@ -202,12 +202,15 @@ async function sync(token){
       const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(c.id)}/events?singleEvents=true&orderBy=startTime&maxResults=250&timeMin=${encodeURIComponent(start.toISOString())}&timeMax=${encodeURIComponent(end.toISOString())}`;
       const data = await F.gfetch(url, token), meta = info(c.id);
       (data.items||[]).forEach(ev=>{
-        if(ev.status==='cancelled' || seen.has(ev.iCalUID||ev.id)) return; seen.add(ev.iCalUID||ev.id);
+        // The same event on both of your calendars only shows once: either the same invitation, or the same title at the same time
+        const twin = ((ev.summary||'').trim().toLowerCase()) + '|' + ((ev.start && (ev.start.dateTime||ev.start.date))||'');
+        if(ev.status==='cancelled' || seen.has(ev.iCalUID||ev.id) || seen.has(twin)) return; seen.add(ev.iCalUID||ev.id); seen.add(twin);
         const allDay = !!(ev.start && ev.start.date);
         const s = allDay ? ev.start.date : isoDate(new Date(ev.start.dateTime));
         const e = allDay ? ev.end.date : '';
         const t = allDay ? '' : new Date(ev.start.dateTime).toLocaleTimeString('en-AU',{hour:'numeric', minute:'2-digit'}).replace(/\s?([ap])\.?m\.?/i,(m,a)=>' '+a.toLowerCase()+'m');
-        events.push({start:s, end:e, time:t, sort: allDay ? '' : ev.start.dateTime, title: ev.summary||'(No title)', cal: c.name || meta.name, colour: meta.colour});
+        const bday = ev.eventType==='birthday' || /birthday|bday/i.test(ev.summary||'');
+        events.push({start:s, end:e, time:t, sort: allDay ? '' : ev.start.dateTime, title: (bday && !/🎂/.test(ev.summary||'') ? '🎂 ' : '') + (ev.summary||'(No title)'), cal: c.name || meta.name, colour: meta.colour});
       });
     }catch(e){ if(e.code===401){ S.conn='idle'; S.msg='The Google connection ran out. Tap Connect and refresh.'; render(); return; } }
   }

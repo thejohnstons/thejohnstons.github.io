@@ -228,9 +228,10 @@ function kidCard(k){
       <button class="linkbtn" style="margin-left:auto" onclick="K.childForm('${k.id}')">Edit</button></div>
     ${(k.fields||[]).filter(f=>f.label).map(f=>`<div class="field"><b>${esc(f.label)}</b><span>${f.value?esc(f.value):'<span style="color:var(--muted)">Not filled in yet</span>'}</span></div>`).join('')}
     <p class="note" style="margin:16px 0 4px">don’t forget!</p>
-    ${rems.map(r=>{ const d=remDone(r); return `<div class="rem"><button class="tick${d?' on':''}" aria-pressed="${d}" aria-label="${d?'Untick':'Tick'} ${esc(r.text)}" onclick="K.tick('${r.id}')">${d?'✓':''}</button>
+    ${rems.filter(r=>!remDone(r) || S.ui.showDone || S.ui.justTicked===r.id).map(r=>{ const d=remDone(r); return `<div class="rem"><button class="tick${d?' on':''}" aria-pressed="${d}" aria-label="${d?'Untick':'Tick'} ${esc(r.text)}" onclick="K.tick('${r.id}')">${d?'✓':''}</button>
       <span><span class="${d?'done':''}">${esc(r.text)}</span>${remWhen(r)?`<span class="when">${esc(remWhen(r))}${r.child==='both'?' · both':''}</span>`:''}</span>
-      <button class="x" onclick="K.delRem('${r.id}')" aria-label="Delete ${esc(r.text)}">Delete</button></div>`; }).join('') || `<p style="margin:4px 0;color:var(--muted)">No reminders yet.</p>`}
+      <button class="x" onclick="K.delRem('${r.id}')" aria-label="Delete ${esc(r.text)}">Delete</button></div>`; }).join('') || `<p style="margin:4px 0;color:var(--muted)">${rems.length ? 'All done! 🎉' : 'No reminders yet.'}</p>`}
+    ${rems.some(remDone) ? `<button class="linkbtn" onclick="K.showDone()">${S.ui.showDone ? 'Hide ticked' : `Show ticked (${rems.filter(remDone).length})`}</button>` : ''}
     <div class="addrow"><input id="rt-${k.id}" class="in" placeholder="e.g. Library bag" aria-label="New reminder for ${esc(k.name)}">
       <div class="r"><select id="rw-${k.id}" class="in" aria-label="When" onchange="document.getElementById('rd-${k.id}').classList.toggle('hidden', this.value!=='date')">
         <option value="">No set day</option>${DAYS.map((d,i)=>`<option value="w${i}">Every ${d}</option>`).join('')}<option value="date">On a date…</option></select>
@@ -307,7 +308,8 @@ window.K = {
     const item={id:uid('r'), child:kid, text, days: w[0]==='w' ? [+w.slice(1)] : [], date: w==='date' ? val('rd-'+kid) : '', doneOn:'', order:Date.now()};
     if(w==='date' && !item.date){ alert('Pick the date for this reminder.'); return; }
     safe(F.put('kids_reminders', item)); },
-  tick: id=>{ const r=S.reminders.find(x=>x.id===id); if(!r) return; safe(F.patch('kids_reminders', id, {doneOn: remDone(r) ? '' : today()})); },
+  showDone: ()=>{ S.ui.showDone=!S.ui.showDone; render(); },
+  tick: id=>{ const r=S.reminders.find(x=>x.id===id); if(!r) return; S.ui.justTicked=id; setTimeout(()=>{ if(S.ui.justTicked===id){ S.ui.justTicked=null; render(); } }, 900); safe(F.patch('kids_reminders', id, {doneOn: remDone(r) ? '' : today()})); },
   delRem: id=>safe(F.remove('kids_reminders', id)),
   addDate: ()=>{ const title=val('dt').trim(), date=val('dd'); if(!title || !date){ alert('Add what’s on and the date.'); return; } safe(F.put('kids_dates',{id:uid('d'), title, date, who:val('dw')})); },
   delDate: id=>safe(F.remove('kids_dates', id))

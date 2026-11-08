@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<script>try{document.documentElement.dataset.style=localStorage.getItem("johnston-style")||"default"}catch(e){document.documentElement.dataset.style="default"}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F8E9DC">
+<meta name="apple-mobile-web-app-title" content="Fresh & Tidy">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon-64.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Fresh &amp; Tidy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Mrs+Saint+Delafield&family=Hanken+Grotesk:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Karla:wght@400;500;700&display=swap">
+<style>
+  :root{--cream:#F8E9DC;--paper:#FFF8F1;--olive:#6E6A33;--olive2:#B5AF7C;--pink:#D48A95;--blush:#F3CDD2;--must:#D8AE68;--ink:#4E4A22;--muted:#756E4C;--line:#EFE2D2;
+    --serif:Fraunces,Georgia,serif;--script:"Mrs Saint Delafield","Snell Roundhand",cursive;--sans:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;color-scheme:light}
+  :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  *,*::before,*::after{box-sizing:inherit}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:var(--olive)}
+  button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+  input,select,textarea{font:inherit;color:var(--ink)}
+  :focus-visible{outline:3px solid var(--olive);outline-offset:3px;border-radius:6px}
+  @media (pointer:coarse){input,select,textarea{font-size:16px}}
+  .wrap{max-width:1180px;margin:0 auto;padding:clamp(12px,3vw,22px) clamp(12px,3vw,32px) 64px;display:flex;flex-direction:column;gap:20px}
+  .suns{height:46px;border-radius:16px;overflow:hidden}
+  .suns svg{width:100%;height:100%}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-bottom:14px;border-bottom:2px solid var(--blush)}
+  .top .l{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .back{font-size:13.5px;font-weight:700;text-decoration:none}
+  .logo{display:flex;align-items:baseline;gap:8px}
+  .logo .s{font-family:var(--script);font-size:38px;line-height:.8;color:var(--pink)}
+  .logo .t{font-family:var(--serif);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:20px}
+  nav.main{display:flex;gap:6px;flex-wrap:wrap}
+  nav.main a{padding:7px 14px;border-radius:999px;font-weight:700;font-size:14px;text-decoration:none;color:var(--ink)}
+  nav.main a:first-child{background:var(--olive);color:var(--paper)}
+  .grid2{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:20px;align-items:start}
+  .grid2b{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+  @media (max-width:900px){.grid2,.grid2b{grid-template-columns:1fr}}
+  .card{background:var(--paper);border-radius:22px;padding:18px 20px}
+  h2.h{margin:0;font-family:var(--serif);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:15px;color:var(--olive)}
+  .scr{font-family:var(--script);font-size:26px;color:var(--pink)}
+  .today{background:var(--olive2);border-radius:22px;padding:18px 20px;color:var(--paper)}
+  .today .scr{color:var(--paper);font-size:36px;line-height:.9}
+  .times{display:flex;gap:6px;flex-wrap:wrap}
+  .times button{border-radius:999px;padding:6px 13px;font-weight:700;font-size:13px;background:rgba(255,248,241,.25);color:var(--paper);min-height:34px}
+  .times button[aria-pressed="true"]{background:var(--paper);color:var(--ink)}
+  .sug{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,248,241,.35)}
+  .sug .ic{background:var(--paper);border-radius:14px;display:grid;place-items:center;width:48px;height:48px}
+  .sug strong{display:block;font-size:16px}
+  .sug .sub{font-size:12.5px;color:#F6F2E2}
+  .pillbtn{background:var(--paper);color:var(--olive);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;white-space:nowrap;min-height:34px}
+  .pillbtn.added{background:transparent;color:var(--paper);border:1.5px solid var(--paper)}
+  .ul{font-size:12.5px;text-decoration:underline;white-space:nowrap}
+  .job{display:grid;grid-template-columns:44px minmax(0,1fr) 54px 108px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+  .job .n{display:block;font-size:15.5px;font-weight:700;text-align:left}
+  .job .n:hover{text-decoration:underline}
+  .job .sub{font-size:12.5px;color:var(--muted)}
+  .done-btn{text-align:center;border:2px solid var(--olive);color:var(--olive);border-radius:999px;padding:6px 4px;font-weight:700;font-size:13px;min-height:36px}
+  .done-btn.on{background:var(--olive);color:var(--paper)}
+  .frame{background-color:var(--paper);background-image:linear-gradient(90deg,var(--must) 50%,transparent 50%),linear-gradient(var(--must) 50%,transparent 50%);background-size:28px 28px;border-radius:22px;padding:14px}
+  .frame > div{background:var(--cream);border-radius:16px;padding:16px}
+  .zones{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 12px}
+  .zones button{padding:5px 11px;border-radius:999px;font-size:12.5px;font-weight:700;background:var(--blush);min-height:32px}
+  .zones button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .rooms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  @media (max-width:520px){.rooms{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .room{background:var(--paper);border-radius:14px;padding:11px 12px;display:flex;flex-direction:column;gap:5px;text-align:left;box-shadow:0 1px 0 #EADBC8}
+  .room[aria-pressed="true"]{box-shadow:0 0 0 2.5px var(--olive)}
+  .bar{height:7px;border-radius:999px;background:#EADBC8;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--pink)}
+  .bar i.full{background:var(--olive)}
+  .step{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed #E6D3BE}
+  .tick{width:22px;height:22px;border-radius:7px;border:2px solid var(--olive);display:grid;place-items:center;font-size:13px;color:var(--paper)}
+  .tick.on{background:var(--olive)}
+  .muted{color:var(--muted)}
+  .small{font-size:13px}
+  .linkbtn{font-size:13px;font-weight:700;text-decoration:underline;color:var(--olive);min-height:32px;display:inline-flex;align-items:center}
+  .btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 18px;border-radius:999px;background:var(--olive);color:var(--paper);font-weight:700}
+  .btn.ghost{background:transparent;color:var(--olive);border:2px solid var(--olive)}
+  .in{min-height:44px;border-radius:12px;border:1.5px solid #E2D3BF;background:#fff;padding:8px 12px;width:100%}
+  textarea.in{min-height:120px;resize:vertical}
+  .seas{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px dashed #E6D3BE;align-items:center}
+  .msg{background:var(--blush);border-radius:16px;padding:12px 16px;display:flex;justify-content:space-between;gap:10px}
+  .gate{max-width:460px;margin:14vh auto;text-align:center}
+  .modal-bg{position:fixed;inset:0;background:rgba(60,50,20,.35);z-index:30}
+  .modal{position:fixed;z-index:31;left:50%;top:50%;transform:translate(-50%,-50%);width:min(520px,calc(100% - 24px));max-height:calc(100vh - 40px);overflow:auto;background:var(--paper);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:12px}
+  .modal label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px}
+  .months{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+  .months label{flex-direction:row;align-items:center;gap:4px;font-weight:500;font-size:13px}
+  .foot{text-align:center;font-size:13px;color:var(--muted)}
+  .style-btn{text-decoration:underline;text-underline-offset:3px}
+  .style-btn[aria-pressed="true"]{text-decoration:none;font-weight:700;cursor:default}
+  @media (max-width:560px){.job{grid-template-columns:40px minmax(0,1fr) 92px}.job .ring{display:none}.sug{grid-template-columns:44px minmax(0,1fr)}.sug .acts{grid-column:2}}
+
+  /* ===== Classic green (Nathan's style) ===== */
+  [data-style="green"]{--cream:#F7F5F1;--paper:transparent;--olive:#4F5E43;--olive2:#3E4A36;--pink:#6B6F66;--blush:#ECE7DD;--must:#CFC9BC;--ink:#1F2420;--muted:#6B6F66;--line:#CFC9BC;
+    --serif:Karla,"Helvetica Neue",Arial,sans-serif;--script:"Cormorant Garamond",Georgia,serif;--sans:Karla,"Helvetica Neue",Arial,sans-serif}
+  [data-style="green"] .suns{display:none}
+  [data-style="green"] .top{border-bottom:1px solid #1F2420}
+  [data-style="green"] .logo .s{font-size:clamp(44px,7vw,66px);color:#1F2420;font-weight:400}
+  [data-style="green"] .logo .t{font-size:11.5px;letter-spacing:.16em;font-weight:700}
+  [data-style="green"] nav.main a{border-radius:0;font-weight:500;padding:4px 0;margin-right:14px;border-bottom:2px solid transparent}
+  [data-style="green"] nav.main a:first-child{background:none;color:#1F2420;border-bottom-color:#4F5E43}
+  [data-style="green"] .card{border-radius:0;border-top:1px solid #1F2420;padding:12px 0}
+  [data-style="green"] h2.h{font-size:11.5px;letter-spacing:.16em;font-weight:700;color:#1F2420}
+  [data-style="green"] .scr{font-style:italic;font-size:20px}
+  [data-style="green"] .today{border-radius:0;color:#F7F5F1}
+  [data-style="green"] .today .scr{color:#F7F5F1;font-size:30px}
+  [data-style="green"] .sug .ic{border-radius:0;background:#F7F5F1}
+  [data-style="green"] .pillbtn,[data-style="green"] .times button,[data-style="green"] .done-btn,[data-style="green"] .btn,[data-style="green"] .zones button,[data-style="green"] .room,[data-style="green"] .in,[data-style="green"] .modal,[data-style="green"] .msg,[data-style="green"] .tick{border-radius:0}
+  [data-style="green"] .pillbtn{background:#F7F5F1;color:#1F2420}
+  [data-style="green"] .frame{background:none;padding:0;border-radius:0;border-top:1px solid #1F2420}
+  [data-style="green"] .frame > div{background:none;padding:12px 0;border-radius:0}
+  [data-style="green"] .room{background:#ECE7DD;box-shadow:none}
+  [data-style="green"] .modal{background:#F7F5F1}
+  [data-style="green"] .times button{background:rgba(247,245,241,.18);color:#F7F5F1}
+  [data-style="green"] .times button[aria-pressed="true"]{background:#F7F5F1;color:#1F2420}
+  [data-style="green"] .zones button[aria-pressed="true"],[data-style="green"] .done-btn.on,[data-style="green"] .btn,[data-style="green"] .tick{color:#F7F5F1}
+  [data-style="green"] .btn.ghost{color:#4F5E43}
+  [data-style="green"] .pillbtn.added{color:#F7F5F1;border-color:#F7F5F1}
+</style>
+</head>
+<body>
+<div id="app" class="wrap"><p>Loading…</p></div>
+<script src="../firebase-config.js"></script>
+<script type="module">
+import * as F from '../family.js';
+const {esc, uid, isoDate, MONTHS} = F;
+const ICONS = {"vacuum": "<g stroke=\"#4E4A22\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"><path d=\"M44 10c-6 10-10 22-12 34\"/><path d=\"M20 44h18a4 4 0 0 1 4 4v4H16v-4a4 4 0 0 1 4-4z\" fill=\"#A9C3E0\"/><circle cx=\"20\" cy=\"54\" r=\"4\" fill=\"#F3CDD2\"/><circle cx=\"38\" cy=\"54\" r=\"4\" fill=\"#F3CDD2\"/><path d=\"M40 8h8\"/></g>", "mop": "<g stroke=\"#4E4A22\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"><path d=\"M34 6c-2 14-1 26 0 36\"/><path d=\"M22 42h24l3 14H19z\" fill=\"#F7E3B8\"/><path d=\"M24 48v8M30 48v8M36 48v8M42 48v8\"/></g>", "skirting": "<g stroke=\"#4E4A22\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"><path d=\"M10 50h44\"/><path d=\"M10 44h44\" stroke-dasharray=\"3 3\"/><path d=\"M38 10l-10 24\"/><rect x=\"20\" y=\"32\" width=\"16\" height=\"9\" rx=\"3\" fill=\"#F3CDD2\" transform=\"rotate(-20 28 36)\"/></g>", "duster": "<g stroke=\"#4E4A22\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"><path d=\"M32 58V34\"/><path d=\"M32 34c-12-2-16-14-12-24 4 6 8 8 12 8 4 0 8-2 12-8 4 10 0 22-12 24z\" fill=\"#F3CDD2\"/></g>", "spray": "<g stroke=\"#4E4A22\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"><path d=\"M24 22h16v6l4 6v20a4 4 0 0 1-4 4H24a4 4 0 0 1-4-4V34l4-6z\" fill=\"#FFF3E2\"/><path d=\"M26 14h14l6 4h-6v4H26z\" fill=\"#A9C3E0\"/><circle cx=\"32\" cy=\"44\" r=\"5\" fill=\"#F3CDD2\"/></g>", "box": "<g stroke=\"#4E4A22\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"><path d=\"M12 24l20-8 20 8-20 8z\" fill=\"#F7E3B8\"/><path d=\"M12 24v22l20 8 20-8V24\"/><path d=\"M32 32v22\"/></g>", "bed": "<g stroke=\"#4E4A22\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"><path d=\"M8 46V22M56 46V34\"/><path d=\"M8 34h48v8H8z\" fill=\"#A9C3E0\"/><rect x=\"12\" y=\"26\" width=\"14\" height=\"8\" rx=\"3\" fill=\"#F3CDD2\"/><path d=\"M8 46h48\"/></g>", "fridge": "<g stroke=\"#4E4A22\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"><rect x=\"18\" y=\"8\" width=\"28\" height=\"48\" rx=\"5\" fill=\"#FFF3E2\"/><path d=\"M18 26h28M24 16v4M24 32v8\"/></g>", "paw": "<g stroke=\"#4E4A22\" stroke-width=\"2\" fill=\"#F3CDD2\"><ellipse cx=\"32\" cy=\"40\" rx=\"11\" ry=\"9\"/><circle cx=\"18\" cy=\"28\" r=\"5\"/><circle cx=\"26\" cy=\"20\" r=\"5\"/><circle cx=\"38\" cy=\"20\" r=\"5\"/><circle cx=\"46\" cy=\"28\" r=\"5\"/></g>", "sun": "<g stroke=\"#4E4A22\" stroke-width=\"2\" stroke-linecap=\"round\" fill=\"none\"><circle cx=\"32\" cy=\"32\" r=\"10\" fill=\"#F7E3B8\"/><path d=\"M32 8v8M32 48v8M8 32h8M48 32h8M15 15l6 6M43 43l6 6M15 49l6-6M43 21l6-6\"/></g>"};
+const icon = (k, s=40) => `<svg width="${s}" height="${s}" viewBox="0 0 64 64" aria-hidden="true">${ICONS[k]||ICONS.spray}</svg>`;
+const STEPS = ['Walls','Wipe surfaces','Declutter','Unpack and clean drawers and cupboards','Disinfect'];
+const ZONES = ['Bedrooms','Living spaces','Halls & wet areas','Outside'];
+// every = roughly how many days between; months = only due in those months; mins = rough time
+const DEFAULT_JOBS = [
+  {id:'vacuum', name:'Vacuum', kind:'regular', every:3, mins:20, icon:'vacuum', order:1},
+  {id:'mop', name:'Mop', kind:'regular', every:14, mins:20, icon:'mop', order:2},
+  {id:'skirting', name:'Skirting boards', kind:'regular', every:30, mins:15, icon:'skirting', order:3},
+  {id:'dust', name:'Dust surfaces', kind:'regular', every:14, mins:15, icon:'duster', order:4},
+  {id:'bathrooms', name:'Bathrooms & toilets (quick clean)', kind:'regular', every:7, mins:15, icon:'spray', suggested:true, order:5},
+  {id:'sheets', name:'Change the sheets', kind:'regular', every:14, mins:15, icon:'bed', suggested:true, order:6},
+  {id:'fridge', name:'Fridge tidy before the big shop', kind:'regular', every:7, mins:10, icon:'fridge', suggested:true, order:7},
+  {id:'dogbed', name:'Dog bed & dog-hair spots', kind:'regular', every:14, mins:10, icon:'paw', suggested:true, order:8},
+  {id:'oven', name:'Oven', kind:'seasonal', every:365, mins:60, icon:'spray', suggested:true, order:20},
+  {id:'rangehood', name:'Range hood filter', kind:'seasonal', every:90, mins:20, icon:'spray', suggested:true, order:21},
+  {id:'filters', name:'Dishwasher & washing machine filters', kind:'seasonal', every:90, mins:20, icon:'spray', suggested:true, order:22},
+  {id:'smoke', name:'Test the smoke alarms', kind:'seasonal', every:30, mins:5, icon:'sun', suggested:true, order:23},
+  {id:'windows', name:'Windows & flyscreens', kind:'seasonal', every:150, months:[3,4,9,10], mins:60, icon:'sun', suggested:true, order:24},
+  {id:'gutters', name:'Gutters (before fire season, and after the leaves drop)', kind:'seasonal', every:150, months:[5,6,9,10], mins:60, icon:'box', suggested:true, order:25},
+  {id:'aircon', name:'Air-con & heater filters', kind:'seasonal', every:150, months:[4,10], mins:20, icon:'sun', suggested:true, order:26},
+  {id:'mattress', name:'Flip & vacuum the mattresses', kind:'seasonal', every:180, mins:20, icon:'bed', suggested:true, order:27},
+  {id:'curtains', name:'Wash the curtains & blinds', kind:'seasonal', every:365, mins:60, icon:'box', suggested:true, order:28}
+];
+const ROOM_LIST = [['Master bedroom & wardrobe','Bedrooms'],['Ensuite','Bedrooms'],['Isabel’s room','Bedrooms'],['Thomas’s room','Bedrooms'],['Kitchen','Living spaces'],['Walk-in pantry','Living spaces'],['Dining & living room','Living spaces'],['Office','Living spaces'],['Hallway','Halls & wet areas'],['Kids’ hallway & toilet','Halls & wet areas'],['Kids’ bathroom','Halls & wet areas'],['Laundry','Halls & wet areas'],['Garage','Outside'],['Shed','Outside'],['Backyard','Outside'],['Front facade & yard','Outside']];
+const DEFAULT_ROOMS = ROOM_LIST.map(([name,zone],i)=>({id:'r'+i, name, zone, order:i, steps:STEPS.map(n=>({n, done:false})), lastFull:''}));
+
+const S = {status:'loading', user:null, jobs:[], rooms:[], day:{items:[], skipped:[]}, mins:15, zone:'All', room:'', ui:{}, msg:''};
+const today = () => isoDate(new Date());
+const daysSince = iso => iso ? Math.floor((new Date(today()+'T00:00:00') - new Date(iso+'T00:00:00'))/86400000) : 9999;
+const ago = iso => { const d=daysSince(iso); return d>=9999 ? 'not done yet' : d===0 ? 'done today' : d===1 ? 'done yesterday' : d<14 ? `done ${d} days ago` : d<60 ? `done ${Math.round(d/7)} weeks ago` : `done ${Math.round(d/30)} months ago`; };
+function fresh(j){
+  const m = new Date().getMonth()+1;
+  if(j.months && j.months.length){ if(!j.months.includes(m)) return 100; return daysSince(j.lastDone) > 60 ? 0 : 100; }
+  return Math.max(0, Math.round(100 - daysSince(j.lastDone)/(j.every||7)*100));
+}
+const label = p => p>=60 ? 'fresh' : p>=35 ? 'on its way' : p>=15 ? 'could use some love' : 'when you can';
+function howOften(j){
+  const e=j.every||7, txt = e===1?'every day':e<7?`every ${e} days`:e%365===0?(e===365?'once a year':`every ${e/365} years`):e%30===0||e>=60?`every ${Math.round(e/30)===1?'month':Math.round(e/30)+' months'}`:e%7===0?(e===7?'weekly':e===14?'fortnightly':`every ${e/7} weeks`):`every ${e} days`;
+  return 'roughly ' + txt + (j.months&&j.months.length?` (in ${j.months.map(n=>MONTHS[n-1].slice(0,3)).join(', ')})`:'');
+}
+function inToday(type, id, step){ return (S.day.items||[]).find(x=>x.type===type && x.id===id && (step==null || x.step===step)); }
+function suggestions(){
+  const skip = new Set(S.day.skipped||[]);
+  const jobs = S.jobs.filter(j=>(j.mins||15)<=S.mins && !skip.has('job:'+j.id) && !inToday('job', j.id) && fresh(j)<60).sort((a,b)=>fresh(a)-fresh(b)).map(j=>({type:'job', id:j.id, text:j.name, icon:j.icon, sub:`About ${j.mins||15} min · ${ago(j.lastDone)}`}));
+  const steps = [];
+  S.rooms.slice().sort((a,b)=>(a.lastFull||'').localeCompare(b.lastFull||'')).forEach(r=>{ (r.steps||[]).forEach((s,i)=>{ if(!s.done && !skip.has(`step:${r.id}:${i}`) && !inToday('step', r.id, i) && S.mins>=10) steps.push({type:'step', id:r.id, step:i, text:`${s.n}: ${r.name}`, icon:'box', sub:`About 10 to 15 min · part of the ${r.name.toLowerCase()} deep clean`}); }); });
+  const out = jobs.slice(0,2); if(steps[0]) out.push(steps[0]); return out.concat(jobs.slice(2)).slice(0,3);
+}
+
+/* ---------- Render ---------- */
+const $ = id => document.getElementById(id);
+function typing(){ const a=document.activeElement; return a && a.closest && a.closest('#app') && /^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName); }
+let pending=false;
+function liveRender(){ if(typing()){ pending=true; return; } render(); }
+document.addEventListener('focusout', ()=>setTimeout(()=>{ if(pending && !typing()){ pending=false; render(); } }, 150));
+function ring(p, size=52){ const r=30, c=2*Math.PI*r; const col = p>=60?'var(--olive)':p>=35?'var(--must)':'var(--pink)';
+  return `<svg class="ring" width="${size}" height="${size}" viewBox="0 0 74 74" role="img" aria-label="${p}% fresh"><circle cx="37" cy="37" r="${r}" fill="none" stroke="#EADBC8" stroke-width="7"/><circle cx="37" cy="37" r="${r}" fill="none" stroke="${col}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${(c*(1-p/100)).toFixed(1)}" transform="rotate(-90 37 37)"/><text x="37" y="43" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="16" fill="currentColor">${p}%</text></svg>`; }
+function suns(){ let s=''; [[40,30],[170,110],[300,40],[430,120],[560,35],[690,115],[820,40],[950,120],[1080,35],[1190,110]].forEach(([x,y])=>{ let p=''; for(let i=0;i<24;i++){ const r=i%2?21:38, a=Math.PI*i/12; p+=`${(x+r*Math.cos(a)).toFixed(1)},${(y+r*Math.sin(a)).toFixed(1)} `; } s+=`<polygon points="${p}" fill="#D48A95" opacity=".9"/><circle cx="${x}" cy="${y}" r="9" fill="#F3CDD2"/>`; });
+  return `<svg aria-hidden="true" viewBox="0 0 1200 150" preserveAspectRatio="xMidYMid slice">${s}</svg>`; }
+function render(){
+  const app = $('app');
+  if(S.status==='loading'){ app.innerHTML='<p>Loading…</p>'; return; }
+  if(S.status!=='ready'){
+    app.innerHTML = `<div class="gate"><p class="logo" style="justify-content:center"><span class="s">our home</span><span class="t">Fresh &amp; Tidy</span></p>${S.status==='noConfig'?'<p>The Firebase settings file wasn’t found. This folder needs to sit inside the dashboard site.</p>'
+      : S.status==='denied' ? `<p>${esc(S.user&&S.user.email)} doesn’t have access. Sign out and use your family Google account.</p><button class="btn" onclick="C.signOut()">Sign out</button>`
+      : `<p>Sign in with your family Google account.</p><button class="btn" onclick="C.signIn()">Sign in with Google</button>`}<p><a href="?demo">Or look around a demo</a></p></div>`;
+    return;
+  }
+  const regular = S.jobs.filter(j=>j.kind!=='seasonal').sort((a,b)=>(a.order||0)-(b.order||0));
+  const seasonal = S.jobs.filter(j=>j.kind==='seasonal').sort((a,b)=>fresh(a)-fresh(b) || (a.order||0)-(b.order||0));
+  const overall = regular.length ? Math.round(regular.reduce((t,j)=>t+fresh(j),0)/regular.length) : 100;
+  const needs = regular.filter(j=>fresh(j)<35).map(j=>j.name);
+  const sugg = suggestions();
+  const rooms = S.rooms.slice().sort((a,b)=>(a.order||0)-(b.order||0)).filter(r=>S.zone==='All' || r.zone===S.zone);
+  const sel = S.rooms.find(r=>r.id===S.room) || rooms[0];
+  const added = (S.day.items||[]);
+  app.innerHTML = `
+  <div class="suns">${suns()}</div>
+  <header class="top"><div class="l"><a class="back" href="../">← Dashboard</a><span class="logo"><span class="s">our home</span><span class="t">Fresh &amp; Tidy</span></span></div>
+    <nav class="main" aria-label="Sections"><a href="#today">Today</a><a href="#house">Around the house</a><a href="#rooms">Rooms</a><a href="#seasonal">Seasonal</a></nav></header>
+  ${S.msg?`<div class="msg" role="status"><span>${esc(S.msg)}</span><button class="linkbtn" onclick="C.clear()">OK</button></div>`:''}
+  <div class="grid2">
+    <section class="today" id="today" aria-label="Today">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><p class="scr" style="margin:0">today, if you’ve got…</p>
+        <div class="times">${[[5,'5 min'],[15,'15 min'],[30,'30 min'],[60,'an hour']].map(([m,l])=>`<button aria-pressed="${S.mins===m}" onclick="C.mins(${m})">${l}</button>`).join('')}</div></div>
+      <div style="margin-top:6px">${sugg.map(s=>`<div class="sug"><span class="ic">${icon(s.icon,40)}</span><span><strong>${esc(s.text)}</strong><span class="sub">${esc(s.sub)}</span></span>
+        <span class="acts" style="display:flex;gap:10px;align-items:center"><button class="pillbtn" onclick="C.add('${s.type}','${s.id}',${s.step??'null'})">Add to today</button><button class="ul" onclick="C.skip('${s.type}','${s.id}',${s.step??'null'})">Not today</button></span></div>`).join('') || '<p style="margin:10px 0">Nothing needs doing that fits. Enjoy the break! ☀️</p>'}</div>
+      ${added.length?`<p style="margin:12px 0 4px;font-weight:700">On today’s list</p>${added.map((x,i)=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:4px 0"><span>${x.done?'✓ ':''}${esc(x.text)}</span><button class="ul" onclick="C.unadd(${i})">Remove</button></div>`).join('')}`:''}
+      <p style="margin:10px 0 0;font-size:12.5px;color:#F6F2E2">Three ideas at most. “Add to today” puts it on your dashboard To do, tagged Home.</p>
+    </section>
+    <aside style="display:flex;flex-direction:column;gap:20px">
+      <section class="card" style="display:flex;gap:16px;align-items:center" aria-label="The house today">${ring(overall,96)}<div><h2 class="h">The house today</h2><p style="margin:4px 0 0;font-size:14px">${overall>=60?'Mostly fresh.':'Could use a little love.'} ${needs.length?esc(needs.slice(0,2).join(' and '))+' could use some love.':'Nothing urgent. 🌿'}</p></div></section>
+      <section class="card" id="seasonal" aria-label="Seasonal"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2 class="h">Seasonal</h2><button class="linkbtn" onclick="C.jobForm('', 'seasonal')">+ Add a job</button></div>
+        ${seasonal.slice(0,S.ui.allSeas?99:6).map(j=>`<div class="seas"><span><button class="n" style="font-weight:700;font-size:14px;text-align:left" onclick="C.jobForm('${j.id}')">${esc(j.name)}</button><span class="small muted" style="display:block;font-size:12px">${esc(howOften(j))}</span></span>
+          <span style="display:flex;gap:8px;align-items:center"><span class="small muted" style="font-size:12px;white-space:nowrap">${fresh(j)<60?'due':esc(ago(j.lastDone))}</span><button class="done-btn ${daysSince(j.lastDone)===0?'on':''}" style="padding:4px 10px;font-size:12px;min-height:30px" onclick="C.done('${j.id}')">${daysSince(j.lastDone)===0?'✓ Done':'Done'}</button></span></div>`).join('')}
+        ${seasonal.length>6?`<button class="linkbtn" onclick="C.ui('allSeas',${!S.ui.allSeas})">${S.ui.allSeas?'Show fewer':`See all ${seasonal.length}`}</button>`:''}</section>
+    </aside></div>
+  <div class="grid2b">
+    <section class="card" id="house" aria-label="Around the house"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;flex-wrap:wrap;gap:8px"><h2 class="h">Around the house</h2><button class="linkbtn" onclick="C.jobForm('', 'regular')">+ Add a job</button></div>
+      ${regular.map(j=>{ const p=fresh(j), d=daysSince(j.lastDone)===0; return `<div class="job"><span>${icon(j.icon,40)}</span><span><button class="n" onclick="C.jobForm('${j.id}')">${esc(j.name)}</button><span class="sub">${j.suggested?'✨ ':''}${esc(howOften(j))} · ${esc(ago(j.lastDone))}</span></span>${ring(p)}<button class="done-btn ${d?'on':''}" onclick="C.done('${j.id}')">${d?'✓ Done':'Done today'}</button></div>`; }).join('')}
+      <p style="margin:10px 0 0;font-size:12.5px" class="muted">✨ = suggested. Tap any job’s name to change how often, or remove it.</p></section>
+    <section class="frame" id="rooms" aria-label="Deep clean and declutter"><div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap"><h2 class="h">Deep clean &amp; declutter</h2><span class="scr">one room at a time</span></div>
+      <div class="zones">${['All',...ZONES].map(z=>`<button aria-pressed="${S.zone===z}" onclick="C.zone('${esc(z)}')">${esc(z)}</button>`).join('')}</div>
+      <div class="rooms">${rooms.map(r=>{ const d=(r.steps||[]).filter(s=>s.done).length, n=(r.steps||[]).length||1; return `<button class="room" aria-pressed="${sel&&sel.id===r.id}" onclick="C.room('${r.id}')"><strong style="font-size:14.5px;line-height:1.25">${esc(r.name)}</strong><span class="bar"><i class="${d===n?'full':''}" style="width:${Math.round(d/n*100)}%"></i></span><span class="small muted" style="font-size:12px">${d}/${n}${r.lastFull?` · full clean ${esc(new Date(r.lastFull+'T00:00:00').toLocaleDateString('en-AU',{month:'short', year:'2-digit'}))}`:''}</span></button>`; }).join('')}</div>
+      <button class="linkbtn" style="margin-top:8px" onclick="C.roomForm()">+ Add a room</button>
+      ${sel?`<div class="card" style="margin-top:12px;padding:14px 16px">
+        <div style="display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap"><div style="display:flex;align-items:center;gap:10px">${icon('spray',40)}<div><strong style="font-size:17px">${esc(sel.name)}</strong><span class="small muted" style="display:block">${(sel.steps||[]).filter(s=>s.done).length} of ${(sel.steps||[]).length} done${sel.lastFull?` · last full clean ${esc(new Date(sel.lastFull+'T00:00:00').toLocaleDateString('en-AU',{month:'short', year:'numeric'}))}`:''}</span></div></div><button class="linkbtn" onclick="C.roomForm('${sel.id}')">Edit room</button></div>
+        ${(sel.steps||[]).map((s,i)=>`<div class="step"><button class="tick ${s.done?'on':''}" aria-pressed="${s.done}" aria-label="${s.done?'Untick':'Tick'} ${esc(s.n)}" onclick="C.step('${sel.id}',${i})">${s.done?'✓':''}</button><span style="${s.done?'text-decoration:line-through;color:var(--muted)':''}">${esc(s.n)}</span>${s.done?'<span></span>':inToday('step', sel.id, i)?'<span class="small muted">on today’s list</span>':`<button class="linkbtn" onclick="C.add('step','${sel.id}',${i})">Add to today</button>`}</div>`).join('')}
+        ${(sel.steps||[]).length && (sel.steps||[]).every(s=>s.done)?`<p style="margin:10px 0 0">🎉 All done! When it’s time again, <button class="linkbtn" onclick="C.fresh('${sel.id}')">start this room fresh</button>.</p>`:''}
+      </div>`:''}
+    </div></section>
+  </div>
+  <p class="foot">${F.DEMO?'Demo: nothing is saved':esc(S.user.email)} · <button class="linkbtn" style="font-size:13px" onclick="C.signOut()">Sign out</button> · ${F.stylePicker()}</p>
+  ${S.ui.modal?S.ui.modal():''}`;
+  document.querySelectorAll('[data-style-pick]').forEach(b=>b.onclick=()=>{ F.saveStyle(S.user && S.user.email, b.dataset.stylePick); render(); });
+}
+
+/* ---------- Forms ---------- */
+function jobForm(id, kind){
+  const j = S.jobs.find(x=>x.id===id) || {name:'', kind:kind||'regular', every:kind==='seasonal'?90:14, mins:15, icon:'spray', months:[]};
+  const unit = j.every%365===0 ? ['years', j.every/365] : j.every%30===0 ? ['months', j.every/30] : j.every%7===0 ? ['weeks', j.every/7] : ['days', j.every];
+  S.ui.modal = () => `<div class="modal-bg" onclick="C.close()"></div><div class="modal" role="dialog" aria-modal="true" aria-labelledby="jf-h">
+    <h2 class="h" id="jf-h">${id?'Edit job':'Add a job'}</h2>
+    <label>Job<input id="jf-n" class="in" value="${esc(j.name)}" placeholder="e.g. Wipe the high chair"></label>
+    <div><b style="font-size:14px">Roughly how often</b><div style="display:flex;gap:8px;margin-top:6px"><input id="jf-e" class="in" type="number" min="1" style="max-width:100px" value="${unit[1]}" aria-label="How many">
+      <select id="jf-u" class="in" aria-label="Days, weeks, months or years">${['days','weeks','months','years'].map(u=>`<option ${u===unit[0]?'selected':''}>${u}</option>`).join('')}</select></div></div>
+    <div><b style="font-size:14px">Only in these months (optional)</b><div class="months" style="margin-top:6px">${MONTHS.map((m,i)=>`<label><input type="checkbox" class="jf-m" value="${i+1}" ${(j.months||[]).includes(i+1)?'checked':''}> ${m.slice(0,3)}</label>`).join('')}</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><label>About how long (minutes)<input id="jf-t" class="in" type="number" min="1" value="${j.mins||15}"></label>
+      <label>Section<select id="jf-k" class="in"><option value="regular" ${j.kind!=='seasonal'?'selected':''}>Around the house</option><option value="seasonal" ${j.kind==='seasonal'?'selected':''}>Seasonal</option></select></label></div>
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">${id?`<button class="linkbtn" onclick="C.delJob('${id}')">Remove job</button>`:'<span></span>'}
+      <span style="display:flex;gap:10px"><button class="btn ghost" onclick="C.close()">Cancel</button><button class="btn" onclick="C.saveJob('${id||''}')">Save</button></span></div></div>`;
+  render();
+}
+function roomForm(id){
+  const r = S.rooms.find(x=>x.id===id) || {name:'', zone:'Living spaces', steps:STEPS.map(n=>({n, done:false}))};
+  S.ui.modal = () => `<div class="modal-bg" onclick="C.close()"></div><div class="modal" role="dialog" aria-modal="true" aria-labelledby="rf-h">
+    <h2 class="h" id="rf-h">${id?'Edit room':'Add a room'}</h2>
+    <label>Room<input id="rf-n" class="in" value="${esc(r.name)}" placeholder="e.g. Guest room"></label>
+    <label>Group<select id="rf-z" class="in">${ZONES.map(z=>`<option ${z===r.zone?'selected':''}>${z}</option>`).join('')}</select></label>
+    <label>Deep-clean steps (one per line)<textarea id="rf-s" class="in">${esc((r.steps||[]).map(s=>s.n).join('\n'))}</textarea></label>
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">${id?`<button class="linkbtn" onclick="C.delRoom('${id}')">Remove room</button>`:'<span></span>'}
+      <span style="display:flex;gap:10px"><button class="btn ghost" onclick="C.close()">Cancel</button><button class="btn" onclick="C.saveRoom('${id||''}')">Save</button></span></div></div>`;
+  render();
+}
+
+/* ---------- Actions ---------- */
+const val = id => ($(id)||{}).value || '';
+const safe = p => p.catch(e=>{ S.msg = e && e.code==='permission-denied' ? "Couldn't save: check the database rules (see the setup guide)." : "Couldn't save that. Check the internet connection."; render(); });
+const saveDay = () => safe(F.put('clean_today', {id:today(), items:S.day.items||[], skipped:S.day.skipped||[]}));
+function textFor(type, id, step){ if(type==='job'){ const j=S.jobs.find(x=>x.id===id); return j?j.name:''; } const r=S.rooms.find(x=>x.id===id); return r && r.steps[step] ? `${r.steps[step].n}: ${r.name}` : ''; }
+window.C = {
+  signIn: ()=>F.signIn().catch(e=>{ S.msg=`Sign-in didn't work (${e.code}).`; render(); }),
+  signOut: ()=>F.logOut(),
+  clear: ()=>{ S.msg=''; render(); },
+  close: ()=>{ S.ui.modal=null; render(); },
+  ui: (k,v)=>{ S.ui[k]=v; render(); },
+  mins: m=>{ S.mins=m; render(); },
+  zone: z=>{ S.zone=z; S.room=''; render(); },
+  room: id=>{ S.room=id; render(); },
+  add: (type,id,step)=>{ S.day.items=[...(S.day.items||[]), {type, id, step: step==null?null:step, text:textFor(type,id,step), done:false}]; saveDay(); render(); },
+  unadd: i=>{ S.day.items=(S.day.items||[]).filter((_,k)=>k!==i); saveDay(); render(); },
+  skip: (type,id,step)=>{ S.day.skipped=[...(S.day.skipped||[]), type==='job'?`job:${id}`:`step:${id}:${step}`]; saveDay(); render(); },
+  done: id=>{ const j=S.jobs.find(x=>x.id===id); if(!j) return; const undo = daysSince(j.lastDone)===0; safe(F.patch('clean_jobs', id, undo ? {lastDone:j.prevDone||''} : {lastDone:today(), prevDone:j.lastDone||''})); },
+  step: (rid,i)=>{ const r=S.rooms.find(x=>x.id===rid); if(!r) return; const steps=r.steps.map((s,k)=>k===i?{...s, done:!s.done}:s); const all=steps.every(s=>s.done);
+    safe(F.patch('clean_rooms', rid, {steps, ...(all && !r.steps.every(s=>s.done) ? {lastFull:today()} : {})})); },
+  fresh: rid=>{ const r=S.rooms.find(x=>x.id===rid); if(r) safe(F.patch('clean_rooms', rid, {steps:r.steps.map(s=>({...s, done:false}))})); },
+  jobForm, roomForm,
+  saveJob: id=>{ const name=val('jf-n').trim(); if(!name) return; const n=Math.max(1,+val('jf-e')||1), u=val('jf-u'); const every = n*({days:1,weeks:7,months:30,years:365}[u]||1);
+    const old=S.jobs.find(j=>j.id===id)||{order:Date.now(), icon:'spray'};
+    safe(F.put('clean_jobs',{...old, id:id||uid('j'), name, every, kind:val('jf-k'), mins:Math.max(1,+val('jf-t')||15), months:[...document.querySelectorAll('.jf-m')].filter(c=>c.checked).map(c=>+c.value), suggested:false})); S.ui.modal=null; render(); },
+  delJob: id=>{ if(confirm('Remove this job?')){ safe(F.remove('clean_jobs', id)); S.ui.modal=null; render(); } },
+  saveRoom: id=>{ const name=val('rf-n').trim(); if(!name) return; const old=S.rooms.find(r=>r.id===id)||{order:Date.now(), lastFull:'', steps:[]};
+    const names=val('rf-s').split('\n').map(s=>s.trim()).filter(Boolean); const steps=names.map(n=>({n, done:!!(old.steps.find(s=>s.n===n)||{}).done}));
+    safe(F.put('clean_rooms',{...old, id:id||uid('r'), name, zone:val('rf-z'), steps})); S.ui.modal=null; render(); },
+  delRoom: id=>{ if(confirm('Remove this room?')){ safe(F.remove('clean_rooms', id)); S.room=''; S.ui.modal=null; render(); } }
+};
+
+/* ---------- Start ---------- */
+F.watchUser(async (u, why)=>{
+  if(why==='noConfig'){ S.status='noConfig'; render(); return; }
+  S.user=u;
+  if(!u){ S.status='signedOut'; render(); return; }
+  S.status='ready'; render();
+  F.loadStyle(u.email).then(render);
+  // Jobs start fresh from the day it's installed, so the house doesn't look overdue on day one
+  try{ await F.seedOnce('clean-seeded', [['clean_jobs', DEFAULT_JOBS.map(j=>({...j, lastDone: j.months ? '' : today()}))], ['clean_rooms', DEFAULT_ROOMS]]); }catch(e){ if(e.code==='permission-denied'){ S.status='denied'; render(); return; } }
+  const err = e=>{ if(e && e.code==='permission-denied'){ S.status='denied'; render(); } };
+  F.listen('clean_jobs', l=>{ S.jobs=l; liveRender(); }, err);
+  F.listen('clean_rooms', l=>{ S.rooms=l; liveRender(); }, err);
+  F.listen('clean_today', l=>{ S.day = l.find(d=>d.id===today()) || {items:[], skipped:[]}; liveRender(); }, err);
+});
+render();
+</script>
+</body>
+</html>

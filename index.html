@@ -211,11 +211,27 @@
   .ti.done .tx{text-decoration:line-through;color:#A86A70}
   .ti .sb{display:block;font-size:12.5px;color:var(--muted)}
   .src{border-radius:999px;padding:4px 11px;font-size:12.5px;font-weight:700;white-space:nowrap}
+  .tx-open{text-align:left;font:inherit;color:inherit}
+  .tx-open:hover{text-decoration:underline}
+  .tx-more{font-size:13px}
+  .tx-detail{display:flex;flex-direction:column;gap:4px;margin-top:6px;padding:8px 10px;border-radius:10px;background:#FBEAEA;font-size:14px}
+  .tx-detail a{color:var(--deep);font-weight:700;text-underline-offset:3px;word-break:break-all}
+  [data-style="green"] .tx-detail{background:#ECE7DD;border-radius:0}
+  [data-style="green"] .tx-detail a{color:#1F2420}
   .todo-add{display:flex;gap:8px;margin-top:14px}
   .todo-add input{flex:1;min-width:0;min-height:44px;border-radius:999px;border:2px solid var(--line);background:#fff;padding:0 16px;font:inherit;color:var(--wine)}
   .todo-add button{background:var(--rose);color:var(--deep);border-radius:999px;padding:0 18px;font-weight:700;min-height:44px}
   .todo-note{margin:12px 0 0;font-size:13px;color:var(--muted)}
   .todo-note button{text-decoration:underline;color:var(--deep);font-weight:700}
+  .todo-add select{min-height:44px;border-radius:999px;border:2px solid var(--line);background:#fff;padding:0 12px;font:inherit;font-size:14px;color:var(--wine);max-width:200px}
+  .todo-routines{margin-top:12px;padding:12px 14px;border-radius:16px;background:#FBEAEA}
+  .todo-routines .rt{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+  .todo-routines .sb{display:block;font-size:12.5px;color:var(--muted)}
+  [data-style="green"] .todo-routines .sb{color:#6B6F66}
+  .todo-routines .rt button{text-decoration:underline;color:var(--deep);font-size:13px}
+  [data-style="green"] .todo-add select{border-radius:0;border:1px solid #CFC9BC}
+  [data-style="green"] .todo-routines{border-radius:0;background:#ECE7DD}
+  @media (max-width:560px){.todo-add{flex-wrap:wrap}.todo-add input{flex-basis:100%}}
   [data-style="green"] .search{border-radius:0;border:1px solid #1F2420;box-shadow:none;background:transparent;color:#1F2420;max-width:none}
   [data-style="green"] .search button{border-radius:0;background:#4F5E43}
   [data-style="green"] .todo{background:none;box-shadow:none;border-radius:0;padding:0;margin-top:44px}
@@ -294,7 +310,8 @@
     <div class="todo-head"><div><h2 id="todo-h" class="p-only">To do</h2><span class="p-only todo-tag">everything in one list</span><p class="g-only g-label"><span>04</span>To do</p></div><span id="todo-count" class="todo-count"></span></div>
     <div id="todo-filters" class="todo-filters"></div>
     <div id="todo-list"><p class="msg">Loading…</p></div>
-    <div class="todo-add"><input id="todo-new" placeholder="Jot something down (goes to your Someday list as “Soon”)" aria-label="Add a to-do" onkeydown="if(event.key==='Enter')DASH.quickAdd()"><button onclick="DASH.quickAdd()">Add</button></div>
+    <div class="todo-add"><input id="todo-new" placeholder="Jot something down…" aria-label="Add a to-do" onkeydown="if(event.key==='Enter')DASH.quickAdd()"><select id="todo-rep" aria-label="Does it repeat?"></select><button onclick="DASH.quickAdd()">Add</button></div>
+    <div id="todo-routines" class="todo-routines" hidden></div>
     <p class="todo-note" id="todo-note"></p>
   </section>
   <div class="apps-head"><h2 class="p-only">Family apps</h2><span class="p-only">everything in one place</span><p class="g-only g-label"><span>05</span>Family apps</p></div>
@@ -317,6 +334,12 @@
     <li><a class="tile t-red" href="./todo/">
       <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/></svg>
       <span><strong>Someday list</strong><span class="d">Things to do when there’s time</span></span></a></li>
+    <li><a class="tile t-rose" href="./dinners/">
+      <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M12 3v3M8.5 4.5l1 2M15.5 4.5l-1 2M3 21h18"/></svg>
+      <span><strong>Dinners we’ve made</strong><span class="d">Guests, dishes and dietary notes</span></span></a></li>
+    <li><a class="tile t-deep" href="./clean/">
+      <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M15 3l-4 9"/><path d="M7 12h8l2 9H5z"/><path d="M8 16v5M11 16v5M14 16v5"/></svg>
+      <span><strong>Fresh &amp; Tidy</strong><span class="d">Gentle cleaning, a little each day</span></span></a></li>
     <li><a class="tile t-line" href="https://calendar.google.com/" target="_blank" rel="noopener">
       <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
       <span><strong>Google Calendar</strong><span class="d">Opens in a new tab</span></span></a></li>
@@ -366,7 +389,7 @@ paintGreeting();
 
 /* ===================== Weather (Open-Meteo, Mount Barker) ===================== */
 const WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=-35.07&longitude=138.86'
-  + '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,uv_index_max'
+  + '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,precipitation_hours,sunshine_duration,daylight_duration,wind_speed_10m_max,wind_gusts_10m_max,uv_index_max'
   + '&timezone=Australia%2FAdelaide&forecast_days=1';
 const ICONS = {
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
@@ -404,25 +427,37 @@ const QUIPS = {
   highUV:["high UV today, hats and sunscreen for the little ones","sunburn risk, reapply sunscreen","UV is high, seek shade at midday","sunnies, hats and long sleeves","cover up, the sun is strong","play in the shade today","sunscreen before the park","UV alert! slip, slop, slap","long sleeves for little arms","shade and water breaks","the sun is fierce today","broad-brim hats on","a strong sun day","reapply after swimming","midday shade, please","morning play beats midday sun","sunscreen in the bag","hats on before you go","cover up those shoulders","a sun-smart day"],
   mild:["have a lovely day","a gentle kind of day","a good day for anything","enjoy the day","make it a good one","a day full of possibilities","a calm and easy day","a nice day for a stroll","mild and pleasant","a comfortable day out there","enjoy the little things today","an easy weather day","a soft, pleasant day","something lovely is coming today","go gently today","perfect for errands","nice and mild","a good day to get things done","pleasant all round","a lovely day for family time"]
 };
-function weatherGroup(w){
-  const c=w.code, p=w.rain??0, max=w.max, min=w.min;
-  const wet = (c>=51&&c<=67)||(c>=80&&c<=82);
-  if(c>=95) return 'storm';
-  if(wet || p>=60){ if(max<=15) return 'coldWet'; if(c>=51&&c<=57) return 'drizzle'; return 'rain'; }
-  if(p>=30) return 'maybeRain';
-  if(min<=2) return 'frosty';
-  if(c===45||c===48) return 'foggy';
-  if(max>=35) return 'scorcher';
-  if(max>=30) return 'hot';
-  if((w.wind??0)>=40) return 'windy';
-  if(max<=14) return 'chilly';
-  if((w.uv??0)>=8 && max>=20) return 'highUV';
-  if(c<=1 && max>=18 && max<=24) return 'perfect';
-  if(c===2||c===3) return 'cloudy';
-  if(max>=25) return 'warm';
-  if(c<=1) return 'perfect';
-  return 'mild';
+/* How the day will actually feel, using hours of sunshine and how much rain is really
+   forecast, not just the day's "worst moment" weather code. The summary and the little
+   comment both come from this, so they always agree. */
+function assessWeather(w){
+  const c=w.code, p=w.rain??0, max=w.max, min=w.min, mm=w.mm, hrs=w.hrs;
+  let sunF = w.sunF;
+  if(sunF==null) sunF = c===0 ? .9 : c===1 ? .75 : c===2 ? .5 : c===3 ? .15 : .3;
+  const sky = sunF>=.75 ? ['Sunny','sun'] : sunF>=.5 ? ['Mostly sunny','partly'] : sunF>=.3 ? ['Partly cloudy','partly'] : ['Cloudy','cloud'];
+  const known = mm!=null && hrs!=null;
+  const heavy = known ? (mm>=5 || hrs>=4) : (((c>=61&&c<=67)||(c>=80&&c<=82)) && p>=70);
+  const some  = known ? (mm>=1 || hrs>=1.5) : (((c>=51&&c<=67)||(c>=80&&c<=82)) && p>=50);
+  if(c>=95) return {group:'storm', label:'Storms', icon:'storm'};
+  if(heavy) return {group: max<=15 ? 'coldWet' : 'rain', label: c>=80&&c<=82 ? 'Showers' : 'Rain', icon:'rain'};
+  if(some) return {group: max<=15 ? 'coldWet' : 'drizzle', label:'Showers about', icon:'rain'};
+  if(p>=40) return {group:'maybeRain', label:'Chance of a shower', icon:'partly'};
+  if((c===45||c===48) && sunF<.5) return {group:'foggy', label:'Foggy start', icon:'fog'};
+  const [label, icon] = sky;
+  let group = 'mild';
+  if(min<=2) group='frosty';
+  else if(max>=35) group='scorcher';
+  else if(max>=30) group='hot';
+  else if((w.gust??0)>=55 || (w.wind??0)>=35) group='windy';
+  else if(max<=14) group='chilly';
+  else if(sunF<.3) group='cloudy';
+  else if(sunF>=.6 && (w.uv??0)>=9 && max>=24) group='highUV';
+  else if(sunF>=.5 && max>=18 && max<=26) group='perfect';
+  else if(max>=27) group='warm';
+  else if(sunF>=.5) group='perfect';
+  return {group, label, icon};
 }
+function weatherGroup(w){ return assessWeather(w).group; }
 function pickQuip(group){
   const bank = QUIPS[group] || QUIPS.mild, keys = Object.keys(QUIPS);
   return bank[(dayOfYear(new Date()) + keys.indexOf(group)*3) % bank.length];
@@ -430,17 +465,20 @@ function pickQuip(group){
 function showWeather(w){
   const box = document.getElementById('weather'), quip = document.getElementById('quip');
   if(!w){ box.innerHTML = `<span class="w-sub">Couldn’t load the weather just now.</span>`; quip.textContent = pickQuip('mild'); return; }
-  const [label, icon] = describeCode(w.code);
-  const rain = w.rain!=null ? `${w.rain}% chance of rain in Mount Barker` : 'Mount Barker';
+  const {label, icon, group} = assessWeather(w);
+  const rain = (w.rain!=null ? `${w.rain}% chance of rain` : '') + (w.mm>=1 ? `, about ${Math.round(w.mm)} mm` : '') + (w.rain!=null ? ' in Mount Barker' : 'Mount Barker');
   box.innerHTML = `<svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24">${ICONS[icon]}</svg>
     <span><span class="w-main">${esc(label)}, ${Math.round(w.min)}° to ${Math.round(w.max)}°</span><span class="w-sub">${esc(rain)}</span></span>`;
-  quip.textContent = pickQuip(weatherGroup(w));
+  quip.textContent = pickQuip(group);
 }
 async function loadWeather(){
   try{
     const r = await fetch(WEATHER_URL); if(!r.ok) throw new Error(r.status);
     const d = (await r.json()).daily;
-    showWeather({code:d.weather_code[0], max:d.temperature_2m_max[0], min:d.temperature_2m_min[0], rain:d.precipitation_probability_max?.[0], wind:d.wind_speed_10m_max?.[0], uv:d.uv_index_max?.[0]});
+    const sun = d.sunshine_duration?.[0], light = d.daylight_duration?.[0];
+    showWeather({code:d.weather_code[0], max:d.temperature_2m_max[0], min:d.temperature_2m_min[0], rain:d.precipitation_probability_max?.[0],
+      mm:d.precipitation_sum?.[0], hrs:d.precipitation_hours?.[0], sunF: sun!=null && light ? sun/light : null,
+      wind:d.wind_speed_10m_max?.[0], gust:d.wind_gusts_10m_max?.[0], uv:d.uv_index_max?.[0]});
   }catch(e){ showWeather(null); }
 }
 loadWeather();
@@ -524,8 +562,8 @@ function showEvents(state){
   if(state.error) html += `<p class="msg" style="color:var(--deep)">${esc(state.error)}</p>`;
   box.innerHTML = html;
 }
-const SRC_STYLE = {Kitchen:['#D0E3FF','#3A2208'], Kids:['#F5B3DC','#7E0C16'], Garden:['#CBD8A9','#3E4A1C'], Someday:['#C20A16','#FFF7F6'], 'Google Tasks':['#BFD3F2','#1F3B66']};
-let todoState = {items:[], filter:'All', note:''};
+const SRC_STYLE = {Home:['#E5E1BE','#4E4A22'], Repeating:['#FFD9B0','#6E3300'], Kitchen:['#D0E3FF','#3A2208'], Kids:['#F5B3DC','#7E0C16'], Garden:['#CBD8A9','#3E4A1C'], Someday:['#C20A16','#FFF7F6'], 'Google Tasks':['#BFD3F2','#1F3B66']};
+let todoState = {items:[], filter:'All', note:'', open:{}};
 function showTodos(st){
   if(st) todoState = {...todoState, ...st};
   const {items, filter, note} = todoState;
@@ -534,15 +572,41 @@ function showTodos(st){
   if(todoState.status==='loading'){ list.innerHTML = '<p class="msg">Loading…</p>'; return; }
   const srcs = ['All', ...Object.keys(SRC_STYLE).filter(k=>items.some(i=>i.src===k))];
   fl.innerHTML = srcs.map(k=>`<button aria-pressed="${filter===k}" onclick="DASH.todoFilter('${k}')">${esc(k)}${k!=='All'?` (${items.filter(i=>i.src===k && !i.done).length})`:''}</button>`).join('');
-  const shown = items.filter(i=>filter==='All' || i.src===filter);
+  const shown = items.filter(i=>(filter==='All' || i.src===filter) && (!i.done || todoState.showDone || i.justDone));
   const left = items.filter(i=>!i.done).length, done = items.filter(i=>i.done).length;
   ct.textContent = items.length ? `${left} left${done?` · ${done} done`:''}` : '';
   list.className = 'todo-list';
   list.innerHTML = shown.length ? shown.map((i,n)=>`<div class="ti${i.done?' done':''}"><button class="tk${i.done?' on':''}" aria-pressed="${!!i.done}" aria-label="${i.done?'Untick':'Tick'} ${esc(i.text)}" onclick="DASH.tickTodo(${items.indexOf(i)})">${i.done?'✓':''}</button>
-    <span class="tx">${esc(i.text)}<span class="sb">${esc(i.sub||'')}</span></span><span class="src" style="background:${SRC_STYLE[i.src][0]};color:${SRC_STYLE[i.src][1]}">${esc(i.src)}</span></div>`).join('')
-    : `<p class="msg">${filter==='All'?'Nothing to do today. Enjoy!':'Nothing here today.'}</p>`;
-  nt.innerHTML = note || '';
+    <span class="tx">${(i.notes||(i.links||[]).length||i.photos)?`<button class="tx-open" onclick="DASH.toggleTodo(${items.indexOf(i)})" aria-expanded="${!!todoState.open[items.indexOf(i)]}">${esc(i.text)} <span class="tx-more">${[i.notes?'📝':'',(i.links||[]).length?'🔗':'',i.photos?'📷':''].join('')}</span></button>`:esc(i.text)}<span class="sb">${esc(i.sub||'')}</span>
+      ${todoState.open[items.indexOf(i)]?`<span class="tx-detail">${i.notes?`<span style="display:block;white-space:pre-wrap">${esc(i.notes)}</span>`:''}${(i.links||[]).map(l=>`<a href="${esc(l.url)}" target="_blank" rel="noopener">🔗 ${esc(l.label||l.url)}</a>`).join('')}${i.photos?`<a href="./todo/">📷 ${i.photos} photo${i.photos===1?'':'s'}: open in the Someday list</a>`:''}</span>`:''}</span><span class="src" style="background:${SRC_STYLE[i.src][0]};color:${SRC_STYLE[i.src][1]}">${esc(i.src)}</span></div>`).join('')
+    : `<p class="msg">${filter==='All'?(items.length?'All done for today. Well done! 🎉':'Nothing to do today. Enjoy!'):'Nothing left here today.'}</p>`;
+  const doneN = items.filter(i=>i.done && (filter==='All' || i.src===filter)).length;
+  nt.innerHTML = (doneN ? `<button onclick="DASH.toggleDone()">${todoState.showDone ? 'Hide ticked' : `Show ticked (${doneN})`}</button> · ` : '') + `<button onclick="DASH.toggleRoutines()">Repeating tasks${todoState.routineCount?` (${todoState.routineCount})`:''}</button>` + (note ? ' · ' + note : '');
 }
+const WD = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const ordinal = n => n + (n%10===1&&n!==11?'st':n%10===2&&n!==12?'nd':n%10===3&&n!==13?'rd':'th');
+function paintRepeatMenu(){
+  const el = document.getElementById('todo-rep'); if(!el) return;
+  const d = new Date(), wd = WD[d.getDay()], dom = d.getDate(), mon = d.toLocaleDateString('en-AU',{month:'short'});
+  el.innerHTML = [['none','Just once (Someday list)'],['daily','Every day'],['weekly',`Every ${wd}`],['fortnightly',`Every 2nd ${wd}`],['monthly',`Monthly on the ${ordinal(dom)}`],['yearly',`Every year on ${dom} ${mon}`]]
+    .map(([v,l])=>`<option value="${v}">${esc(l)}</option>`).join('');
+}
+function repeatLabel(r){
+  if(r.freq==='daily') return 'Every day';
+  if(r.freq==='weekly') return `Every ${WD[r.day]}`;
+  if(r.freq==='fortnightly') return `Every 2nd ${WD[r.day]}`;
+  if(r.freq==='monthly') return `Monthly on the ${ordinal(r.date)}`;
+  if(r.freq==='yearly') return `Every year on ${r.date} ${new Date(2026, r.month-1, 1).toLocaleDateString('en-AU',{month:'short'})}`;
+  return '';
+}
+function showRoutines(list, open){
+  const box = document.getElementById('todo-routines'); if(!box) return;
+  box.hidden = !open;
+  if(!open) return;
+  box.innerHTML = `<b>Repeating tasks</b>` + (list.length ? list.map(r=>`<div class="rt"><span>${esc(r.text)}<span class="sb">${esc(repeatLabel(r))}</span></span><button onclick="DASH.delRoutine('${r.id}')" aria-label="Delete ${esc(r.text)}">Delete</button></div>`).join('')
+    : `<p class="msg" style="margin:6px 0 0">None yet. Add one above and choose how often it repeats.</p>`);
+}
+paintRepeatMenu();
 function showAccount(email){
   document.getElementById('who').textContent = email ? `Signed in as ${email}` : '';
   document.getElementById('acct').innerHTML = email ? `<button onclick="DASH.signOut()">Sign out</button>` : '';
@@ -563,7 +627,7 @@ document.addEventListener('visibilitychange', ()=>{
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signInWithRedirect, getRedirectResult, signOut }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import { getFirestore, collection, query, where, getDocs, doc, getDoc, setDoc }
+import { getFirestore, collection, query, where, getDocs, doc, getDoc, setDoc, deleteDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 import { SEASON } from './garden/season.js';
 
@@ -635,11 +699,12 @@ async function fetchEvents(token){
       const q = `calendars/${encodeURIComponent(c.id)}/events?singleEvents=true&orderBy=startTime&maxResults=50&timeMin=${encodeURIComponent(start.toISOString())}&timeMax=${encodeURIComponent(end.toISOString())}`;
       const data = await gcal(q, token);
       (data.items||[]).forEach(ev=>{
-        if(ev.status==='cancelled' || seen.has(ev.iCalUID||ev.id)) return;
-        seen.add(ev.iCalUID||ev.id);
+        const twin = ((ev.summary||'').trim().toLowerCase()) + '|' + ((ev.start && (ev.start.dateTime||ev.start.date))||'');
+        if(ev.status==='cancelled' || seen.has(ev.iCalUID||ev.id) || seen.has(twin)) return;
+        seen.add(ev.iCalUID||ev.id); seen.add(twin);
         const allDay = !!(ev.start && ev.start.date);
         const s = allDay ? null : new Date(ev.start.dateTime);
-        events.push({sort: allDay ? '00' : s.toISOString(), when: allDay ? 'All day' : timeText(s), title: ev.summary || '(No title)', cal: cals.length>1 ? (c.name||'') : ''});
+        events.push({sort: allDay ? '00' : s.toISOString(), when: allDay ? 'All day' : timeText(s), title: ((ev.eventType==='birthday' || /birthday|bday/i.test(ev.summary||'')) && !/🎂/.test(ev.summary||'') ? '🎂 ' : '') + (ev.summary || '(No title)'), cal: cals.length>1 ? (c.name||'') : ''});
       });
     }catch(e){ if(e.code===401) throw e; /* a calendar this person can't see is skipped */ }
   }
@@ -707,6 +772,16 @@ async function saveCalendars(){
 
 
 /* ---------- The combined to-do list ---------- */
+let routineList = [], routinesOpen = false;
+function routineDue(r, d){
+  const wd = d.getDay(), dom = d.getDate(), last = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+  if(r.freq==='daily') return true;
+  if(r.freq==='weekly') return wd===r.day;
+  if(r.freq==='fortnightly'){ if(wd!==r.day) return false; const a=new Date(r.start+'T00:00:00'), b=new Date(isoDate(d)+'T00:00:00'); return Math.round((b-a)/(7*86400000)) % 2 === 0; }
+  if(r.freq==='monthly') return dom===r.date || (r.date>last && dom===last);   // e.g. "the 31st" falls on the last day of short months
+  if(r.freq==='yearly') return d.getMonth()+1===r.month && dom===r.date;
+  return false;
+}
 const hh = (...p) => doc(db,'households',HOUSEHOLD,...p);
 let todoItems = [];
 function remDue(r, t, wd){
@@ -726,11 +801,28 @@ async function loadTodos(){
   const [kids, rems] = await Promise.all([safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'kids_children'))), safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'kids_reminders')))]);
   const kidName = id => { if(id==='both') return 'Both'; const k = kids && kids.docs.find(d=>d.id===id); return k ? k.data().name : ''; };
   (rems ? rems.docs : []).forEach(d=>{ const r=d.data(), due=remDue(r,t,wd); if(due) items.push({src:'Kids', text:r.text, sub:[kidName(r.child), due.sub].filter(Boolean).join(' · '), done:due.done, act:{k:'kids', id:d.id, weekly: !!(r.days&&r.days.length)}}); });
+  // Fresh & Tidy: what you added to today, plus one gentle suggestion
+  const [cday, cjobs] = await Promise.all([safeGet(()=>getDoc(hh('clean_today', t))), safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'clean_jobs')))]);
+  const cd = cday && cday.exists() ? cday.data() : {items:[], skipped:[]};
+  (cd.items||[]).forEach((x,i)=>items.push({src:'Home', text:x.text, sub:'Fresh & Tidy · added today', done:!!x.done, act:{k:'cleanitem', i, item:x}}));
+  if(cjobs){
+    const since = iso => iso ? Math.floor((new Date(t+'T00:00:00') - new Date(iso+'T00:00:00'))/86400000) : 9999;
+    const m = now.getMonth()+1, skip = new Set(cd.skipped||[]);
+    const freshOf = j => (j.months && j.months.length) ? (j.months.includes(m) && since(j.lastDone)>60 ? 0 : 100) : Math.max(0, 100 - since(j.lastDone)/(j.every||7)*100);
+    const pick = cjobs.docs.map(d=>({...d.data(), id:d.id})).filter(j=>freshOf(j)<35 && !skip.has('job:'+j.id) && !(cd.items||[]).some(x=>x.type==='job' && x.id===j.id)).sort((a,b)=>freshOf(a)-freshOf(b) || (a.mins||15)-(b.mins||15))[0];
+    if(pick) items.push({src:'Home', text:`🧹 ${pick.name}`, sub:`Today’s cleaning suggestion · about ${pick.mins||15} min`, done:false, act:{k:'cleanjob', id:pick.id}});
+    const doneToday = cjobs.docs.map(d=>({...d.data(), id:d.id})).filter(j=>j.lastDone===t && j.sugDay===t);
+    doneToday.forEach(j=>items.push({src:'Home', text:`🧹 ${j.name}`, sub:'Today’s cleaning suggestion', done:true, act:{k:'cleanjob', id:j.id}}));
+  }
+  // Repeating tasks due today
+  const routines = await safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'routines')));
+  routineList = (routines ? routines.docs : []).map(d=>({...d.data(), id:d.id})).sort((a,b)=>(a.added||0)-(b.added||0));
+  routineList.filter(r=>routineDue(r, now)).forEach(r=>items.push({src:'Repeating', text:r.text, sub:repeatLabel(r), done:r.doneOn===t, act:{k:'routine', id:r.id}}));
   // Someday list: things marked "Soon"
   const todo = await safeGet(()=>getDocs(query(collection(db,'households',HOUSEHOLD,'todo_items'), where('priority','==','soon'))));
-  (todo ? todo.docs : []).forEach(d=>{ const v=d.data(); if(!v.done || Date.now()-v.done < 12*3600000) items.push({src:'Someday', text:v.text, sub:'Someday list · soon', done:!!v.done, act:{k:'todo', id:d.id}}); });
+  (todo ? todo.docs : []).forEach(d=>{ const v=d.data(); if(!v.done || Date.now()-v.done < 12*3600000) items.push({src:'Someday', text:v.text, sub:'Someday list · soon', done:!!v.done, notes:v.notes||'', links:v.links||[], photos:(v.photos||[]).length, act:{k:'todo', id:d.id}}); });
   // Garden: this week's and this month's jobs
-  const [gt, gw, gm] = await Promise.all([safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'garden_tasks'))), safeGet(()=>getDoc(hh('garden_meta','week'))), safeGet(()=>getDoc(hh('garden_meta','month')))]);
+  const [gt, gw, gm, gy] = await Promise.all([safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'garden_tasks'))), safeGet(()=>getDoc(hh('garden_meta','week'))), safeGet(()=>getDoc(hh('garden_meta','month'))), safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'garden_yearly')))]);
   const monday = (()=>{ const x=new Date(now); x.setDate(x.getDate()-((x.getDay()+6)%7)); return isoDate(x); })();
   const wDone = gw && gw.exists() && gw.data().week===monday ? (gw.data().done||{}) : {};
   (gt ? gt.docs : []).sort((a,b)=>(a.data().order||0)-(b.data().order||0)).forEach(d=>{ const v=d.data(); items.push({src:'Garden', text:v.job, sub:['This week', v.where, v.often].filter(Boolean).join(' · '), done:!!wDone[d.id], act:{k:'gweek', id:d.id}}); });
@@ -738,6 +830,7 @@ async function loadTodos(){
     const mm = gm && gm.exists() && gm.data().month===mk ? gm.data() : {done:{}, extra:[]};
     SEASON[now.getMonth()][2].forEach(([kind,text],i)=>items.push({src:'Garden', text:`${kind}: ${text}`, sub:'This month', done:!!(mm.done||{})['j'+i], act:{k:'gmonth', key:'j'+i}}));
     (mm.extra||[]).forEach((text,i)=>items.push({src:'Garden', text, sub:'This month', done:!!(mm.done||{})['x'+i], act:{k:'gmonth', key:'x'+i}}));
+    (gy ? gy.docs : []).filter(d=>+d.data().month===now.getMonth()+1).forEach(d=>{ const v=d.data(); items.push({src:'Garden', text:`${v.kind?v.kind+': ':''}${v.text}`, sub:'This month · every year', done:!!(mm.done||{})['y'+d.id], act:{k:'gmonth', key:'y'+d.id}}); });
   }
   // Google Tasks due today or overdue
   let note = '';
@@ -749,15 +842,15 @@ async function loadTodos(){
         const lists = (await gfetch('https://tasks.googleapis.com/tasks/v1/users/@me/lists?maxResults=100', tok)).items || [];
         for(const l of lists){
           const tasks = (await gfetch(`https://tasks.googleapis.com/tasks/v1/lists/${encodeURIComponent(l.id)}/tasks?showCompleted=false&maxResults=100&dueMax=${encodeURIComponent(end.toISOString())}`, tok)).items || [];
-          tasks.filter(x=>x.due && x.title).forEach(x=>{ const d=x.due.slice(0,10); items.push({src:'Google Tasks', text:x.title, sub: d===t ? 'Due today' : 'Overdue', done:false, act:{k:'gtask', list:l.id, id:x.id}}); });
+          tasks.filter(x=>x.due && x.title).forEach(x=>{ const d=x.due.slice(0,10); items.push({src:'Google Tasks', text:x.title, sub: d===t ? 'Due today' : 'Overdue', done:false, notes:x.notes||'', act:{k:'gtask', list:l.id, id:x.id}}); });
         }
       }catch(e){ note = 'Couldn’t reach Google Tasks just now. <button onclick="DASH.connectCalendar()">Reconnect</button>'; }
     } else note = 'Google Tasks will show here once Google is connected. <button onclick="DASH.connectCalendar()">Connect Google</button>';
   }
-  const order = {'Google Tasks':0, Kitchen:1, Kids:2, Someday:3, Garden:4};
+  const order = {'Google Tasks':0, Repeating:1, Kitchen:2, Kids:3, Home:4, Someday:5, Garden:6};
   items.sort((a,b)=>(a.done-b.done) || order[a.src]-order[b.src]);
   todoItems = items;
-  showTodos({status:'ready', items, note});
+  showTodos({status:'ready', items, note, open:{}, routineCount: routineList.length}); showRoutines(routineList, routinesOpen);
 }
 async function gfetch(url, token, opts={}){
   const r = await fetch(url, {...opts, headers:{Authorization:'Bearer '+token, 'Content-Type':'application/json'}});
@@ -767,11 +860,20 @@ async function gfetch(url, token, opts={}){
 async function tickTodo(n){
   const it = todoItems[n]; if(!it) return;
   const now = new Date(), t = isoDate(now), a = it.act, on = !it.done;
-  it.done = on; showTodos({items: todoItems});
+  it.done = on; if(on){ it.justDone = true; setTimeout(()=>{ it.justDone = false; showTodos(); }, 900); } showTodos({items: todoItems});
   try{
     if(a.k==='kitchen'){ const d = await getDoc(hh('plan', a.key)); if(d.exists()){ const v=d.data(); await setDoc(hh('plan', a.key), {...v, items:(v.items||[]).map(i=>i.id===a.id?{...i, done:on}:i)}); } }
     else if(a.k==='kids'){ await setDoc(hh('kids_reminders', a.id), {doneOn: on ? t : ''}, {merge:true}); }
     else if(a.k==='todo'){ await setDoc(hh('todo_items', a.id), {done: on ? Date.now() : 0}, {merge:true}); }
+    else if(a.k==='routine'){ await setDoc(hh('routines', a.id), {doneOn: on ? t : ''}, {merge:true}); }
+    else if(a.k==='cleanjob'){ const d = await getDoc(hh('clean_jobs', a.id)); const v = d.exists() ? d.data() : {};
+      await setDoc(hh('clean_jobs', a.id), on ? {lastDone:t, prevDone:v.lastDone||'', sugDay:t} : {lastDone:v.prevDone||'', sugDay:''}, {merge:true}); }
+    else if(a.k==='cleanitem'){ const d = await getDoc(hh('clean_today', t)); const v = d.exists() ? d.data() : {items:[]};
+      const list = (v.items||[]).map((x,k)=>k===a.i ? {...x, done:on} : x); await setDoc(hh('clean_today', t), {...v, items:list});
+      const x = a.item;
+      if(x.type==='job'){ const j = await getDoc(hh('clean_jobs', x.id)); const jv = j.exists() ? j.data() : {}; await setDoc(hh('clean_jobs', x.id), on ? {lastDone:t, prevDone:jv.lastDone||''} : {lastDone:jv.prevDone||''}, {merge:true}); }
+      else if(x.type==='step'){ const r = await getDoc(hh('clean_rooms', x.id)); if(r.exists()){ const rv=r.data(); const steps=(rv.steps||[]).map((st,k)=>k===x.step?{...st, done:on}:st);
+        await setDoc(hh('clean_rooms', x.id), {...rv, steps, ...(on && steps.every(st=>st.done) ? {lastFull:t} : {})}); } } }
     else if(a.k==='gweek'){ const x=new Date(now); x.setDate(x.getDate()-((x.getDay()+6)%7)); const wk=isoDate(x);
       const d = await getDoc(hh('garden_meta','week')); const done = d.exists() && d.data().week===wk ? {...(d.data().done||{})} : {};
       if(on) done[a.id]=true; else delete done[a.id]; await setDoc(hh('garden_meta','week'), {week:wk, done}); }
@@ -785,7 +887,13 @@ async function quickAdd(){
   const el = document.getElementById('todo-new'), text = (el.value||'').trim(); if(!text || !user) return;
   el.value = '';
   const id = 't' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-  try{ await setDoc(hh('todo_items', id), {text, priority:'soon', category:'home', time:'30min', added:Date.now(), done:0}); loadTodos(); }
+  const freq = (document.getElementById('todo-rep')||{}).value || 'none', d = new Date();
+  try{
+    if(freq==='none') await setDoc(hh('todo_items', id), {text, priority:'soon', category:'home', time:'30min', added:Date.now(), done:0});
+    else await setDoc(hh('routines', id), {text, freq, day:d.getDay(), date:d.getDate(), month:d.getMonth()+1, start:isoDate(d), added:Date.now(), doneOn:''});
+    const sel = document.getElementById('todo-rep'); if(sel) sel.value = 'none';
+    loadTodos();
+  }
   catch(e){ showTodos({note:'Couldn’t add that. Check the database rules (see the setup guide).'}); }
 }
 
@@ -802,8 +910,12 @@ window.DASH = {
   signOut(){ clearToken(); return signOut(auth); },
   signedIn:false,
   async setStyle(st){ applyStyle(st); if(user){ try{ await setDoc(doc(db,'households',HOUSEHOLD,'prefs',String(user.email).toLowerCase()), {style:st}, {merge:true}); }catch(e){} } },
-  refresh(){ loadMeals(); loadEvents(); loadTodos(); },
+  refresh(){ loadMeals(); loadEvents(); loadTodos(); if(typeof loadWeather==='function') loadWeather(); if(typeof paintGreeting==='function') paintGreeting(); },
   tickTodo, quickAdd, todoFilter(k){ showTodos({filter:k}); },
+  toggleDone(){ showTodos({showDone: !todoState.showDone}); },
+  toggleRoutines(){ routinesOpen = !routinesOpen; showRoutines(routineList, routinesOpen); },
+  async delRoutine(id){ if(!confirm('Delete this repeating task?')) return; try{ await deleteDoc(hh('routines', id)); }catch(e){} loadTodos(); },
+  toggleTodo(n){ const o={...todoState.open}; o[n]=!o[n]; showTodos({open:o}); },
   connectCalendar, toggleCalendarPicker, saveCalendars
 };
 getRedirectResult(auth).catch(()=>{});

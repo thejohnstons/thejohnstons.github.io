@@ -10,8 +10,8 @@ window.FIREBASE_CONFIG = {
 };
 window.HOUSEHOLD_ID = "johnston";
 
-// Google Calendar (read-only) for "coming up" on the dashboard.
-// Paste the Web client ID from Google Cloud between the quotes (setup guide, step 5).
+// Google Calendar and Google Tasks, for the dashboard and the Family calendar.
+// Paste the Web client ID from Google Cloud between the quotes (setup guide, step 6).
 // It looks like 1234567890-abc123.apps.googleusercontent.com. It is not a secret.
 // Leave it empty and the dashboard simply says the calendar isn't set up yet.
 window.GOOGLE_CALENDAR_CLIENT_ID = "";
