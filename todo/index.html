@@ -243,7 +243,7 @@ function editForm(id){
   render(); setTimeout(()=>{ const e=$('ef-t'); if(e) e.focus(); },50);
 }
 const photoCache = {};
-async function loadPhoto(pid){ if(photoCache[pid]!==undefined) return; photoCache[pid]=null; try{ const p=await F.getOne('todo_photos', pid); photoCache[pid]=p?p.data:''; render(); }catch(e){} }
+async function loadPhoto(pid){ if(photoCache[pid]!==undefined) return; photoCache[pid]=null; try{ const p=await F.getOne('~todo_photos', pid); photoCache[pid]=p?p.data:''; render(); }catch(e){} }
 function syncDraft(){ const d=S.ui.draft; if(!d) return; const g=id=>{ const e=$(id); return e?e.value:null; };
   ['text:ef-t','priority:ef-p','category:ef-c','time:ef-m','notes:ef-n'].forEach(x=>{ const [k,i]=x.split(':'); const v=g(i); if(v!==null) d[k]=v; }); }
 function editModal(){
@@ -300,24 +300,24 @@ window.T = {
   have: k=>{ S.have = S.have===k ? '' : k; render(); },
   quick: p=>{ S.draft.pri=p; render(); const e=$('new'); if(e){ e.focus(); e.scrollIntoView({block:'center'}); } },
   add: ()=>{ const text=val('new').trim(); if(!text) return; S.draft={pri:val('np'), cat:val('nc'), time:val('nt')};
-    safe(F.put('todo_items',{id:uid('t'), text, priority:S.draft.pri, category:S.draft.cat, time:S.draft.time, added:Date.now(), done:0})); $('new').value=''; },
-  tick: id=>{ const t=S.items.find(x=>x.id===id); if(t) safe(F.patch('todo_items', id, {done: t.done ? 0 : Date.now()})); },
+    safe(F.put('~todo_items',{id:uid('t'), text, priority:S.draft.pri, category:S.draft.cat, time:S.draft.time, added:Date.now(), done:0})); $('new').value=''; },
+  tick: id=>{ const t=S.items.find(x=>x.id===id); if(t) safe(F.patch('~todo_items', id, {done: t.done ? 0 : Date.now()})); },
   edit: editForm,
   save: id=>{ syncDraft(); const d=S.ui.draft; const text=(d.text||'').trim(); if(!text) return;
-    safe(F.patch('todo_items', id, {text, priority:d.priority, category:d.category, time:d.time, notes:(d.notes||'').trim(), links:d.links, photos:d.photos})); S.ui.modal=null; S.ui.draft=null; render(); },
+    safe(F.patch('~todo_items', id, {text, priority:d.priority, category:d.category, time:d.time, notes:(d.notes||'').trim(), links:d.links, photos:d.photos})); S.ui.modal=null; S.ui.draft=null; render(); },
   addLink: ()=>{ syncDraft(); let url=val('ef-lu').trim(); if(!url) return; if(!/^https?:\/\//i.test(url)) url='https://'+url; S.ui.draft.links.push({url, label:val('ef-ll').trim()}); render(); },
   delLink: i=>{ syncDraft(); S.ui.draft.links.splice(i,1); render(); },
   addPhoto: async input=>{ syncDraft(); const file=input.files&&input.files[0]; input.value=''; if(!file) return; const st=$('ef-ps'); if(st) st.textContent='Saving photo…';
-    try{ const data=await compress(file); const pid=uid('p'); await F.put('todo_photos',{id:pid, data}); photoCache[pid]=data; S.ui.draft.photos.push(pid); render(); }
+    try{ const data=await compress(file); const pid=uid('p'); await F.put('~todo_photos',{id:pid, data}); photoCache[pid]=data; S.ui.draft.photos.push(pid); render(); }
     catch(e){ const s2=$('ef-ps'); if(s2) s2.textContent = e.message==='too_large' ? 'That photo is too big even after shrinking. Try another.' : "Couldn't save the photo. Try again."; } },
-  delPhoto: i=>{ syncDraft(); const [pid]=S.ui.draft.photos.splice(i,1); if(pid) F.remove('todo_photos', pid).catch(()=>{}); render(); },
+  delPhoto: i=>{ syncDraft(); const [pid]=S.ui.draft.photos.splice(i,1); if(pid) F.remove('~todo_photos', pid).catch(()=>{}); render(); },
   viewPhoto: pid=>{ syncDraft(); S.ui.view = pid ? photoCache[pid] : ''; render(); },
-  del: id=>{ if(confirm('Delete this task?')){ const t=S.items.find(x=>x.id===id); (t&&t.photos||[]).forEach(p=>F.remove('todo_photos',p).catch(()=>{})); safe(F.remove('todo_items', id)); S.ui.modal=null; render(); } },
-  clearDone: ()=>{ S.items.filter(t=>t.done && Date.now()-t.done > 30*86400000).forEach(t=>F.remove('todo_items', t.id)); },
+  del: id=>{ if(confirm('Delete this task?')){ const t=S.items.find(x=>x.id===id); (t&&t.photos||[]).forEach(p=>F.remove('~todo_photos',p).catch(()=>{})); safe(F.remove('~todo_items', id)); S.ui.modal=null; render(); } },
+  clearDone: ()=>{ S.items.filter(t=>t.done && Date.now()-t.done > 30*86400000).forEach(t=>F.remove('~todo_items', t.id)); },
   catForm,
   saveCat: id=>{ const name=val('cf-n').trim(); if(!name) return; const old=S.cats.find(c=>c.id===id)||{order:Date.now()};
-    safe(F.put('todo_categories',{...old, id:id||uid('c'), name, doodle:S.ui.pick.doodle, colour:S.ui.pick.colour})); S.ui.modal=null; render(); },
-  delCat: id=>{ const n=S.items.filter(t=>t.category===id).length; if(!confirm(n?`${n} task${n===1?'':'s'} use this category. Remove it anyway? They'll show under “Other”.`:'Remove this category?')) return; safe(F.remove('todo_categories', id)); S.ui.modal=null; render(); }
+    safe(F.put('~todo_categories',{...old, id:id||uid('c'), name, doodle:S.ui.pick.doodle, colour:S.ui.pick.colour})); S.ui.modal=null; render(); },
+  delCat: id=>{ const n=S.items.filter(t=>t.category===id).length; if(!confirm(n?`${n} task${n===1?'':'s'} use this category. Remove it anyway? They'll show under “Other”.`:'Remove this category?')) return; safe(F.remove('~todo_categories', id)); S.ui.modal=null; render(); }
 };
 
 /* ---------- Start ---------- */
@@ -325,13 +325,28 @@ F.watchUser(async (u, why)=>{
   if(why==='noConfig'){ S.status='noConfig'; render(); return; }
   S.user=u;
   if(!u){ S.status='signedOut'; render(); return; }
+  F.setOwner(u.email);
   S.status='ready'; render();
   F.loadStyle(u.email).then(render);
-  try{ await F.seedOnce('todo-seeded', [['todo_categories', DEFAULT_CATS]]); }catch(e){ if(e.code==='permission-denied'){ S.status='denied'; render(); return; } }
+  try{ await F.seedOnce('todo-seeded-'+String(u.email).toLowerCase().replace(/[^a-z0-9]/g,'-'), [['~todo_categories', DEFAULT_CATS]]); }catch(e){ if(e.code==='permission-denied'){ S.status='denied'; render(); return; } }
   const err = e=>{ if(e && e.code==='permission-denied'){ S.status='denied'; render(); } };
-  F.listen('todo_items', l=>{ S.items=l; liveRender(); }, err);
-  F.listen('todo_categories', l=>{ S.cats=l; if(!l.some(c=>c.id===S.draft.cat) && l[0]) S.draft.cat=l[0].id; liveRender(); }, err);
+  F.listen('~todo_items', l=>{ S.items=l; liveRender(); }, err);
+  F.listen('~todo_categories', l=>{ S.cats=l; if(!l.some(c=>c.id===S.draft.cat) && l[0]) S.draft.cat=l[0].id; liveRender(); }, err);
+  // Items from the old shared list (before lists became private) can be moved across
+  try{ const old = await F.getAll('todo_items'); const oldR = await F.getAll('routines');
+    if(old.length || oldR.length) showMoveBanner(old.length + oldR.length); }catch(e){}
 });
+function showMoveBanner(n){
+  let b = document.getElementById('moveOld'); if(!b){ b = document.createElement('div'); b.id='moveOld'; b.setAttribute('role','status');
+    b.style.cssText='position:sticky;top:0;z-index:20;margin:10px auto;max-width:900px;background:#FFF3D6;color:#4A3500;border-radius:16px;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:15px';
+    document.body.prepend(b); }
+  b.innerHTML = `<span>🔒 Your Someday list is now private to you. ${n} item${n>1?'s are':' is'} still in the old shared list.</span><button type="button" id="moveOldBtn" style="border:0;border-radius:999px;padding:9px 16px;font-weight:700;background:#4A3500;color:#FFF3D6;cursor:pointer">Move them to my list</button>`;
+  document.getElementById('moveOldBtn').onclick = async e => { e.target.disabled = true; e.target.textContent = 'Moving…';
+    try{ for(const c of ['todo_items','todo_categories','todo_photos','routines']){ const rows = await F.getAll(c);
+        for(const r of rows){ await F.put('~'+c, r); await F.remove(c, r.id); } }
+      b.innerHTML = '<span>All moved. Only you can see them now. 🔒</span>'; setTimeout(()=>b.remove(), 4000); }
+    catch(err){ b.innerHTML = '<span>Couldn’t move them. Check the database rules include the private section (Nathan’s guide, Part A).</span>'; } };
+}
 render();
 </script>
 </body>

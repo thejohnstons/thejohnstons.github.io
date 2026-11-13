@@ -1,5 +1,6 @@
 /* =====================================================================
-   family.js: shared by the Kids' corner, Someday list and Family calendar.
+   family.js: shared by the dashboard, Kids' corner, Someday list, Family calendar,
+   Garden, Dinners, Fresh & Tidy, Move well and Be Still.
    Sign-in, the family database (households/johnston), each person's
    style, and the read-only Google Calendar + Google Tasks connection.
    ===================================================================== */
@@ -49,7 +50,15 @@ export function logOut(){ clearToken(); if(DEMO){ location.href = location.pathn
 
 /* ---------- Database (with an in-memory stand-in for demo mode) ---------- */
 const mem = {};
-const path = (c, id) => id ? [...['households', HOUSEHOLD], c, id] : [...['households', HOUSEHOLD], c];
+// Collections starting with "~" are private: stored under private/{email}, which the database
+// rules only let that person read or write. Call setOwner(email) after sign-in.
+let OWNER = '';
+export function setOwner(email){ OWNER = String(email||'').toLowerCase(); }
+export const owner = () => OWNER;
+const path = (c, id) => {
+  const base = c.startsWith('~') ? ['private', OWNER || 'nobody', c.slice(1)] : ['households', HOUSEHOLD, c];
+  return id ? [...base, id] : base;
+};
 export function listen(c, cb, onErr){
   if(DEMO){ mem[c] = mem[c] || {}; const fire=()=>cb(Object.entries(mem[c]).map(([id,v])=>({...v, id}))); (mem.__subs = mem.__subs || []).push([c, fire]); setTimeout(fire,0); return ()=>{}; }
   return onSnapshot(collection(db, ...path(c)), snap=>cb(snap.docs.map(d=>({...d.data(), id:d.id}))), err=>onErr && onErr(err));
@@ -118,24 +127,31 @@ export function stylePicker(onPick){
 /* ---------- Google Calendar + Tasks (one connection, shared with the dashboard) ---------- */
 export const CAL_CLIENT_ID = window.GOOGLE_CALENDAR_CLIENT_ID || '';
 export const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/tasks';
-export function savedToken(){
-  try{ const t = JSON.parse(localStorage.getItem('jd-cal-token')||'null'); return t && t.exp > Date.now()+60000 ? t : null; }catch(e){ return null; }
+export const EVENTS_SCOPE = 'https://www.googleapis.com/auth/calendar.events';
+// Returns the saved token if it is still valid and covers every scope asked for.
+export function savedToken(need){
+  try{ const t = JSON.parse(localStorage.getItem('jd-cal-token')||'null');
+    if(!(t && t.exp > Date.now()+60000)) return null;
+    if(need && !String(need).split(' ').every(sc=>String(t.scope||'').split(' ').includes(sc))) return null;
+    return t; }catch(e){ return null; }
 }
 export function saveToken(token, secs, scope){ try{ localStorage.setItem('jd-cal-token', JSON.stringify({token, exp:Date.now()+(secs||3600)*1000, scope:scope||''})); }catch(e){} }
 export function clearToken(){ try{ localStorage.removeItem('jd-cal-token'); }catch(e){} }
-let tokenClient = null, pendingCb = null;
+const tokenClients = {}; let pendingCb = null;
 // Needs a tap (a browser rule for Google's pop-up). Calls back with the token, or null.
-export function connectGoogle(cb, email){
+// extra: optional extra scopes, e.g. EVENTS_SCOPE for adding events.
+export function connectGoogle(cb, email, extra){
   if(!CAL_CLIENT_ID){ cb(null, 'notSetUp'); return; }
   if(!(window.google && google.accounts && google.accounts.oauth2)){ cb(null, 'loading'); return; }
+  const scope = extra ? SCOPES+' '+extra : SCOPES;
   pendingCb = cb;
-  if(!tokenClient) tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: CAL_CLIENT_ID, scope: SCOPES,
+  if(!tokenClients[scope]) tokenClients[scope] = google.accounts.oauth2.initTokenClient({
+    client_id: CAL_CLIENT_ID, scope, include_granted_scopes: true,
     callback: resp=>{ const f = pendingCb; pendingCb = null;
       if(resp.error){ f && f(null, 'refused'); return; }
       saveToken(resp.access_token, +resp.expires_in, resp.scope); f && f(resp.access_token); }
   });
-  tokenClient.requestAccessToken({prompt:'', hint: email || undefined});
+  tokenClients[scope].requestAccessToken({prompt:'', hint: email || undefined});
 }
 export async function gfetch(url, token, opts={}){
   const r = await fetch(url, {...opts, headers:{Authorization:'Bearer '+token, 'Content-Type':'application/json', ...(opts.headers||{})}});

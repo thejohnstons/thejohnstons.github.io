@@ -340,6 +340,12 @@
     <li><a class="tile t-deep" href="./clean/">
       <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M15 3l-4 9"/><path d="M7 12h8l2 9H5z"/><path d="M8 16v5M11 16v5M14 16v5"/></svg>
       <span><strong>Fresh &amp; Tidy</strong><span class="d">Gentle cleaning, a little each day</span></span></a></li>
+    <li><a class="tile t-red" href="./workout/">
+      <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M6 8v8M3.5 10v4M18 8v8M20.5 10v4M6 12h12"/></svg>
+      <span><strong>Move well</strong><span class="d">Workouts, runs, stretches and cycle</span></span></a></li>
+    <li><a class="tile t-rose" href="./bestill/">
+      <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M12 21c0-5 0-8 0-9"/><path d="M12 12c-3-1-5-4-4-8 3 1 5 4 4 8zM12 12c3-1 5-4 4-8-3 1-5 4-4 8z"/><path d="M8 21h8"/></svg>
+      <span><strong>Be Still</strong><span class="d">Meditations, sleep stories, journal</span></span></a></li>
     <li><a class="tile t-line" href="https://calendar.google.com/" target="_blank" rel="noopener">
       <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
       <span><strong>Google Calendar</strong><span class="d">Opens in a new tab</span></span></a></li>
@@ -562,7 +568,7 @@ function showEvents(state){
   if(state.error) html += `<p class="msg" style="color:var(--deep)">${esc(state.error)}</p>`;
   box.innerHTML = html;
 }
-const SRC_STYLE = {Home:['#E5E1BE','#4E4A22'], Repeating:['#FFD9B0','#6E3300'], Kitchen:['#D0E3FF','#3A2208'], Kids:['#F5B3DC','#7E0C16'], Garden:['#CBD8A9','#3E4A1C'], Someday:['#C20A16','#FFF7F6'], 'Google Tasks':['#BFD3F2','#1F3B66']};
+const SRC_STYLE = {Workout:['#DAD6F7','#2A2470'], Home:['#E5E1BE','#4E4A22'], Repeating:['#FFD9B0','#6E3300'], Kitchen:['#D0E3FF','#3A2208'], Kids:['#F5B3DC','#7E0C16'], Garden:['#CBD8A9','#3E4A1C'], Someday:['#C20A16','#FFF7F6'], 'Google Tasks':['#BFD3F2','#1F3B66']};
 let todoState = {items:[], filter:'All', note:'', open:{}};
 function showTodos(st){
   if(st) todoState = {...todoState, ...st};
@@ -581,7 +587,8 @@ function showTodos(st){
       ${todoState.open[items.indexOf(i)]?`<span class="tx-detail">${i.notes?`<span style="display:block;white-space:pre-wrap">${esc(i.notes)}</span>`:''}${(i.links||[]).map(l=>`<a href="${esc(l.url)}" target="_blank" rel="noopener">🔗 ${esc(l.label||l.url)}</a>`).join('')}${i.photos?`<a href="./todo/">📷 ${i.photos} photo${i.photos===1?'':'s'}: open in the Someday list</a>`:''}</span>`:''}</span><span class="src" style="background:${SRC_STYLE[i.src][0]};color:${SRC_STYLE[i.src][1]}">${esc(i.src)}</span></div>`).join('')
     : `<p class="msg">${filter==='All'?(items.length?'All done for today. Well done! 🎉':'Nothing to do today. Enjoy!'):'Nothing left here today.'}</p>`;
   const doneN = items.filter(i=>i.done && (filter==='All' || i.src===filter)).length;
-  nt.innerHTML = (doneN ? `<button onclick="DASH.toggleDone()">${todoState.showDone ? 'Hide ticked' : `Show ticked (${doneN})`}</button> · ` : '') + `<button onclick="DASH.toggleRoutines()">Repeating tasks${todoState.routineCount?` (${todoState.routineCount})`:''}</button>` + (note ? ' · ' + note : '');
+  nt.innerHTML = (doneN ? `<button onclick="DASH.toggleDone()">${todoState.showDone ? 'Hide ticked' : `Show ticked (${doneN})`}</button> · ` : '') + `<button onclick="DASH.toggleRoutines()">Repeating tasks${todoState.routineCount?` (${todoState.routineCount})`:''}</button> · <button onclick="DASH.toggleSources()" aria-expanded="${!!todoState.srcOpen}">Show on my dashboard</button>` + (note ? ' · ' + note : '')
+    + (todoState.srcOpen ? `<span class="src-pick" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${['Workout','Google Tasks','Repeating','Kitchen','Kids','Home','Someday','Garden'].map(k=>`<label style="display:inline-flex;gap:6px;align-items:center;font-size:13.5px"><input type="checkbox" ${window.hiddenSrc.includes(k)?'':'checked'} onchange="DASH.setSource('${k}', this.checked)"> ${esc(k==='Home'?'Home (cleaning)':k)}</label>`).join('')}<span style="flex-basis:100%;font-size:12.5px;color:var(--muted)">Only changes your dashboard. Your Someday list, repeating tasks and workouts are private to you.</span></span>` : '');
 }
 const WD = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const ordinal = n => n + (n%10===1&&n!==11?'st':n%10===2&&n!==12?'nd':n%10===3&&n!==13?'rd':'th');
@@ -783,7 +790,11 @@ function routineDue(r, d){
   return false;
 }
 const hh = (...p) => doc(db,'households',HOUSEHOLD,...p);
-let todoItems = [];
+// Private: only the signed-in person can read these (private/{email}/...)
+const me = () => String(user && user.email || '').toLowerCase();
+const pv = (...p) => doc(db,'private',me(),...p);
+const pcol = c => collection(db,'private',me(),c);
+let todoItems = [], todoAll = []; window.hiddenSrc = [];
 function remDue(r, t, wd){
   if(r.days && r.days.length) return r.days.includes(wd) ? {done: r.doneOn===t, sub:'Today'} : null;
   if(r.date && r.date<=t){ const done=!!r.doneOn; if(r.date<t && done) return null; return {done, sub: r.date===t ? 'Today' : 'Overdue'}; }
@@ -815,11 +826,17 @@ async function loadTodos(){
     doneToday.forEach(j=>items.push({src:'Home', text:`🧹 ${j.name}`, sub:'Today’s cleaning suggestion', done:true, act:{k:'cleanjob', id:j.id}}));
   }
   // Repeating tasks due today
-  const routines = await safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'routines')));
+  const routines = await safeGet(()=>getDocs(pcol('routines')));
   routineList = (routines ? routines.docs : []).map(d=>({...d.data(), id:d.id})).sort((a,b)=>(a.added||0)-(b.added||0));
   routineList.filter(r=>routineDue(r, now)).forEach(r=>items.push({src:'Repeating', text:r.text, sub:repeatLabel(r), done:r.doneOn===t, act:{k:'routine', id:r.id}}));
   // Someday list: things marked "Soon"
-  const todo = await safeGet(()=>getDocs(query(collection(db,'households',HOUSEHOLD,'todo_items'), where('priority','==','soon'))));
+  const todo = await safeGet(()=>getDocs(query(pcol('todo_items'), where('priority','==','soon'))));
+  // Old shared lists still waiting to be moved to this person's private list
+  let oldShared = 0;
+  if(!(todo && todo.size) && !(routines && routines.size)){
+    const [ot, orr] = await Promise.all([safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'todo_items'))), safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'routines')))]);
+    oldShared = (ot ? ot.size : 0) + (orr ? orr.size : 0);
+  }
   (todo ? todo.docs : []).forEach(d=>{ const v=d.data(); if(!v.done || Date.now()-v.done < 12*3600000) items.push({src:'Someday', text:v.text, sub:'Someday list · soon', done:!!v.done, notes:v.notes||'', links:v.links||[], photos:(v.photos||[]).length, act:{k:'todo', id:d.id}}); });
   // Garden: this week's and this month's jobs
   const [gt, gw, gm, gy] = await Promise.all([safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'garden_tasks'))), safeGet(()=>getDoc(hh('garden_meta','week'))), safeGet(()=>getDoc(hh('garden_meta','month'))), safeGet(()=>getDocs(collection(db,'households',HOUSEHOLD,'garden_yearly')))]);
@@ -832,6 +849,17 @@ async function loadTodos(){
     (mm.extra||[]).forEach((text,i)=>items.push({src:'Garden', text, sub:'This month', done:!!(mm.done||{})['x'+i], act:{k:'gmonth', key:'x'+i}}));
     (gy ? gy.docs : []).filter(d=>+d.data().month===now.getMonth()+1).forEach(d=>{ const v=d.data(); items.push({src:'Garden', text:`${v.kind?v.kind+': ':''}${v.text}`, sub:'This month · every year', done:!!(mm.done||{})['y'+d.id], act:{k:'gmonth', key:'y'+d.id}}); });
   }
+  // Move well: today's workout (private)
+  try{
+    const [mst, mlogs] = await Promise.all([safeGet(()=>getDoc(pv('move_meta','state'))), safeGet(()=>getDocs(query(pcol('move_logs'), where('date','==',t))))]);
+    if(mst && mst.exists()){
+      const M = await import('/workout/plan.js'), st = mst.data();
+      const pw = await safeGet(()=>getDoc(pv('move_periodweek', M.monday(t))));
+      const plan = M.planFor(st, t, {periodWeek: pw && pw.exists() ? pw.data() : null}).filter(x=>!x.optional && !x.night);
+      const done = (mlogs ? mlogs.docs : []).map(d=>d.data());
+      plan.forEach(x=>items.push({src:'Workout', text:(x.kind==='run' ? `🏃‍♀️ Run ${x.km} km` : x.kind==='stretch' ? `🌿 ${x.title}` : `💪 ${x.title}`), sub: x.week ? `Move well · week ${x.week}` : 'Move well', done: done.some(l=>l.planKey===x.key), act:{k:'workout', key:x.key, kind:x.kind, title:x.title, program:x.program, week:x.week}}));
+    }
+  }catch(e){}
   // Google Tasks due today or overdue
   let note = '';
   if(CAL_CLIENT_ID){
@@ -847,8 +875,13 @@ async function loadTodos(){
       }catch(e){ note = 'Couldn’t reach Google Tasks just now. <button onclick="DASH.connectCalendar()">Reconnect</button>'; }
     } else note = 'Google Tasks will show here once Google is connected. <button onclick="DASH.connectCalendar()">Connect Google</button>';
   }
-  const order = {'Google Tasks':0, Repeating:1, Kitchen:2, Kids:3, Home:4, Someday:5, Garden:6};
+  const order = {'Google Tasks':0, Workout:1, Repeating:2, Kitchen:3, Kids:4, Home:5, Someday:6, Garden:7};
   items.sort((a,b)=>(a.done-b.done) || order[a.src]-order[b.src]);
+  // Each person chooses which lists show on their own dashboard
+  try{ const pd = await getDoc(doc(db,'households',HOUSEHOLD,'prefs',me())); window.hiddenSrc = (pd.exists() && pd.data().hiddenSources) || []; }catch(e){}
+  todoAll = items.slice();
+  for(let i=items.length-1;i>=0;i--) if(window.hiddenSrc.includes(items[i].src)) items.splice(i,1);
+  if(oldShared) note = (note ? note + ' · ' : '') + `${oldShared} item${oldShared>1?'s':''} from the old shared list can be moved to your private list. <button onclick="DASH.moveShared(this)">Move them to my list</button>`;
   todoItems = items;
   showTodos({status:'ready', items, note, open:{}, routineCount: routineList.length}); showRoutines(routineList, routinesOpen);
 }
@@ -864,8 +897,11 @@ async function tickTodo(n){
   try{
     if(a.k==='kitchen'){ const d = await getDoc(hh('plan', a.key)); if(d.exists()){ const v=d.data(); await setDoc(hh('plan', a.key), {...v, items:(v.items||[]).map(i=>i.id===a.id?{...i, done:on}:i)}); } }
     else if(a.k==='kids'){ await setDoc(hh('kids_reminders', a.id), {doneOn: on ? t : ''}, {merge:true}); }
-    else if(a.k==='todo'){ await setDoc(hh('todo_items', a.id), {done: on ? Date.now() : 0}, {merge:true}); }
-    else if(a.k==='routine'){ await setDoc(hh('routines', a.id), {doneOn: on ? t : ''}, {merge:true}); }
+    else if(a.k==='todo'){ await setDoc(pv('todo_items', a.id), {done: on ? Date.now() : 0}, {merge:true}); }
+    else if(a.k==='routine'){ await setDoc(pv('routines', a.id), {doneOn: on ? t : ''}, {merge:true}); }
+    else if(a.k==='workout'){
+      if(on) await setDoc(pv('move_logs', 'd'+t+'-'+a.key), {kind:a.kind, title:a.title, date:t, planKey:a.key, quick:true, pendingCal:true, at:Date.now(), program:a.program||null, week:a.week||null});
+      else { const ls = await getDocs(query(pcol('move_logs'), where('date','==',t))); for(const d of ls.docs) if(d.data().planKey===a.key) await deleteDoc(d.ref); } }
     else if(a.k==='cleanjob'){ const d = await getDoc(hh('clean_jobs', a.id)); const v = d.exists() ? d.data() : {};
       await setDoc(hh('clean_jobs', a.id), on ? {lastDone:t, prevDone:v.lastDone||'', sugDay:t} : {lastDone:v.prevDone||'', sugDay:''}, {merge:true}); }
     else if(a.k==='cleanitem'){ const d = await getDoc(hh('clean_today', t)); const v = d.exists() ? d.data() : {items:[]};
@@ -889,8 +925,8 @@ async function quickAdd(){
   const id = 't' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
   const freq = (document.getElementById('todo-rep')||{}).value || 'none', d = new Date();
   try{
-    if(freq==='none') await setDoc(hh('todo_items', id), {text, priority:'soon', category:'home', time:'30min', added:Date.now(), done:0});
-    else await setDoc(hh('routines', id), {text, freq, day:d.getDay(), date:d.getDate(), month:d.getMonth()+1, start:isoDate(d), added:Date.now(), doneOn:''});
+    if(freq==='none') await setDoc(pv('todo_items', id), {text, priority:'soon', category:'home', time:'30min', added:Date.now(), done:0});
+    else await setDoc(pv('routines', id), {text, freq, day:d.getDay(), date:d.getDate(), month:d.getMonth()+1, start:isoDate(d), added:Date.now(), doneOn:''});
     const sel = document.getElementById('todo-rep'); if(sel) sel.value = 'none';
     loadTodos();
   }
@@ -914,7 +950,15 @@ window.DASH = {
   tickTodo, quickAdd, todoFilter(k){ showTodos({filter:k}); },
   toggleDone(){ showTodos({showDone: !todoState.showDone}); },
   toggleRoutines(){ routinesOpen = !routinesOpen; showRoutines(routineList, routinesOpen); },
-  async delRoutine(id){ if(!confirm('Delete this repeating task?')) return; try{ await deleteDoc(hh('routines', id)); }catch(e){} loadTodos(); },
+  async delRoutine(id){ if(!confirm('Delete this repeating task?')) return; try{ await deleteDoc(pv('routines', id)); }catch(e){} loadTodos(); },
+  toggleSources(){ showTodos({srcOpen: !todoState.srcOpen}); },
+  async setSource(k, on){ const hid = new Set(window.hiddenSrc); on ? hid.delete(k) : hid.add(k); window.hiddenSrc = [...hid];
+    try{ await setDoc(doc(db,'households',HOUSEHOLD,'prefs',me()), {hiddenSources:window.hiddenSrc}, {merge:true}); }catch(e){} loadTodos(); },
+  async moveShared(btn){ if(btn) { btn.disabled = true; btn.textContent = 'Moving…'; }
+    try{ for(const c of ['todo_items','todo_categories','todo_photos','routines']){ const snap = await getDocs(collection(db,'households',HOUSEHOLD,c));
+        for(const d of snap.docs){ await setDoc(pv(c, d.id), d.data()); await deleteDoc(d.ref); } } }
+    catch(e){ showTodos({note:'Couldn’t move them. Check the database rules include the private section (Nathan’s guide, Part A).'}); return; }
+    loadTodos(); },
   toggleTodo(n){ const o={...todoState.open}; o[n]=!o[n]; showTodos({open:o}); },
   connectCalendar, toggleCalendarPicker, saveCalendars
 };
