@@ -14,7 +14,7 @@ window.HOUSEHOLD_ID = "johnston";
 // Paste the Web client ID from Google Cloud between the quotes (setup guide, step 6).
 // It looks like 1234567890-abc123.apps.googleusercontent.com. It is not a secret.
 // Leave it empty and the dashboard simply says the calendar isn't set up yet.
-window.GOOGLE_CALENDAR_CLIENT_ID = "";
+window.GOOGLE_CALENDAR_CLIENT_ID = "151416826562-c187hrn13immjfqgt569get5g5bbh2c4.apps.googleusercontent.com";
 
 // Optional: each person's starting style, by Google email (lower case).
 // Either of you can change your own style any time in the apps ("My style").
