@@ -252,6 +252,7 @@
   [data-style="green"] .todo-add button{background:#4F5E43;color:#F7F5F1}
   .style-pick{display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap}
   .style-pick button[aria-pressed="true"]{text-decoration:none;font-weight:700;color:inherit;cursor:default}
+.gbanner{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#E8F0FE;color:#1F3B66;border-radius:14px;padding:10px 12px;margin:0 0 10px;font-size:14px}.gbanner button{border:0;border-radius:999px;padding:8px 14px;font-weight:700;background:#1F3B66;color:#fff;cursor:pointer}
 </style>
 </head>
 <body>
@@ -582,13 +583,14 @@ function showTodos(st){
   const srcs = ['All', ...Object.keys(SRC_STYLE).filter(k=>items.some(i=>i.src===k))];
   fl.innerHTML = srcs.map(k=>`<button aria-pressed="${filter===k}" onclick="DASH.todoFilter('${k}')">${esc(k)}${k!=='All'?` (${items.filter(i=>i.src===k && !i.done).length})`:''}</button>`).join('');
   const shown = items.filter(i=>(filter==='All' || i.src===filter) && (!i.done || todoState.showDone || i.justDone));
+  const gb = todoState.gBanner ? `<div class="gbanner" role="status"><span>🔄 ${esc(todoState.gBanner)}</span><button onclick="DASH.connectCalendar()">Refresh Google</button></div>` : '';
   const left = items.filter(i=>!i.done).length, done = items.filter(i=>i.done).length;
   ct.textContent = items.length ? `${left} left${done?` · ${done} done`:''}` : '';
   list.className = 'todo-list';
-  list.innerHTML = shown.length ? shown.map((i,n)=>`<div class="ti${i.done?' done':''}"><button class="tk${i.done?' on':''}" aria-pressed="${!!i.done}" aria-label="${i.done?'Untick':'Tick'} ${esc(i.text)}" onclick="DASH.tickTodo(${items.indexOf(i)})">${i.done?'✓':''}</button>
+  list.innerHTML = gb + (shown.length ? shown.map((i,n)=>`<div class="ti${i.done?' done':''}"><button class="tk${i.done?' on':''}" aria-pressed="${!!i.done}" aria-label="${i.done?'Untick':'Tick'} ${esc(i.text)}" onclick="DASH.tickTodo(${items.indexOf(i)})">${i.done?'✓':''}</button>
     <span class="tx">${(i.notes||(i.links||[]).length||i.photos)?`<button class="tx-open" onclick="DASH.toggleTodo(${items.indexOf(i)})" aria-expanded="${!!todoState.open[items.indexOf(i)]}">${esc(i.text)} <span class="tx-more">${[i.notes?'📝':'',(i.links||[]).length?'🔗':'',i.photos?'📷':''].join('')}</span></button>`:esc(i.text)}<span class="sb">${esc(i.sub||'')}</span>
       ${todoState.open[items.indexOf(i)]?`<span class="tx-detail">${i.notes?`<span style="display:block;white-space:pre-wrap">${esc(i.notes)}</span>`:''}${(i.links||[]).map(l=>`<a href="${esc(l.url)}" target="_blank" rel="noopener">🔗 ${esc(l.label||l.url)}</a>`).join('')}${i.photos?`<a href="./todo/">📷 ${i.photos} photo${i.photos===1?'':'s'}: open in the Someday list</a>`:''}</span>`:''}</span><span class="src" style="background:${SRC_STYLE[i.src][0]};color:${SRC_STYLE[i.src][1]}">${esc(i.src)}</span></div>`).join('')
-    : `<p class="msg">${filter==='All'?(items.length?'All done for today. Well done! 🎉':'Nothing to do today. Enjoy!'):'Nothing left here today.'}</p>`;
+    : `<p class="msg">${filter==='All'?(items.length?'All done for today. Well done! 🎉':'Nothing to do today. Enjoy!'):'Nothing left here today.'}</p>`);
   const doneN = items.filter(i=>i.done && (filter==='All' || i.src===filter)).length;
   nt.innerHTML = (doneN ? `<button onclick="DASH.toggleDone()">${todoState.showDone ? 'Hide ticked' : `Show ticked (${doneN})`}</button> · ` : '') + `<button onclick="DASH.toggleRoutines()">Repeating tasks${todoState.routineCount?` (${todoState.routineCount})`:''}</button> · <button onclick="DASH.toggleSources()" aria-expanded="${!!todoState.srcOpen}">Show on my dashboard</button>` + (note ? ' · ' + note : '')
     + (todoState.srcOpen ? `<span class="src-pick" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${['Workout','Google Tasks','Repeating','Kitchen','Kids','Home','Someday','Garden'].map(k=>`<label style="display:inline-flex;gap:6px;align-items:center;font-size:13.5px"><input type="checkbox" ${window.hiddenSrc.includes(k)?'':'checked'} onchange="DASH.setSource('${k}', this.checked)"> ${esc(k==='Home'?'Home (cleaning)':k)}</label>`).join('')}<span style="flex-basis:100%;font-size:12.5px;color:var(--muted)">Only changes your dashboard. Your Someday list, repeating tasks and workouts are private to you.</span></span>` : '');
@@ -864,7 +866,7 @@ async function loadTodos(){
     }
   }catch(e){}
   // Google Tasks due today or overdue
-  let note = '';
+  let note = '', gBanner = '';
   if(CAL_CLIENT_ID){
     const tok = tokenHasTasks() ? savedToken() : null;
     if(tok){
@@ -875,8 +877,8 @@ async function loadTodos(){
           const tasks = (await gfetch(`https://tasks.googleapis.com/tasks/v1/lists/${encodeURIComponent(l.id)}/tasks?showCompleted=false&maxResults=100&dueMax=${encodeURIComponent(end.toISOString())}`, tok)).items || [];
           tasks.filter(x=>x.due && x.title).forEach(x=>{ const d=x.due.slice(0,10); items.push({src:'Google Tasks', text:x.title, sub: d===t ? 'Due today' : 'Overdue', done:false, notes:x.notes||'', act:{k:'gtask', list:l.id, id:x.id}}); });
         }
-      }catch(e){ note = 'Couldn’t reach Google Tasks just now. <button onclick="DASH.connectCalendar()">Reconnect</button>'; }
-    } else note = 'Google Tasks will show here once Google is connected. <button onclick="DASH.connectCalendar()">Connect Google</button>';
+      }catch(e){ gBanner = 'Couldn’t reach Google Tasks just now.'; }
+    } else gBanner = localStorage.getItem('jd-cal-token') ? 'Google needs a quick refresh to show your Google Tasks (it times out after about an hour).' : 'Connect Google to see your Google Tasks here.';
   }
   const order = {'Google Tasks':0, Workout:1, Repeating:2, Kitchen:3, Kids:4, Home:5, Someday:6, Garden:7};
   items.sort((a,b)=>(a.done-b.done) || order[a.src]-order[b.src]);
@@ -886,7 +888,7 @@ async function loadTodos(){
   for(let i=items.length-1;i>=0;i--) if(window.hiddenSrc.includes(items[i].src)) items.splice(i,1);
   if(oldShared) note = (note ? note + ' · ' : '') + `${oldShared} item${oldShared>1?'s':''} from the old shared list can be moved to your private list. <button onclick="DASH.moveShared(this)">Move them to my list</button>`;
   todoItems = items;
-  showTodos({status:'ready', items, note, open:{}, routineCount: routineList.length}); showRoutines(routineList, routinesOpen);
+  showTodos({status:'ready', items, note, gBanner, open:{}, routineCount: routineList.length}); showRoutines(routineList, routinesOpen);
 }
 async function gfetch(url, token, opts={}){
   const r = await fetch(url, {...opts, headers:{Authorization:'Bearer '+token, 'Content-Type':'application/json'}});

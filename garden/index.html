@@ -404,7 +404,7 @@ function withIds(prefix, list){ return list.map((x,i)=>({id: x.id || `${prefix}$
 let updateTried = false;
 function maybeUpdate(){
   if(updateTried || S.demo || !Object.keys(COLS).every(k=>S.loaded[k])) return;
-  updateTried = true; applyUpdate().catch(()=>{}); importFromHash();
+  updateTried = true; applyUpdate().then(()=>applyUpdateB()).catch(()=>{}); importFromHash();
 }
 async function seedDefaults(){
   // Writes the starting data the first time only. A marker stops it ever running again.
@@ -442,7 +442,7 @@ const UPDATE = {
     {id:'u01', name:'Gypsophila', variety:'Snowflake (perennial)', spot:'MB', type:'Perennial', status:'Sown', from:11, to:2, colour:'#F4F1EA', planted:'November 2026 (direct-sown)', sun:'Full sun', picking:'Pick when about half the tiny flowers are open', vase:'About a week, and it dries well'},
     {id:'u02', name:'Scabiosa', variety:'Fama', spot:'P3', type:'Perennial', status:'Sown', from:11, to:3, colour:'#A9B8D6', planted:'5 November 2026 (direct-sown)', sun:'Full sun', picking:'Pick when the flowers are just opening', vase:'About a week'},
     {id:'u03', name:'Scabiosa', variety:'Fama', spot:'P4', type:'Perennial', status:'Sown', from:11, to:3, colour:'#F2F0F6', planted:'5 November 2026 (direct-sown)', sun:'Full sun', picking:'Pick when the flowers are just opening', vase:'About a week'},
-    {id:'u04', name:'Feverfew', variety:'Golden Ball', spot:'P1', type:'Perennial', status:'Sown', from:11, to:2, colour:'#F2D45C', planted:'5 November 2026 (direct-sown)', sun:'Full sun to part shade', picking:'Pick when most of the flowers are open', vase:'About a week', notes:'Big pot: if it went into the other big pot, change the spot to P2.'},
+    {id:'u04', name:'Feverfew', variety:'Golden Ball', spot:'P1', type:'Perennial', status:'Sown', from:11, to:2, colour:'#F2D45C', planted:'5 November 2026 (direct-sown)', sun:'Full sun to part shade', picking:'Pick when most of the flowers are open', vase:'About a week', notes:'Big pot (the other big pot has the Sunny Reggae dahlia).'},
     {id:'u05', name:'Chives', variety:'', spot:'P5', type:'Herb', status:'Sown', from:10, to:12, colour:'#C9A9DD', planted:'5 November 2026 (direct-sown)', sun:'Full sun to part shade', water:'Keep moist'},
     {id:'u06', name:'Star jasmine', variety:'Trachelospermum jasminoides', spot:'', type:'Climber / vine', status:'Growing', from:10, to:12, colour:'#FFFFFF', sun:'Sun or part shade', water:'Regularly until established, then fairly drought hardy',
       care:{spring:'Flowers start: beautifully scented', summer:'Trim lightly after flowering to keep it tidy', autumn:'Tie in any new long shoots', winter:'Little to do'}},
@@ -461,6 +461,47 @@ const UPDATE = {
   spotNotes: {P4:'', P5:''},
   diary: [{id:'d-u01', date:'2026-11-05', spots:['P1','P3','P4','P5'], text:'Sowed the side garden pots: Fama scabiosa (P3 and P4), feverfew (big pot) and chives (P5). Direct-sowing everything this year.'}]
 };
+/* ---------------- Second November 2026 update ----------------
+   The pot plan from the 5 November garden chat, plus the pots out the back and by the front door. */
+const UPDATE_B = {
+  id:'update-2026-11b',
+  spots: [
+    {id:'FD', code:'FD', name:'Front door pot', area:'front', kind:'pot', note:'Shady spot by the front door', order:1.8},
+    {id:'BP', code:'BP', name:'Pots out the back', area:'back', kind:'pot', note:'Herb pots and a little creeper. One spot here, where two pots sit, gets barely any sun.', order:22}
+  ],
+  plants: [
+    {id:'v01', name:'Dahlia', variety:'Sunny Reggae', spot:'P2', type:'Tuber', status:'Wish list', from:12, to:4, colour:'#F2A33A', sun:'Full sun (the sunniest pot)', picking:'Pick when the flowers are almost fully open', vase:'About 5 days', notes:'Planned for this big pot (5 November plan). Change the status to Sown when the seeds are in.'},
+    {id:'v02', name:'Astilbe', variety:'', spot:'FD', type:'Perennial', status:'Wish list', from:11, to:1, colour:'#E9A8C4', sun:'Part shade to shade', water:'Keep moist; don’t let the pot dry out', picking:'Pick when about half the plume is open', vase:'About a week', notes:'Chosen for the shady pot by the front door. Change the status when it’s planted.'},
+    {id:'v03', name:'Rosemary', variety:'', spot:'BP', type:'Herb', status:'Growing', from:0, to:0, colour:'#7C9A86', sun:'Full sun', water:'Let it dry out between waterings',
+      care:{spring:'Trim after flowering to keep it bushy', summer:'Water in long hot spells', autumn:'A light trim', winter:'Little to do'}},
+    {id:'v04', name:'Lavender', variety:'', spot:'BP', type:'Herb', status:'Growing', from:10, to:2, colour:'#B39DDB', sun:'Full sun', water:'Let it dry out between waterings', picking:'Pick when a few flowers on the spike have opened', vase:'Lasts well, and dries beautifully',
+      care:{spring:'Light trim as new growth starts', summer:'Pick often; trim after the first flush', autumn:'Trim by about a third, never into old wood', winter:'Little to do'}},
+    {id:'v05', name:'Mint', variety:'', spot:'BP', type:'Herb', status:'Growing', from:0, to:0, colour:'#7FC08F', sun:'Sun or part shade', water:'Keep moist',
+      care:{spring:'Trim to encourage fresh leaves', summer:'Keep it in its own pot: it spreads', autumn:'Cut back tired stems', winter:'Dies back; regrows in spring'}},
+    {id:'v06', name:'Creeper', variety:'little one in a pot (name to find)', spot:'BP', type:'Climber / vine', status:'Growing', from:0, to:0, colour:'#8FAF7A', notes:'Add its name when you find it.'}
+  ],
+  notes: {P1:'Feverfew Golden Ball', P2:'Dahlia Sunny Reggae (the sunniest spot)', P3:'Fama scabiosa', P4:'Fama scabiosa', P5:'Chives'}
+};
+function updateBItems(){
+  const names = new Set(S.plants.map(p=>(p.name+'|'+(p.spot||'')).toLowerCase()));
+  return {
+    spots: UPDATE_B.spots.filter(sp=>!S.spots.some(x=>x.code===sp.code)),
+    plants: UPDATE_B.plants.filter(p=>!names.has((p.name+'|'+(p.spot||'')).toLowerCase())),
+    // pot notes only fill in blanks, so nothing Thea typed is replaced
+    spotNotes: S.spots.filter(sp=>sp.code in UPDATE_B.notes && !(sp.note||'').trim()).map(sp=>({...sp, note:UPDATE_B.notes[sp.code]}))
+  };
+}
+async function applyUpdateB(){
+  if(S.demo){ const u=updateBItems(); S.spots.push(...u.spots); S.plants.push(...u.plants); u.spotNotes.forEach(x=>{ const i=S.spots.findIndex(y=>y.id===x.id); S.spots[i]=x; }); return; }
+  const mark = await getDoc(doc(db, ...base(), 'garden_meta', UPDATE_B.id));
+  if(mark.exists()) return;
+  const u = updateBItems(), b = writeBatch(db);
+  u.spots.forEach(({id,...r})=>b.set(docRef('spots',id), r));
+  u.plants.forEach(({id,...r})=>b.set(docRef('plants',id), r));
+  u.spotNotes.forEach(({id,...r})=>b.set(docRef('spots',id), r));
+  b.set(doc(db, ...base(), 'garden_meta', UPDATE_B.id), {at:Date.now()});
+  await b.commit();
+}
 function updateItems(){
   const names = new Set(S.plants.map(p=>(p.name+'|'+(p.spot||'')).toLowerCase()));
   return {
@@ -490,7 +531,7 @@ async function applyUpdate(){
 function startDemo(){
   S.demo=true; S.status='ready'; S.user={email:'demo'};
   S.spots=withIds('s',DEFAULTS.spots); S.plants=withIds('pl',DEFAULTS.plants); S.seeds=withIds('sd',DEFAULTS.seeds); S.diary=withIds('d',DEFAULTS.diary); S.tasks=withIds('t',DEFAULTS.tasks); S.yearly=[];
-  Object.keys(COLS).forEach(k=>S.loaded[k]=true); applyUpdate(); importFromHash(); render();
+  Object.keys(COLS).forEach(k=>S.loaded[k]=true); applyUpdate(); applyUpdateB(); importFromHash(); render();
 }
 
 /* ---------------- Rendering ---------------- */
