@@ -114,6 +114,8 @@
   [data-style="green"] .msg{border-radius:0;background:#ECE7DD}
   .style-btn{text-decoration:underline;text-underline-offset:3px}
   .style-btn[aria-pressed="true"]{text-decoration:none;font-weight:800;cursor:default}
+.mk.add{opacity:.6;font-weight:600}
+.mk.add:hover,.mk.add:focus-visible{opacity:1}
 </style>
 </head>
 <body>
@@ -176,7 +178,8 @@ function hostOf(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch
 function extras(t){
   const links = (t.links||[]).map(l=>`<a class="lnk" href="${esc(l.url)}" target="_blank" rel="noopener">🔗 ${esc(l.label||hostOf(l.url))}</a>`).join('');
   const marks = [t.notes ? '📝 note' : '', (t.photos||[]).length ? `📷 ${t.photos.length} photo${t.photos.length===1?'':'s'}` : ''].filter(Boolean);
-  return (links || marks.length) ? `<div class="xtra">${links}${marks.map(m=>`<button class="mk" onclick="T.edit('${t.id}')">${m}</button>`).join('')}</div>` : '';
+  if(!links && !marks.length) return t.done ? '' : `<div class="xtra"><button class="mk add" onclick="T.edit('${t.id}')" aria-label="Add notes or links to ${esc(t.text)}">＋ Notes & links</button></div>`;
+  return `<div class="xtra">${links}${marks.map(m=>`<button class="mk" onclick="T.edit('${t.id}')">${m}</button>`).join('')}</div>`;
 }
 function card(t){
   const c = catOf(t.category);
